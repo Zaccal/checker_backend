@@ -2,6 +2,9 @@
 .yarn/
 !.yarn/releases
 .vscode/*
+.idea
+.idea/*
+.vscode
 !.vscode/launch.json
 !.vscode/*.code-snippets
 .idea/workspace.xml
