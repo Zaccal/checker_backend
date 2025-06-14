@@ -79,7 +79,11 @@ model User {
   todos     Todo[]
   todoLists TodoList[]
 
+  username        String?
+  displayUsername String?
+
   @@unique([email])
+  @@unique([username])
   @@map("user")
 }
 

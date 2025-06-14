@@ -1,9 +1,10 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { getPrisma } from "./prisma.js";
-import { magicLink, openAPI } from "better-auth/plugins";
+import { magicLink, openAPI, username } from "better-auth/plugins";
 import { createAuthMiddleware } from "better-auth/api";
 import setDefaultLists from "./setDefaultLists.js";
+import { transport } from "./email.js";
 
 const prisma = getPrisma();
 
@@ -13,9 +14,17 @@ export const auth = betterAuth({
   }),
   plugins: [
     openAPI(),
+    username(),
     magicLink({
       disableSignUp: true,
-      sendMagicLink: async ({ email, token, url }, request) => {},
+      sendMagicLink: async ({ email, url }) => {
+        await transport.sendMail({
+          from: process.env.EMAIL,
+          to: email,
+          subject: "Sign in to your account",
+          text: `Click the link to sign in to your account: ${url}`,
+        });
+      },
     }),
   ],
   trustedOrigins: process.env.ORIGINS!.split(" ") || [],

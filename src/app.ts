@@ -6,7 +6,6 @@ import { userMidllware, errorHandler, notFound } from "./middlewares/index.js";
 import { BASE_PATH } from "./lib/constants.js";
 import { logger } from "hono/logger";
 import { compress } from "hono/compress";
-import { transport } from "./lib/email.js";
 
 const app = new Hono().basePath(BASE_PATH);
 
