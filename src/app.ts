@@ -30,30 +30,6 @@ app.route("/todos/subtasks", subTaskApp);
 app.route("/lists", tasksList);
 app.route("/auth", authApp);
 
-app.get("/testemail", async (c) => {
-  try {
-    transport.sendMail(
-      {
-        from: "checker_webapp@mail.ru",
-        to: "ksss90411@gmail.com",
-        subject: "testing",
-        text: "Everything work",
-      },
-      (error, info) => {
-        if (error) {
-          console.log(error);
-        }
-        console.log("send " + info);
-      }
-    );
-  } catch (error) {
-    if (error instanceof Error) {
-      c.text(error.message, 500);
-    }
-    c.text("Opss!");
-  }
-});
-
 // Error Handler (improved to use err)
 app.onError(errorHandler);
 
