@@ -126,11 +126,10 @@ todosApp.post(
       });
       return c.json(todo);
     } catch (error) {
-      if (error instanceof PrismaClientKnownRequestError) {
-        if (error.code === "P2025") {
-          return c.notFound();
-        }
-
+      if (
+        error instanceof PrismaClientKnownRequestError ||
+        error instanceof Error
+      ) {
         c.text(error.message, 500);
       }
       c.text("An error occurred while creating the todo.", 500);
@@ -169,8 +168,6 @@ todosApp.delete("/:id", async (c) => {
 const todoCompletedSchema = z.object({
   complited: z.boolean(),
 });
-
-type TodoCompletedDto = z.infer<typeof todoCompletedSchema>;
 
 todosApp.patch(
   "complite/:id",

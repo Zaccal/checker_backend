@@ -152,7 +152,8 @@ exports.Prisma.TagScalarFieldEnum = {
   name: 'name',
   color: 'color',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  userId: 'userId'
 };
 
 exports.Prisma.UserScalarFieldEnum = {

@@ -63,6 +63,8 @@ model Tag {
   updatedAt DateTime @updatedAt
 
   todos Todo[]
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
 }
 
 model User {
@@ -78,6 +80,7 @@ model User {
 
   todos     Todo[]
   todoLists TodoList[]
+  tags Tag[]
 
   username        String?
   displayUsername String?

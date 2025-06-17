@@ -24,3 +24,12 @@ export const LISTS_SELECT: Prisma.TodoListSelect = {
   title: true,
   todos: true,
 };
+
+export const TAGS_SELECT: Prisma.TagSelect = {
+  color: true,
+  createdAt: true,
+  updatedAt: true,
+  id: true,
+  name: true,
+  todos: true,
+};

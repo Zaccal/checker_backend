@@ -1,5 +1,11 @@
 import { Hono } from "hono";
-import { authApp, subTaskApp, tasksList, todosApp } from "./routes/v1/index.js";
+import {
+  authApp,
+  subTaskApp,
+  tagsApp,
+  tasksList,
+  todosApp,
+} from "./routes/v1/index.js";
 import { cors } from "hono/cors";
 import { authCors, globalCors } from "./lib/cors.js";
 import { userMidllware, errorHandler, notFound } from "./middlewares/index.js";
@@ -27,6 +33,7 @@ if (process.env.NODE_ENV === "production") {
 app.route("/todos", todosApp);
 app.route("/todos/subtasks", subTaskApp);
 app.route("/lists", tasksList);
+app.route("/tags", tagsApp);
 app.route("/auth", authApp);
 
 // Error Handler (improved to use err)
