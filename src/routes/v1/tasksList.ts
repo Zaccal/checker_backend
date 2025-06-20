@@ -18,6 +18,7 @@ tasksList.use("*", protectRoutes);
 tasksList.use("/:id/*", protectLists);
 
 // GET
+
 tasksList.get(
   "/search",
   zValidator("query", SearchQuerySchema, (result, c) => {
@@ -54,11 +55,11 @@ tasksList.get(
       ) {
         return c.text(
           `An error occurred while searching the todo lists. (${error.message})`,
-          500
+          500,
         );
       }
     }
-  }
+  },
 );
 
 tasksList.get("/", async (c) => {
@@ -67,6 +68,7 @@ tasksList.get("/", async (c) => {
     const lists = await getPrisma().todoList.findMany({
       where: {
         userId: id,
+        protected: false,
       },
       select: LISTS_SELECT,
     });
@@ -79,7 +81,7 @@ tasksList.get("/", async (c) => {
     ) {
       return c.text(
         `An error occurred while getting the todo list. (${error.message})`,
-        500
+        500,
       );
     }
   }
@@ -108,7 +110,7 @@ tasksList.get("/protected", async (c) => {
     ) {
       return c.text(
         `An error occurred while getting the protected todo lists. (${error.message})`,
-        500
+        500,
       );
     }
   }
@@ -140,7 +142,7 @@ tasksList.get("/:id", async (c) => {
 
       return c.text(
         `An error occurred while getting the todo list. (${error.message})`,
-        500
+        500,
       );
     }
 
@@ -190,11 +192,11 @@ tasksList.post(
       ) {
         return c.text(
           `An error occurred while creating the todo list. (${error.message})`,
-          500
+          500,
         );
       }
     }
-  }
+  },
 );
 
 // PATCH
@@ -246,13 +248,13 @@ tasksList.patch(
 
         return c.text(
           `An error occurred while updating the todo list. (${error.message})`,
-          500
+          500,
         );
       }
 
       return c.text("An error occurred while updating the todo list.", 500);
     }
-  }
+  },
 );
 
 // add task to list
@@ -288,13 +290,13 @@ tasksList.patch("/:id/:taskId", async (c) => {
 
       return c.text(
         `An error occurred while adding the task to the todo list. (${error.message})`,
-        500
+        500,
       );
     }
 
     return c.text(
       "An error occurred while adding the task to the todo list.",
-      500
+      500,
     );
   }
 });
@@ -323,7 +325,7 @@ tasksList.delete("/:id", async (c) => {
 
       return c.text(
         `An error occurred while deleting the todo list. (${error.message})`,
-        500
+        500,
       );
     }
 
