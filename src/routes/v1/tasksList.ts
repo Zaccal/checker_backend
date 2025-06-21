@@ -126,7 +126,12 @@ tasksList.get("/:id", async (c) => {
         id,
         userId,
       },
-      select: LISTS_SELECT,
+      select: {
+        ...LISTS_SELECT,
+        todos: {
+          select: TODOS_SELECT,
+        },
+      },
     });
 
     if (!foundList) {

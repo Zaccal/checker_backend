@@ -49,11 +49,11 @@ todosApp.get(
       ) {
         return c.text(
           `An error occurred while searching for todos. (${error.message})`,
-          500
+          500,
         );
       }
     }
-  }
+  },
 );
 
 todosApp.get("/:id", async (c) => {
@@ -134,7 +134,7 @@ todosApp.post(
       }
       c.text("An error occurred while creating the todo.", 500);
     }
-  }
+  },
 );
 
 // DELETE
@@ -205,7 +205,7 @@ todosApp.patch(
         return c.text("An error occurred while geting the todo.", 500);
       }
     }
-  }
+  },
 );
 
 const todoUpdateSchema = z.object({
@@ -258,7 +258,7 @@ todosApp.patch(
         return c.text("An error occurred while geting the todo.", 500);
       }
     }
-  }
+  },
 );
 
 export default todosApp;
