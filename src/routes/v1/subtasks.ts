@@ -10,6 +10,7 @@ import {
   subtaskCreateSchema,
   subtaskUpdateSchema,
 } from "../../schemas/subtasks.schemas.js";
+import { SUBTASKS_SELECT } from "../../lib/constants.js";
 
 const subTaskApp = new Hono<{ Variables: AuthVariables }>();
 
@@ -39,6 +40,7 @@ subTaskApp.get(
             userId,
           },
         },
+        select: SUBTASKS_SELECT,
         skip: offset,
         take: limit,
       });
@@ -60,24 +62,32 @@ subTaskApp.get("/:todoId", async (c) => {
   const { id } = c.get("user");
 
   try {
-    const subtasks = await getPrisma().subTask.findMany({
+    const subtasks = await getPrisma().subTask.findFirst({
       where: {
         todoId,
         todo: {
           userId: id,
         },
       },
+      select: SUBTASKS_SELECT,
     });
+
+    if (!subtasks) {
+      return c.text("Subtasks not found for this todo.", 404);
+    }
 
     return c.json(subtasks);
   } catch (error) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      if (error.code === "P2025") {
-        return c.notFound();
-      }
-
-      return c.text("An error occurred while geting the todo.", 500);
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError ||
+      error instanceof Error
+    ) {
+      return c.text(
+        `An error occurred while geting the todo: ${error.message}`,
+        500
+      );
     }
+    return c.text("An error occurred while geting the todo", 500);
   }
 });
 
@@ -94,6 +104,7 @@ subTaskApp.get("/:todoId/:id", async (c) => {
           userId,
         },
       },
+      select: SUBTASKS_SELECT,
     });
 
     if (!subtaskFound) {
@@ -104,7 +115,7 @@ subTaskApp.get("/:todoId/:id", async (c) => {
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       if (error.code === "P2025") {
-        return c.notFound();
+        return c.text("Subtask not found.", 404);
       }
 
       return c.text("An error occurred while geting the todo.", 500);
@@ -134,14 +145,19 @@ subTaskApp.post(
             },
           },
         },
+        select: SUBTASKS_SELECT,
       });
 
       return c.json(createdSubtask);
     } catch (error) {
-      if (error instanceof PrismaClientKnownRequestError) {
-        if (error.code === "P2025") {
-          return c.notFound();
-        }
+      if (
+        error instanceof PrismaClientKnownRequestError ||
+        error instanceof Error
+      ) {
+        return c.text(
+          `An error occurred while creating the subtask: ${error.message}`,
+          500
+        );
       }
 
       return c.text("An error occurred while geting the todo.", 500);
@@ -171,6 +187,7 @@ subTaskApp.patch(
             userId,
           },
         },
+        select: SUBTASKS_SELECT,
         data: {
           title,
           completed,
@@ -181,7 +198,7 @@ subTaskApp.patch(
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === "P2025") {
-          return c.notFound();
+          return c.text("Subtask not found.", 404);
         }
       }
 
@@ -206,15 +223,20 @@ subTaskApp.delete("/:id", async (c) => {
       },
     });
 
-    return c.json({ success: true });
+    return c.json({ message: "Subtask has deleted successfully" });
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       if (error.code === "P2025") {
-        return c.notFound();
+        return c.text("Subtask not found", 404);
       }
+
+      c.text(
+        `An error occurred while deleting the subtask: ${error.message}`,
+        500
+      );
     }
 
-    return c.text("An error occurred while geting the todo.", 500);
+    return c.text(`An error occurred while geting the subtask`, 500);
   }
 });
 

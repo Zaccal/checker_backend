@@ -5,6 +5,33 @@ export const API_PREFIX = process.env.PREFIX || "/api";
 export const BASE_PATH = `${API_PREFIX}/${API_VERSION}`;
 export const PORT = Number(process.env.PORT || 3500);
 
+export const TAGS_SELECT: Prisma.TagSelect = {
+  color: true,
+  createdAt: true,
+  updatedAt: true,
+  id: true,
+  name: true,
+  todos: {
+    select: {
+      id: true,
+      title: true,
+      completed: true,
+      expiresAt: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+  },
+};
+
+export const SUBTASKS_SELECT: Prisma.SubTaskSelect = {
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+  title: true,
+  completed: true,
+  todoId: true,
+};
+
 export const TODOS_SELECT: Prisma.TodoSelect = {
   createdAt: true,
   updatedAt: true,
@@ -12,8 +39,12 @@ export const TODOS_SELECT: Prisma.TodoSelect = {
   title: true,
   completed: true,
   expiresAt: true,
-  tags: true,
-  subTasks: true,
+  tags: {
+    select: TAGS_SELECT,
+  },
+  subTasks: {
+    select: SUBTASKS_SELECT,
+  },
 };
 
 export const LISTS_SELECT: Prisma.TodoListSelect = {
@@ -22,14 +53,7 @@ export const LISTS_SELECT: Prisma.TodoListSelect = {
   updatedAt: true,
   icon: true,
   title: true,
-  todos: true,
-};
-
-export const TAGS_SELECT: Prisma.TagSelect = {
-  color: true,
-  createdAt: true,
-  updatedAt: true,
-  id: true,
-  name: true,
-  todos: true,
+  todos: {
+    select: TODOS_SELECT,
+  },
 };

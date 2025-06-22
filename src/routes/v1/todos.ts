@@ -65,7 +65,7 @@ todosApp.get("/:id", async (c) => {
   const { id } = c.req.param();
 
   try {
-    const todos = await getPrisma().todo.findMany({
+    const todos = await getPrisma().todo.findFirst({
       where: {
         userId: user.id,
         OR: [
@@ -78,13 +78,17 @@ todosApp.get("/:id", async (c) => {
       select: TODOS_SELECT,
     });
 
+    if (!todos) {
+      return c.text("Todo not found.", 404);
+    }
+
     return c.json(todos);
   } catch (error) {
     if (
       error instanceof Prisma.PrismaClientKnownRequestError ||
       error instanceof Error
     ) {
-      c.text(error.message, 500);
+      return c.text(error.message, 500);
     }
 
     c.text("An error occurred while getting the todos.", 500);
@@ -148,15 +152,20 @@ todosApp.delete("/:id", async (c) => {
         userId: user.id,
       },
     });
-    return c.json({ success: true });
+
+    return c.json({ message: "Task has deleted successfully" });
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       if (error.code === "P2025") {
-        return c.notFound();
+        return c.text("Todo not found.", 404);
       }
-
-      return c.text("An error occurred while geting the todo.", 500);
+      return c.text(
+        `An error occurred while deleting the todo: ${error.message}`,
+        500
+      );
     }
+
+    return c.text("An error occurred while geting the todo.", 500);
   }
 });
 
@@ -192,11 +201,15 @@ todosApp.patch(
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === "P2025") {
-          return c.notFound();
+          return c.text("Todo not found.", 404);
         }
 
-        return c.text("An error occurred while geting the todo.", 500);
+        return c.text(
+          `An error occurred while geting the todo: ${error.message}`,
+          500
+        );
       }
+      return c.text("An error occurred while geting the todo.", 500);
     }
   }
 );
@@ -230,7 +243,7 @@ todosApp.patch(
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === "P2025") {
-          return c.notFound();
+          return c.text("Todo not found.", 404);
         }
 
         return c.text("An error occurred while geting the todo.", 500);

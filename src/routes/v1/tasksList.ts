@@ -143,11 +143,10 @@ tasksList.get("/:id", async (c) => {
 
     return c.json(foundList);
   } catch (error) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      if (error.code === "P2025") {
-        return c.notFound();
-      }
-
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError ||
+      error instanceof Error
+    ) {
       return c.text(
         `An error occurred while getting the todo list. (${error.message})`,
         500
@@ -214,10 +213,6 @@ tasksList.patch(
     const { icon, title } = c.req.valid("json");
     const { id: userId } = c.get("user");
 
-    if (!icon && !title) {
-      return c.text("At least one field (icon or title) must be provided", 400);
-    }
-
     try {
       const updatedList = await getPrisma().todoList.update({
         where: {
@@ -231,19 +226,15 @@ tasksList.patch(
         select: LISTS_SELECT,
       });
 
-      if (!updatedList) {
-        return c.notFound();
-      }
-
       return c.json(updatedList);
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === "P2025") {
-          return c.notFound();
+          return c.text("Todo list not found.", 404);
         }
 
         return c.text(
-          `An error occurred while updating the todo list. (${error.message})`,
+          `An error occurred while updating the todo list: ${error.message}`,
           500
         );
       }
@@ -252,50 +243,6 @@ tasksList.patch(
     }
   }
 );
-
-// add task to list
-tasksList.patch("/:id/:taskId", async (c) => {
-  const { id, taskId } = c.req.param();
-  const { id: userId } = c.get("user");
-
-  try {
-    const foundList = await getPrisma().todoList.update({
-      where: {
-        id,
-        userId,
-      },
-      data: {
-        todos: {
-          connect: {
-            id: taskId,
-          },
-        },
-      },
-      select: LISTS_SELECT,
-    });
-
-    if (!foundList) {
-      return c.notFound();
-    }
-    return c.json({ success: true }, 201);
-  } catch (error) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      if (error.code === "P2025") {
-        return c.notFound();
-      }
-
-      return c.text(
-        `An error occurred while adding the task to the todo list. (${error.message})`,
-        500
-      );
-    }
-
-    return c.text(
-      "An error occurred while adding the task to the todo list.",
-      500
-    );
-  }
-});
 
 // DELETE
 
@@ -309,14 +256,13 @@ tasksList.delete("/:id", async (c) => {
         id,
         userId,
       },
-      select: LISTS_SELECT,
     });
 
-    return c.json({ success: true });
+    return c.json({ message: "List has deleted successfully" });
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       if (error.code === "P2025") {
-        return c.notFound();
+        return c.text("Todo list not found.", 404);
       }
 
       return c.text(

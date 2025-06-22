@@ -42,7 +42,14 @@ tagsApp.get(
 
       return c.json(foundTags);
     } catch (error) {
-      if (error instanceof Error || Prisma.PrismaClientKnownRequestError) {
+      if (
+        error instanceof Error ||
+        error instanceof Prisma.PrismaClientKnownRequestError
+      ) {
+        return c.text(
+          `An error occurred while searching for tags. (${error.message})`,
+          500
+        );
       }
 
       c.text("An error occurred while searching for tags", 500);
@@ -78,6 +85,10 @@ tagsApp.get("/:id", async (c) => {
       },
       select: TAGS_SELECT,
     });
+
+    if (!foundTag) {
+      return c.text("Tag not found", 404);
+    }
 
     return c.json(foundTag);
   } catch (error) {
@@ -165,11 +176,15 @@ tagsApp.patch(
 
       return c.json(updatedTag);
     } catch (error) {
-      if (
-        error instanceof Prisma.PrismaClientKnownRequestError ||
-        error instanceof Error
-      ) {
-        return c.text(error.message, 500);
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === "P2025") {
+          return c.text("Tag not found.", 404);
+        }
+
+        return c.text(
+          `An error occurred while updating the tag: ${error.message}`,
+          500
+        );
       }
 
       return c.text("An error occurred while updating the tag.", 500);
@@ -184,21 +199,24 @@ tagsApp.delete("/:id", async (c) => {
   const { id: userId } = c.get("user");
 
   try {
-    const deletedTag = await prisma.tag.delete({
+    await prisma.tag.delete({
       where: {
         id,
         userId,
       },
-      select: TAGS_SELECT,
     });
 
-    return c.json({ message: "Tag deleted successfully" });
+    return c.json({ message: "Tag has deleted successfully" });
   } catch (error) {
-    if (
-      error instanceof Prisma.PrismaClientKnownRequestError ||
-      error instanceof Error
-    ) {
-      return c.text(error.message, 500);
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === "P2025") {
+        return c.text("Tag not found.", 404);
+      }
+
+      return c.text(
+        `An error occured while deleting the tag: ${error.message}`,
+        500
+      );
     }
 
     return c.text("An error occurred while deleting the tag.", 500);
