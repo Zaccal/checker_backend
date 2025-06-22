@@ -3,10 +3,13 @@ import type { AuthVariables } from "../../lib/auth-instance.js";
 import { Prisma } from "../../generated/prisma/index.js";
 import { getPrisma } from "../../lib/prisma.js";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
-import { z } from "zod";
 import { zValidator } from "@hono/zod-validator";
 import protectRoutes from "../../middlewares/protectRoutes.middleware.js";
 import { SearchQuerySchema } from "../../schemas/searchQuery.schemas.js";
+import {
+  subtaskCreateSchema,
+  subtaskUpdateSchema,
+} from "../../schemas/subtasks.schemas.js";
 
 const subTaskApp = new Hono<{ Variables: AuthVariables }>();
 
@@ -110,20 +113,16 @@ subTaskApp.get("/:todoId/:id", async (c) => {
 });
 
 // POST
-const subtaskCreateSchema = z.object({
-  title: z.string().min(1).max(100),
-});
 
 subTaskApp.post(
-  "/:todoId",
+  "/",
   zValidator("json", subtaskCreateSchema, (result, c) => {
     if (!result.success) {
       return c.text("Invalide format!", 400);
     }
   }),
   async (c) => {
-    const { title } = c.req.valid("json");
-    const { todoId } = c.req.param();
+    const { title, taskId } = c.req.valid("json");
 
     try {
       const createdSubtask = await getPrisma().subTask.create({
@@ -131,7 +130,7 @@ subTaskApp.post(
           title,
           todo: {
             connect: {
-              id: todoId,
+              id: taskId,
             },
           },
         },
@@ -151,12 +150,7 @@ subTaskApp.post(
 );
 
 // PATCH
-const subtaskUpdateSchema = z.object({
-  title: z.string().optional(),
-  completed: z.boolean().optional(),
-});
 
-// "id" param is the subtask id, not the todo id
 subTaskApp.patch(
   "/:id",
   zValidator("json", subtaskUpdateSchema, (result, c) => {
@@ -168,10 +162,6 @@ subTaskApp.patch(
     const { id } = c.req.param();
     const { title, completed } = c.req.valid("json");
     const { id: userId } = c.get("user");
-
-    if (!title && completed === undefined) {
-      return c.text("Please provide a title or completed value", 400);
-    }
 
     try {
       const updatedSubtask = await getPrisma().subTask.update({
@@ -202,7 +192,6 @@ subTaskApp.patch(
 
 // DELETE
 
-// "id" param is the subtask id, not the todo id
 subTaskApp.delete("/:id", async (c) => {
   const { id } = c.req.param();
   const { id: userId } = c.get("user");

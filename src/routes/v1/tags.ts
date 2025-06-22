@@ -2,11 +2,13 @@ import { Hono } from "hono";
 import type { AuthVariables } from "../../lib/auth-instance.js";
 import { getPrisma } from "../../lib/prisma.js";
 import { Prisma } from "../../generated/prisma/index.js";
-import { z } from "zod";
 import { zValidator } from "@hono/zod-validator";
 import { TAGS_SELECT } from "../../lib/constants.js";
 import { SearchQuerySchema } from "../../schemas/searchQuery.schemas.js";
-import { success } from "zod/v4";
+import {
+  tagCreateSchema,
+  tagUpdateSchema,
+} from "../../schemas/tags.schemas.js";
 
 const tagsApp = new Hono<{ Variables: AuthVariables }>();
 const prisma = getPrisma();
@@ -92,12 +94,6 @@ tagsApp.get("/:id", async (c) => {
 
 // POST
 
-const tagCreateSchema = z.object({
-  name: z.string().min(2).max(50),
-  color: z.string().min(2),
-  todoId: z.string(),
-});
-
 tagsApp.post(
   "/",
   zValidator("json", tagCreateSchema, (result, c) => {
@@ -144,11 +140,6 @@ tagsApp.post(
 );
 
 // PATCH
-
-const tagUpdateSchema = z.object({
-  name: z.string().min(2).max(50).optional(),
-  color: z.string().min(2).optional(),
-});
 
 tagsApp.patch(
   "/:id",

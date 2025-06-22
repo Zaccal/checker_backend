@@ -2,12 +2,15 @@ import { Hono } from "hono";
 import type { AuthVariables } from "../../lib/auth-instance.js";
 import { getPrisma } from "../../lib/prisma.js";
 import { Prisma } from "../../generated/prisma/index.js";
-import { z } from "zod";
 import { zValidator } from "@hono/zod-validator";
 import protectRoutes from "../../middlewares/protectRoutes.middleware.js";
 import protectLists from "../../middlewares/protectLists.middleware.js";
 import { SearchQuerySchema } from "../../schemas/searchQuery.schemas.js";
 import { LISTS_SELECT, TODOS_SELECT } from "../../lib/constants.js";
+import {
+  createListSchema,
+  updateListSchema,
+} from "../../schemas/taskList.schemas.js";
 
 const tasksList = new Hono<{ Variables: AuthVariables }>();
 
@@ -55,11 +58,11 @@ tasksList.get(
       ) {
         return c.text(
           `An error occurred while searching the todo lists. (${error.message})`,
-          500,
+          500
         );
       }
     }
-  },
+  }
 );
 
 tasksList.get("/", async (c) => {
@@ -81,7 +84,7 @@ tasksList.get("/", async (c) => {
     ) {
       return c.text(
         `An error occurred while getting the todo list. (${error.message})`,
-        500,
+        500
       );
     }
   }
@@ -110,7 +113,7 @@ tasksList.get("/protected", async (c) => {
     ) {
       return c.text(
         `An error occurred while getting the protected todo lists. (${error.message})`,
-        500,
+        500
       );
     }
   }
@@ -147,7 +150,7 @@ tasksList.get("/:id", async (c) => {
 
       return c.text(
         `An error occurred while getting the todo list. (${error.message})`,
-        500,
+        500
       );
     }
 
@@ -156,13 +159,6 @@ tasksList.get("/:id", async (c) => {
 });
 
 // POST
-
-const createListSchema = z.object({
-  icon: z.string().min(2),
-  title: z.string().min(2).max(50),
-});
-
-export type CreateListDto = z.infer<typeof createListSchema>;
 
 tasksList.post(
   "/",
@@ -197,19 +193,14 @@ tasksList.post(
       ) {
         return c.text(
           `An error occurred while creating the todo list. (${error.message})`,
-          500,
+          500
         );
       }
     }
-  },
+  }
 );
 
 // PATCH
-
-const updateListSchema = z.object({
-  icon: z.string().min(2).optional(),
-  title: z.string().min(2).max(50).optional(),
-});
 
 tasksList.patch(
   "/:id",
@@ -253,13 +244,13 @@ tasksList.patch(
 
         return c.text(
           `An error occurred while updating the todo list. (${error.message})`,
-          500,
+          500
         );
       }
 
       return c.text("An error occurred while updating the todo list.", 500);
     }
-  },
+  }
 );
 
 // add task to list
@@ -295,13 +286,13 @@ tasksList.patch("/:id/:taskId", async (c) => {
 
       return c.text(
         `An error occurred while adding the task to the todo list. (${error.message})`,
-        500,
+        500
       );
     }
 
     return c.text(
       "An error occurred while adding the task to the todo list.",
-      500,
+      500
     );
   }
 });
@@ -330,7 +321,7 @@ tasksList.delete("/:id", async (c) => {
 
       return c.text(
         `An error occurred while deleting the todo list. (${error.message})`,
-        500,
+        500
       );
     }
 

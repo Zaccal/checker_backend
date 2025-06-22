@@ -1,6 +1,5 @@
 import { Hono } from "hono";
 import { getPrisma } from "../../lib/prisma.js";
-import { z } from "zod";
 import { Prisma } from "../../generated/prisma/index.js";
 import { zValidator } from "@hono/zod-validator";
 import type { AuthVariables } from "../../lib/auth-instance.js";
@@ -8,6 +7,11 @@ import { PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
 import protectRoutes from "../../middlewares/protectRoutes.middleware.js";
 import { TODOS_SELECT } from "../../lib/constants.js";
 import { SearchQuerySchema } from "../../schemas/searchQuery.schemas.js";
+import {
+  todoCompletedSchema,
+  todoCreateSchema,
+  todoUpdateSchema,
+} from "../../schemas/todos.schemas.js";
 
 const todosApp = new Hono<{ Variables: AuthVariables }>();
 
@@ -49,11 +53,11 @@ todosApp.get(
       ) {
         return c.text(
           `An error occurred while searching for todos. (${error.message})`,
-          500,
+          500
         );
       }
     }
-  },
+  }
 );
 
 todosApp.get("/:id", async (c) => {
@@ -88,13 +92,6 @@ todosApp.get("/:id", async (c) => {
 });
 
 // POST
-
-const todoCreateSchema = z.object({
-  title: z.string().min(1).max(100),
-  taskListId: z.string(),
-});
-
-export type TodoCreateDto = z.infer<typeof todoCreateSchema>;
 
 todosApp.post(
   "/",
@@ -134,7 +131,7 @@ todosApp.post(
       }
       c.text("An error occurred while creating the todo.", 500);
     }
-  },
+  }
 );
 
 // DELETE
@@ -164,10 +161,6 @@ todosApp.delete("/:id", async (c) => {
 });
 
 // PATCH
-
-const todoCompletedSchema = z.object({
-  complited: z.boolean(),
-});
 
 todosApp.patch(
   "complite/:id",
@@ -205,18 +198,9 @@ todosApp.patch(
         return c.text("An error occurred while geting the todo.", 500);
       }
     }
-  },
+  }
 );
 
-const todoUpdateSchema = z.object({
-  title: z.string().min(1).max(100).optional(),
-  expiresAt: z.date().optional(),
-  todoListId: z.string().optional(),
-  tags: z.array(z.string()).optional(), // Array of ids
-  // TODO: Check does it works correct when I send the tags
-});
-
-// TODO: Check this endpoint when you create a todoList and tags
 todosApp.patch(
   "/:id",
   zValidator("json", todoUpdateSchema, (result, c) => {
@@ -227,7 +211,7 @@ todosApp.patch(
   async (c) => {
     const { id } = c.req.param();
     const user = c.get("user");
-    const { title, expiresAt, tags, todoListId } = c.req.valid("json");
+    const { title, expiresAt } = c.req.valid("json");
 
     try {
       const todo = await getPrisma().todo.update({
@@ -238,12 +222,6 @@ todosApp.patch(
         data: {
           title,
           expiresAt,
-          tags: {
-            set: tags ? tags.map((tag) => ({ id: tag })) : undefined,
-          },
-          todoList: {
-            connect: todoListId ? { id: todoListId } : undefined,
-          },
         },
         select: TODOS_SELECT,
       });
@@ -258,7 +236,7 @@ todosApp.patch(
         return c.text("An error occurred while geting the todo.", 500);
       }
     }
-  },
+  }
 );
 
 export default todosApp;
