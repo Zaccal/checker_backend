@@ -6,6 +6,7 @@ import { z } from "zod";
 import { zValidator } from "@hono/zod-validator";
 import { TAGS_SELECT } from "../../lib/constants.js";
 import { SearchQuerySchema } from "../../schemas/searchQuery.schemas.js";
+import { success } from "zod/v4";
 
 const tagsApp = new Hono<{ Variables: AuthVariables }>();
 const prisma = getPrisma();
@@ -141,5 +142,76 @@ tagsApp.post(
     }
   }
 );
+
+// PATCH
+
+const tagUpdateSchema = z.object({
+  name: z.string().min(2).max(50).optional(),
+  color: z.string().min(2).optional(),
+});
+
+tagsApp.patch(
+  "/:id",
+  zValidator("json", tagUpdateSchema, (result, c) => {
+    if (!result.success) {
+      c.text("Invalid format!", 400);
+    }
+  }),
+  async (c) => {
+    const { id } = c.req.param();
+    const body = c.req.valid("json");
+    const { id: userId } = c.get("user");
+
+    try {
+      const updatedTag = await prisma.tag.update({
+        where: {
+          id,
+          userId,
+        },
+        data: body,
+        select: TAGS_SELECT,
+      });
+
+      return c.json(updatedTag);
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError ||
+        error instanceof Error
+      ) {
+        return c.text(error.message, 500);
+      }
+
+      return c.text("An error occurred while updating the tag.", 500);
+    }
+  }
+);
+
+// DELETE
+
+tagsApp.delete("/:id", async (c) => {
+  const { id } = c.req.param();
+  const { id: userId } = c.get("user");
+
+  try {
+    const deletedTag = await prisma.tag.delete({
+      where: {
+        id,
+        userId,
+      },
+      select: TAGS_SELECT,
+    });
+
+    return c.json({ message: "Tag deleted successfully" });
+  } catch (error) {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError ||
+      error instanceof Error
+    ) {
+      return c.text(error.message, 500);
+    }
+
+    return c.text("An error occurred while deleting the tag.", 500);
+  }
+});
 
 export default tagsApp;
