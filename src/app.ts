@@ -31,7 +31,7 @@ if (process.env.NODE_ENV === "production") {
 
 // Routes
 app.route("/todos", todosApp);
-app.route("/todos/subtasks", subTaskApp);
+app.route("/subtasks", subTaskApp);
 app.route("/lists", tasksList);
 app.route("/tags", tagsApp);
 app.route("/auth", authApp);
