@@ -12,7 +12,7 @@ export const authCors: CORSOptions = {
 export const globalCors: CORSOptions = {
   origin: process.env.ORIGINS!.split(" ") || [],
   allowHeaders: ["Content-Type", "Authorization", "Accept"],
-  allowMethods: ["POST", "GET", "PUT", "DELETE", "OPTIONS"],
+  allowMethods: ["POST", "GET", "PUT", "DELETE", "OPTIONS", "PATCH"],
   exposeHeaders: ["Content-Length", "X-Request-ID"],
   maxAge: 3600,
   credentials: true,
