@@ -40,7 +40,10 @@ export const TODOS_SELECT: Prisma.TodoSelect = {
   completed: true,
   expiresAt: true,
   tags: {
-    select: TAGS_SELECT,
+    select: {
+      ...TAGS_SELECT,
+      todos: false,
+    },
   },
   subTasks: {
     select: SUBTASKS_SELECT,
@@ -53,6 +56,7 @@ export const LISTS_SELECT: Prisma.TodoListSelect = {
   updatedAt: true,
   icon: true,
   title: true,
+  protected: true,
   todos: {
     select: TODOS_SELECT,
   },
