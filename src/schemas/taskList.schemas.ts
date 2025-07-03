@@ -9,7 +9,7 @@ export type CreateListDto = z.infer<typeof createListSchema>;
 
 export const updateListSchema = z
   .object({
-    icon: z.string().nullable().optional().default(null),
+    icon: z.string().optional(),
     title: z.string().min(2).max(50).optional(),
   })
   .refine((data) => data.icon || data.title, {
