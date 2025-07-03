@@ -28,16 +28,15 @@ export const auth = betterAuth({
     }),
     emailOTP({
       sendVerificationOTP: async ({ email, otp, type }) => {
-        if (type !== "sign-in") {
-          await transport.sendMail({
-            from: process.env.EMAIL,
-            to: email,
-            subject: "Verify code",
-            text: `you OTP code: ${otp}`,
-          });
-        }
+        await transport.sendMail({
+          from: process.env.EMAIL,
+          to: email,
+          subject: "Verify code",
+          text: `you OTP code: ${otp}`,
+        });
       },
-      sendVerificationOnSignUp: true,
+      expiresIn: 600,
+      allowedAttempts: 3,
     }),
   ],
   trustedOrigins: process.env.ORIGINS!.split(" ") || [],
@@ -54,7 +53,10 @@ export const auth = betterAuth({
   },
   hooks: {
     after: createAuthMiddleware(async (c) => {
-      if (c.path.startsWith("/sign-up/")) {
+      if (
+        c.path.startsWith("/sign-up/") ||
+        c.path.startsWith("/sign-in/email-otp")
+      ) {
         const newSession = c.context.newSession;
 
         if (newSession) {

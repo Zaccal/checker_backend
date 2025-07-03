@@ -1,6 +1,17 @@
 import { getPrisma } from "./prisma.js";
 
 async function setDefaultLists(id: string) {
+  const data = getPrisma().todoList.findFirst({
+    where: {
+      userId: id,
+      protected: true,
+    },
+  });
+
+  if (data !== null) {
+    return;
+  }
+
   await getPrisma().todoList.createMany({
     data: [
       {
