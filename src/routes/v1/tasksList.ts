@@ -44,9 +44,6 @@ tasksList.get(
         },
         skip: offset,
         take: limit,
-        orderBy: {
-          createdAt: "desc",
-        },
         select: LISTS_SELECT,
       });
 
@@ -74,6 +71,9 @@ tasksList.get("/", async (c) => {
         protected: false,
       },
       select: LISTS_SELECT,
+      orderBy: {
+        createdAt: "desc",
+      },
     });
 
     return c.json(lists);

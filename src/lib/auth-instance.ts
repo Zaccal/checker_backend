@@ -1,7 +1,7 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { getPrisma } from "./prisma.js";
-import { magicLink, openAPI, username } from "better-auth/plugins";
+import { emailOTP, magicLink, openAPI, username } from "better-auth/plugins";
 import { createAuthMiddleware } from "better-auth/api";
 import setDefaultLists from "./setDefaultLists.js";
 import { transport } from "./email.js";
@@ -26,12 +26,25 @@ export const auth = betterAuth({
         });
       },
     }),
+    emailOTP({
+      sendVerificationOTP: async ({ email, otp, type }) => {
+        if (type !== "sign-in") {
+          await transport.sendMail({
+            from: process.env.EMAIL,
+            to: email,
+            subject: "Verify code",
+            text: `you OTP code: ${otp}`,
+          });
+        }
+      },
+      sendVerificationOnSignUp: true,
+    }),
   ],
   trustedOrigins: process.env.ORIGINS!.split(" ") || [],
   emailAndPassword: {
     enabled: true,
-    requireEmailVerification: false,
-    autoSignIn: true,
+    requireEmailVerification: true,
+    autoSignIn: false,
   },
   socialProviders: {
     github: {
