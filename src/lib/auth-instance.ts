@@ -53,7 +53,10 @@ export const auth = betterAuth({
   },
   hooks: {
     after: createAuthMiddleware(async (c) => {
-      if (c.path.startsWith("/sign-in/")) {
+      if (
+        c.path.startsWith("/magic-link/verify") ||
+        c.path.startsWith("/sign-in/email-otp")
+      ) {
         const newSession = c.context.newSession;
 
         if (newSession && !newSession.user.emailVerified) {
