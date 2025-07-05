@@ -2,12 +2,15 @@ import { Hono } from "hono";
 import type { AuthVariables } from "../../lib/auth-instance.js";
 import { getPrisma } from "../../lib/prisma.js";
 import { Prisma } from "../../generated/prisma/index.js";
-import { z } from "zod";
 import { zValidator } from "@hono/zod-validator";
 import protectRoutes from "../../middlewares/protectRoutes.middleware.js";
 import protectLists from "../../middlewares/protectLists.middleware.js";
 import { SearchQuerySchema } from "../../schemas/searchQuery.schemas.js";
 import { LISTS_SELECT, TODOS_SELECT } from "../../lib/constants.js";
+import {
+  createListSchema,
+  updateListSchema,
+} from "../../schemas/taskList.schemas.js";
 
 const tasksList = new Hono<{ Variables: AuthVariables }>();
 
@@ -18,6 +21,7 @@ tasksList.use("*", protectRoutes);
 tasksList.use("/:id/*", protectLists);
 
 // GET
+
 tasksList.get(
   "/search",
   zValidator("query", SearchQuerySchema, (result, c) => {
@@ -40,9 +44,6 @@ tasksList.get(
         },
         skip: offset,
         take: limit,
-        orderBy: {
-          createdAt: "desc",
-        },
         select: LISTS_SELECT,
       });
 
@@ -67,8 +68,12 @@ tasksList.get("/", async (c) => {
     const lists = await getPrisma().todoList.findMany({
       where: {
         userId: id,
+        protected: false,
       },
       select: LISTS_SELECT,
+      orderBy: {
+        createdAt: "asc",
+      },
     });
 
     return c.json(lists);
@@ -124,7 +129,12 @@ tasksList.get("/:id", async (c) => {
         id,
         userId,
       },
-      select: LISTS_SELECT,
+      select: {
+        ...LISTS_SELECT,
+        todos: {
+          select: TODOS_SELECT,
+        },
+      },
     });
 
     if (!foundList) {
@@ -133,11 +143,10 @@ tasksList.get("/:id", async (c) => {
 
     return c.json(foundList);
   } catch (error) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      if (error.code === "P2025") {
-        return c.notFound();
-      }
-
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError ||
+      error instanceof Error
+    ) {
       return c.text(
         `An error occurred while getting the todo list. (${error.message})`,
         500
@@ -149,13 +158,6 @@ tasksList.get("/:id", async (c) => {
 });
 
 // POST
-
-const createListSchema = z.object({
-  icon: z.string().min(2),
-  title: z.string().min(2).max(50),
-});
-
-export type CreateListDto = z.infer<typeof createListSchema>;
 
 tasksList.post(
   "/",
@@ -199,11 +201,6 @@ tasksList.post(
 
 // PATCH
 
-const updateListSchema = z.object({
-  icon: z.string().min(2).optional(),
-  title: z.string().min(2).max(50).optional(),
-});
-
 tasksList.patch(
   "/:id",
   zValidator("json", updateListSchema, (result, c) => {
@@ -215,10 +212,6 @@ tasksList.patch(
     const { id } = c.req.param();
     const { icon, title } = c.req.valid("json");
     const { id: userId } = c.get("user");
-
-    if (!icon && !title) {
-      return c.text("At least one field (icon or title) must be provided", 400);
-    }
 
     try {
       const updatedList = await getPrisma().todoList.update({
@@ -233,19 +226,15 @@ tasksList.patch(
         select: LISTS_SELECT,
       });
 
-      if (!updatedList) {
-        return c.notFound();
-      }
-
       return c.json(updatedList);
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === "P2025") {
-          return c.notFound();
+          return c.text("Todo list not found.", 404);
         }
 
         return c.text(
-          `An error occurred while updating the todo list. (${error.message})`,
+          `An error occurred while updating the todo list: ${error.message}`,
           500
         );
       }
@@ -254,50 +243,6 @@ tasksList.patch(
     }
   }
 );
-
-// add task to list
-tasksList.patch("/:id/:taskId", async (c) => {
-  const { id, taskId } = c.req.param();
-  const { id: userId } = c.get("user");
-
-  try {
-    const foundList = await getPrisma().todoList.update({
-      where: {
-        id,
-        userId,
-      },
-      data: {
-        todos: {
-          connect: {
-            id: taskId,
-          },
-        },
-      },
-      select: LISTS_SELECT,
-    });
-
-    if (!foundList) {
-      return c.notFound();
-    }
-    return c.json({ success: true }, 201);
-  } catch (error) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      if (error.code === "P2025") {
-        return c.notFound();
-      }
-
-      return c.text(
-        `An error occurred while adding the task to the todo list. (${error.message})`,
-        500
-      );
-    }
-
-    return c.text(
-      "An error occurred while adding the task to the todo list.",
-      500
-    );
-  }
-});
 
 // DELETE
 
@@ -311,14 +256,13 @@ tasksList.delete("/:id", async (c) => {
         id,
         userId,
       },
-      select: LISTS_SELECT,
     });
 
-    return c.json({ success: true });
+    return c.json({ message: "List has deleted successfully" });
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       if (error.code === "P2025") {
-        return c.notFound();
+        return c.text("Todo list not found.", 404);
       }
 
       return c.text(

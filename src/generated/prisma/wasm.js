@@ -152,7 +152,8 @@ exports.Prisma.TagScalarFieldEnum = {
   name: 'name',
   color: 'color',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  userId: 'userId'
 };
 
 exports.Prisma.UserScalarFieldEnum = {
@@ -162,7 +163,9 @@ exports.Prisma.UserScalarFieldEnum = {
   emailVerified: 'emailVerified',
   image: 'image',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  username: 'username',
+  displayUsername: 'displayUsername'
 };
 
 exports.Prisma.SessionScalarFieldEnum = {

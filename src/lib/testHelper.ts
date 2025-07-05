@@ -2,7 +2,7 @@ import type { TodoSelectedResponse } from "./types.js";
 
 export function expectHasProperties<T = TodoSelectedResponse>(
   obj: T,
-  keys: string[],
+  keys: string[]
 ) {
   keys.forEach((key) => {
     expect(obj).toHaveProperty(key);
@@ -27,4 +27,13 @@ export const expectedKeysLists = [
   "createdAt",
   "todos",
   "icon",
+];
+
+export const expectedKeysTags = [
+  "id",
+  "name",
+  "updatedAt",
+  "createdAt",
+  "todos",
+  "color",
 ];

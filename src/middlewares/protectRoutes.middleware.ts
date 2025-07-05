@@ -5,7 +5,7 @@ async function protectRoutes(c: Context, next: Next) {
   const session = await auth.api.getSession({ headers: c.req.raw.headers });
 
   if (!session || !session.user) {
-    return c.text("Not Found", 404);
+    return c.text("Not found", 401);
   }
 
   return next();

@@ -1,9 +1,10 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { getPrisma } from "./prisma.js";
-import { magicLink, openAPI } from "better-auth/plugins";
+import { emailOTP, magicLink, openAPI, username } from "better-auth/plugins";
 import { createAuthMiddleware } from "better-auth/api";
 import setDefaultLists from "./setDefaultLists.js";
+import { transport } from "./email.js";
 
 const prisma = getPrisma();
 
@@ -13,16 +14,36 @@ export const auth = betterAuth({
   }),
   plugins: [
     openAPI(),
+    username(),
     magicLink({
       disableSignUp: true,
-      sendMagicLink: async ({ email, token, url }, request) => {},
+      sendMagicLink: async ({ email, url }) => {
+        await transport.sendMail({
+          from: process.env.EMAIL,
+          to: email,
+          subject: "Sign in to your account",
+          text: `Click the link to sign in to your account: ${url}`,
+        });
+      },
+    }),
+    emailOTP({
+      sendVerificationOTP: async ({ email, otp }) => {
+        await transport.sendMail({
+          from: process.env.EMAIL,
+          to: email,
+          subject: "Verify code",
+          text: `you OTP code: ${otp}`,
+        });
+      },
+      expiresIn: 600,
+      allowedAttempts: 3,
     }),
   ],
   trustedOrigins: process.env.ORIGINS!.split(" ") || [],
   emailAndPassword: {
     enabled: true,
-    requireEmailVerification: false,
-    autoSignIn: true,
+    requireEmailVerification: true,
+    autoSignIn: false,
   },
   socialProviders: {
     github: {
@@ -32,10 +53,13 @@ export const auth = betterAuth({
   },
   hooks: {
     after: createAuthMiddleware(async (c) => {
-      if (c.path.startsWith("/sign-up/")) {
+      if (
+        c.path.startsWith("/magic-link/verify") ||
+        c.path.startsWith("/sign-in/email-otp")
+      ) {
         const newSession = c.context.newSession;
 
-        if (newSession) {
+        if (newSession && !newSession.user.emailVerified) {
           await setDefaultLists(newSession.user.id);
         }
       }

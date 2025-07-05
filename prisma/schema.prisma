@@ -15,19 +15,19 @@ datasource db {
 }
 
 model Todo {
-  id        String   @id @default(cuid())
+  id        String    @id @default(cuid())
   title     String
-  completed Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  completed Boolean   @default(false)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   expiresAt DateTime?
 
-  todoList  TodoList? @relation(fields: [todoListId], references: [id], onDelete: Cascade)
+  todoList   TodoList? @relation(fields: [todoListId], references: [id], onDelete: Cascade)
   todoListId String?
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String
-  subTasks SubTask[]
-  tags Tag[]
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String
+  subTasks   SubTask[]
+  tags       Tag[]
 }
 
 model TodoList {
@@ -36,11 +36,11 @@ model TodoList {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   icon      String?
-  protected Boolean @default(false)
+  protected Boolean  @default(false)
 
   todos Todo[]
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
 }
 
@@ -51,18 +51,20 @@ model SubTask {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  todo Todo @relation(fields: [todoId], references: [id], onDelete: Cascade)
+  todo   Todo   @relation(fields: [todoId], references: [id], onDelete: Cascade)
   todoId String
 }
 
 model Tag {
   id        String   @id @default(cuid())
   name      String
-  color      String
+  color     String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   todos Todo[]
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
 }
 
 model User {
@@ -76,11 +78,16 @@ model User {
   sessions      Session[]
   accounts      Account[]
 
-  todos         Todo[]
-  todoLists     TodoList[]
+  todos     Todo[]
+  todoLists TodoList[]
+  tags Tag[]
+
+  username        String?
+  displayUsername String?
 
   @@unique([email])
   @@map("user")
+  @@unique([username])
 }
 
 model Session {

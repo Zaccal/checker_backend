@@ -1,9 +1,9 @@
 import type { Hono } from "hono";
-import type { CreateListDto } from "../../../routes/v1/tasksList.js";
 import {
   expectedKeysLists,
   expectHasProperties,
 } from "../../../lib/testHelper.js";
+import type { CreateListDto } from "../../../schemas/taskList.schemas.js";
 
 vi.mock("../../../lib/prisma.ts", async () => {
   const { mockPrisma } = await import("../../mock/prisma.mock.js");
