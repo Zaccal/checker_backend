@@ -4,8 +4,9 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "dev:4000": "PORT=4000 pnpm run dev",
-    "build": "tsc",
-    "start": "node dist/index.js",
+    "build": "tsc && cp -R src/generated dist/src/generated",
+    "vercel-build": "tsc && cp -R src/generated dist/src/generated",
+    "start": "node dist/src/index.js",
     "lint": "eslint ./src/ --ext .ts --ignore-pattern './src/generated'",
     "test": "vitest run",
     "test:watch": "vitest",
