@@ -52,7 +52,7 @@ tasksList.get("/", async (c) => {
             },
             select: LISTS_SELECT,
             orderBy: {
-                createdAt: "desc",
+                createdAt: "asc",
             },
         });
         return c.json(lists);
