@@ -1,8 +1,8 @@
 {
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/api"
+  "buildCommand": "pnpm run vercel-build",
+  "functions": {
+    "api/index.ts": {
+      "runtime": "nodejs18.x"
     }
-  ]
+  }
 }

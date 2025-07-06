@@ -5,6 +5,7 @@
     "dev": "tsx watch src/index.ts",
     "dev:4000": "PORT=4000 pnpm run dev",
     "build": "tsc",
+    "vercel-build": "tsc",
     "start": "node dist/index.js",
     "lint": "eslint ./src/ --ext .ts --ignore-pattern './src/generated'",
     "test": "vitest run",

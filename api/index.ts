@@ -1,10 +1,7 @@
 import { handle } from "@hono/node-server/vercel";
+import { app } from "../src/app.js";
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
-import { app } from "../dist/src/app.js";
-
-export const runtime = "edge";
+export const runtime = "nodejs18.x";
 
 export const GET = handle(app);
 export const POST = handle(app);
