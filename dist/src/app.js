@@ -1,5 +1,11 @@
 import { Hono } from "hono";
-import { authApp, subTaskApp, tagsApp, tasksList, todosApp, } from "./routes/v1/index.js";
+import {
+  authApp,
+  subTaskApp,
+  tagsApp,
+  tasksList,
+  todosApp,
+} from "./routes/v1/index.js";
 import { cors } from "hono/cors";
 import { authCors, globalCors } from "./lib/cors.js";
 import { userMidllware, errorHandler, notFound } from "./middlewares/index.js";
@@ -16,9 +22,8 @@ app.use("*", userMidllware);
 app.use(logger());
 // Compression middleware, enabled only in production
 if (process.env.NODE_ENV === "production") {
-    app.use(compress({ encoding: "gzip" }));
+  app.use(compress({ encoding: "gzip" }));
 }
-//
 // Routes
 app.route("/todos", todosApp);
 app.route("/subtasks", subTaskApp);
