@@ -1,5 +1,5 @@
 export const authCors = {
-    origin: process.env.ORIGINS.split(" "),
+    origin: process.env.ORIGINS.split(",") || [],
     allowHeaders: ["Content-Type", "Authorization"],
     allowMethods: ["POST", "GET", "OPTIONS"],
     exposeHeaders: ["Content-Length"],
@@ -7,7 +7,7 @@ export const authCors = {
     credentials: true,
 };
 export const globalCors = {
-    origin: process.env.ORIGINS.split(" ") || [],
+    origin: process.env.ORIGINS.split(",") || [],
     allowHeaders: ["Content-Type", "Authorization", "Accept"],
     allowMethods: ["POST", "GET", "PUT", "DELETE", "OPTIONS", "PATCH"],
     exposeHeaders: ["Content-Length", "X-Request-ID"],
