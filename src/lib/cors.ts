@@ -1,6 +1,4 @@
-import type { CORSOptions } from "hono/cors";
-
-export const authCors: CORSOptions = {
+export const authCors = {
   origin: process.env.ORIGINS!.split(",") || [],
   allowHeaders: ["Content-Type", "Authorization"],
   allowMethods: ["POST", "GET", "OPTIONS"],
@@ -9,7 +7,7 @@ export const authCors: CORSOptions = {
   credentials: true,
 };
 
-export const globalCors: CORSOptions = {
+export const globalCors = {
   origin: process.env.ORIGINS!.split(",") || [],
   allowHeaders: ["Content-Type", "Authorization", "Accept"],
   allowMethods: ["POST", "GET", "PUT", "DELETE", "OPTIONS", "PATCH"],
