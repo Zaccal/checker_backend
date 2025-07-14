@@ -1,17 +1,21 @@
-export const authCors = {
-  origin: process.env.ORIGINS!.split(",") || [],
+import { cors } from "hono/cors";
+
+const allowedOrigins = process.env.ORIGINS?.split(",") || [];
+
+export const authCors = cors({
+  origin: allowedOrigins,
   allowHeaders: ["Content-Type", "Authorization"],
   allowMethods: ["POST", "GET", "OPTIONS"],
   exposeHeaders: ["Content-Length"],
   maxAge: 600,
   credentials: true,
-};
+});
 
-export const globalCors = {
-  origin: process.env.ORIGINS!.split(",") || [],
-  allowHeaders: ["Content-Type", "Authorization", "Accept"],
-  allowMethods: ["POST", "GET", "PUT", "DELETE", "OPTIONS", "PATCH"],
-  exposeHeaders: ["Content-Length", "X-Request-ID"],
-  maxAge: 3600,
+export const globalCors = cors({
+  origin: allowedOrigins,
+  allowHeaders: ["Content-Type", "Authorization"],
+  allowMethods: ["POST", "GET", "PUT", "PATCH", "DELETE"],
+  exposeHeaders: ["Content-Length"],
+  maxAge: 600,
   credentials: true,
-};
+});

@@ -16,8 +16,8 @@ import { compress } from "hono/compress";
 const app = new Hono().basePath(BASE_PATH);
 
 // Set CORS for different routes
-app.use("/auth/*", cors(authCors));
-app.use("*", cors(globalCors));
+app.use("/lists/*", globalCors);
+app.use("/auth/*", authCors);
 
 // Middleware for get user for every route
 app.use("*", userMidllware);
@@ -28,7 +28,7 @@ app.use(logger());
 if (process.env.NODE_ENV === "production") {
   app.use(compress({ encoding: "gzip" }));
 }
-//
+
 // Routes
 app.route("/todos", todosApp);
 app.route("/subtasks", subTaskApp);
