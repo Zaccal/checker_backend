@@ -2,6 +2,8 @@ import { cors } from "hono/cors";
 
 const allowedOrigins = process.env.ORIGINS?.split(",") || [];
 
+console.log(allowedOrigins);
+
 export const authCors = cors({
   origin: allowedOrigins,
   allowHeaders: ["Content-Type", "Authorization"],
