@@ -1,13 +1,7 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { getPrisma } from "./prisma.js";
-import {
-  bearer,
-  emailOTP,
-  magicLink,
-  openAPI,
-  username,
-} from "better-auth/plugins";
+import { emailOTP, magicLink, openAPI, username } from "better-auth/plugins";
 import { createAuthMiddleware } from "better-auth/api";
 import setDefaultLists from "./setDefaultLists.js";
 import { transport } from "./email.js";
@@ -21,7 +15,6 @@ export const auth = betterAuth({
   plugins: [
     openAPI(),
     username(),
-    bearer(),
     magicLink({
       disableSignUp: true,
       sendMagicLink: async ({ email, url }) => {
