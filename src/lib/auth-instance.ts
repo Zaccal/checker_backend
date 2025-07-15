@@ -65,6 +65,11 @@ export const auth = betterAuth({
       }
     }),
   },
+  advanced: {
+    defaultCookieAttributes: {
+      sameSite: "None",
+    },
+  },
 });
 
 export type AuthType = {
