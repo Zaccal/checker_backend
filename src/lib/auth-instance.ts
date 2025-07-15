@@ -7,6 +7,7 @@ import setDefaultLists from "./setDefaultLists.js";
 import { transport } from "./email.js";
 
 const prisma = getPrisma();
+const IS_PRODUCTION = process.env.NODE_ENV === "production";
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
@@ -67,7 +68,7 @@ export const auth = betterAuth({
   },
   advanced: {
     defaultCookieAttributes: {
-      sameSite: "None", // I use Vercel so I have to set this to none
+      domain: IS_PRODUCTION ? process.env.COOKIE_DOMAIN : undefined,
     },
   },
 });
