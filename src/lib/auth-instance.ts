@@ -39,7 +39,7 @@ export const auth = betterAuth({
       allowedAttempts: 3,
     }),
   ],
-  trustedOrigins: process.env.ORIGINS!.split(" ") || [],
+  trustedOrigins: process.env.ORIGINS!.split(",") || [],
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: true,
