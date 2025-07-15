@@ -66,12 +66,8 @@ export const auth = betterAuth({
     }),
   },
   advanced: {
-    crossSubDomainCookies: {
-      enabled: false, // I use Vercel so I have to disable this
-      domain: process.env.COOKIE_DOMAIN,
-    },
     defaultCookieAttributes: {
-      sameSite: "none", // I use Vercel so I have to set this to none
+      sameSite: "None", // I use Vercel so I have to set this to none
     },
   },
 });
