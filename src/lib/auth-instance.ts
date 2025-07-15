@@ -1,13 +1,18 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { getPrisma } from "./prisma.js";
-import { emailOTP, magicLink, openAPI, username } from "better-auth/plugins";
+import {
+  bearer,
+  emailOTP,
+  magicLink,
+  openAPI,
+  username,
+} from "better-auth/plugins";
 import { createAuthMiddleware } from "better-auth/api";
 import setDefaultLists from "./setDefaultLists.js";
 import { transport } from "./email.js";
 
 const prisma = getPrisma();
-const IS_PRODUCTION = process.env.NODE_ENV === "production";
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
@@ -16,6 +21,7 @@ export const auth = betterAuth({
   plugins: [
     openAPI(),
     username(),
+    bearer(),
     magicLink({
       disableSignUp: true,
       sendMagicLink: async ({ email, url }) => {
@@ -65,11 +71,6 @@ export const auth = betterAuth({
         }
       }
     }),
-  },
-  advanced: {
-    defaultCookieAttributes: {
-      domain: IS_PRODUCTION ? process.env.COOKIE_DOMAIN : undefined,
-    },
   },
 });
 
