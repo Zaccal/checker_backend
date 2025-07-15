@@ -65,6 +65,12 @@ export const auth = betterAuth({
       }
     }),
   },
+  advanced: {
+    crossSubDomainCookies: {
+      enabled: true,
+      domain: process.env.COOKIE_DOMAIN,
+    },
+  },
 });
 
 export type AuthType = {
