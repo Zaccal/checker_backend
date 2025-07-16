@@ -70,10 +70,6 @@ export const auth = betterAuth({
     defaultCookieAttributes: {
       sameSite: "None",
       secure: true,
-      domain:
-        process.env.NODE_ENV === "production"
-          ? extractDomain(process.env.WEB_DOMAIN!)
-          : undefined,
     },
   },
 });
