@@ -5,7 +5,6 @@ import { emailOTP, magicLink, openAPI, username } from "better-auth/plugins";
 import { createAuthMiddleware } from "better-auth/api";
 import setDefaultLists from "./setDefaultLists.js";
 import { transport } from "./email.js";
-import { extractDomain } from "./extractDomain.js";
 
 const prisma = getPrisma();
 
@@ -65,13 +64,6 @@ export const auth = betterAuth({
         }
       }
     }),
-  },
-  advanced: {
-    defaultCookieAttributes: {
-      sameSite: "None",
-      secure: true,
-      partitioned: true,
-    },
   },
 });
 
