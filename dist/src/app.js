@@ -1,6 +1,5 @@
 import { Hono } from "hono";
 import { authApp, subTaskApp, tagsApp, tasksList, todosApp, } from "./routes/v1/index.js";
-import { cors } from "hono/cors";
 import { authCors, globalCors } from "./lib/cors.js";
 import { userMidllware, errorHandler, notFound } from "./middlewares/index.js";
 import { BASE_PATH } from "./lib/constants.js";
