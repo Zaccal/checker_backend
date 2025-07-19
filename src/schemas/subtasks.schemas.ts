@@ -7,7 +7,7 @@ export const subtaskCreateSchema = z.object({
 
 export const subtaskUpdateSchema = z
   .object({
-    title: z.string().optional(),
+    title: z.string().max(100).optional(),
     completed: z.boolean().optional(),
   })
   .refine((data) => data.title || data.completed, {
