@@ -2,7 +2,6 @@ import { Hono } from "hono";
 import type { AuthVariables } from "../../lib/auth-instance.js";
 import { Prisma } from "../../generated/prisma/index.js";
 import { getPrisma } from "../../lib/prisma.js";
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
 import { zValidator } from "@hono/zod-validator";
 import protectRoutes from "../../middlewares/protectRoutes.middleware.js";
 import { SearchQuerySchema } from "../../schemas/searchQuery.schemas.js";
@@ -126,7 +125,7 @@ subTaskApp.post(
       return c.json(createdSubtask);
     } catch (error) {
       if (
-        error instanceof PrismaClientKnownRequestError ||
+        error instanceof Prisma.PrismaClientKnownRequestError ||
         error instanceof Error
       ) {
         return c.text(
