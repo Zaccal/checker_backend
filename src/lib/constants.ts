@@ -61,3 +61,22 @@ export const LISTS_SELECT: Prisma.TodoListSelect = {
     select: TODOS_SELECT,
   },
 };
+
+export const PROFILE_SELECT: Prisma.UserSelect = {
+  id: true,
+  name: true,
+  email: true,
+  image: true,
+  createdAt: true,
+  updatedAt: true,
+  displayUsername: true,
+  sessions: {
+    select: {
+      id: true,
+      createdAt: true,
+      updatedAt: true,
+      userAgent: true,
+      ipAddress: true,
+    },
+  },
+};
