@@ -65,6 +65,19 @@ export const auth = betterAuth({
       }
     }),
   },
+  advanced: {
+    defaultCookieAttributes: {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "lax" : "none",
+      maxAge: 60 * 60 * 24 * 30,
+      path: "/",
+      domain:
+        process.env.NODE_ENV === "production"
+          ? process.env.WEB_DOMAIN
+          : undefined,
+    },
+  },
 });
 
 export type AuthType = {
