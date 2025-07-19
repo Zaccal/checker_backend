@@ -28,6 +28,15 @@ const FAKE_TAG = {
   todos: [FAKE_TODO],
 };
 
+const FAKE_SUBTASK = {
+  id: "subtask-123",
+  title: "Test Subtask",
+  completed: false,
+  createdAt: new Date(),
+  updatedAt: new Date(),
+  todoId: "12345",
+};
+
 const prismaMethods = ["create", "delete", "update", "findUnique", "findFirst"];
 
 const todo = Object.fromEntries(
@@ -42,10 +51,18 @@ const tag = Object.fromEntries(
   prismaMethods.map((method) => [method, vi.fn().mockResolvedValue(FAKE_TAG)])
 );
 
+const subTask = Object.fromEntries(
+  prismaMethods.map((method) => [
+    method,
+    vi.fn().mockResolvedValue(FAKE_SUBTASK),
+  ])
+);
+
 export const mockPrisma = {
   getPrisma: () => ({
     todo,
     todoList,
     tag,
+    subTask,
   }),
 };
