@@ -9,6 +9,7 @@ export const todoUpdateSchema = z.object({
   expiresAt: z.date().optional(),
 });
 
+// TODO: add tags, and expired field
 export const todoCreateSchema = z.object({
   title: z.string().min(1).max(100),
   taskListId: z.string(),

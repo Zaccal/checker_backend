@@ -9,8 +9,10 @@ import { SearchQuerySchema } from "../../schemas/searchQuery.schemas.js";
 import { LISTS_SELECT, TODOS_SELECT } from "../../lib/constants.js";
 import {
   createListSchema,
+  filterTodosSchema,
   updateListSchema,
 } from "../../schemas/taskList.schemas.js";
+import { filterTodosWhere } from "../../lib/filterTodosWhere.js";
 
 const tasksList = new Hono<{ Variables: AuthVariables }>();
 
@@ -118,6 +120,45 @@ tasksList.get("/protected", async (c) => {
     }
   }
 });
+
+tasksList.get(
+  "/:listId/todos",
+  zValidator("query", filterTodosSchema, (result, c) => {
+    if (!result.success) {
+      return c.text(result.error.message, 400);
+    }
+  }),
+  async (c) => {
+    const { listId } = c.req.param();
+    const { id: userId } = c.get("user");
+    const { sortBy, sortOrder, ...filter } = c.req.valid("query");
+
+    const where: Prisma.TodoWhereInput = filterTodosWhere(
+      filter,
+      listId,
+      userId
+    );
+
+    try {
+      const todos = await getPrisma().todo.findMany({
+        where,
+        orderBy: {
+          [sortBy as keyof Prisma.TodoOrderByWithRelationInput]: sortOrder,
+        },
+        select: TODOS_SELECT,
+      });
+
+      return c.json(todos);
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        return c.text(
+          `An error occurred while getting the todos. (${error.message})`,
+          500
+        );
+      }
+    }
+  }
+);
 
 tasksList.get("/:id", async (c) => {
   const { id } = c.req.param();

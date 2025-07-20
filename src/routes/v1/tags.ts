@@ -14,6 +14,7 @@ const tagsApp = new Hono<{ Variables: AuthVariables }>();
 const prisma = getPrisma();
 
 // GET
+// TODO: Create a endpoint to connect tags to a todo
 
 tagsApp.get(
   "/search",
