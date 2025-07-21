@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import {
   authApp,
+  docApp,
   profileApp,
   subTaskApp,
   tagsApp,
@@ -36,6 +37,9 @@ app.route("/lists", tasksList);
 app.route("/tags", tagsApp);
 app.route("/auth", authApp);
 app.route("/profile", profileApp);
+
+// Docs
+app.route("/", docApp);
 
 // Error Handler (improved to use err)
 app.onError(errorHandler);
