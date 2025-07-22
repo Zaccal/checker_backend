@@ -39,6 +39,13 @@ export const auth = betterAuth({
       allowedAttempts: 3,
     }),
   ],
+  account: {
+    accountLinking: {
+      allowDifferentEmails: false,
+      enabled: true,
+      trustedProviders: ["github"],
+    },
+  },
   trustedOrigins: process.env.ORIGINS!.split(",") || [],
   emailAndPassword: {
     enabled: true,
