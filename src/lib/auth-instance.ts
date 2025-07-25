@@ -51,6 +51,14 @@ export const auth = betterAuth({
     enabled: true,
     requireEmailVerification: true,
     autoSignIn: false,
+    sendResetPassword: async ({ user, url }) => {
+      await transport.sendMail({
+        from: process.env.EMAIL,
+        to: user.email,
+        subject: "Reset your password",
+        text: `Click the link to reset your password: ${url}`,
+      });
+    },
   },
   socialProviders: {
     github: {
