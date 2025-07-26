@@ -37,6 +37,7 @@ export const auth = betterAuth({
       },
       expiresIn: 600,
       allowedAttempts: 3,
+      sendVerificationOnSignUp: true,
     }),
   ],
   account: {
