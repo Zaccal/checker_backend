@@ -13,6 +13,7 @@ import { userMidllware, errorHandler, notFound } from "./middlewares/index.js";
 import { BASE_PATH } from "./lib/constants.js";
 import { logger } from "hono/logger";
 import { compress } from "hono/compress";
+import authCustom from "./routes/authCustom.js";
 
 const app = new Hono().basePath(BASE_PATH);
 
@@ -36,6 +37,7 @@ app.route("/subtasks", subTaskApp);
 app.route("/lists", tasksList);
 app.route("/tags", tagsApp);
 app.route("/auth", authApp);
+app.route("/auth-custom", authCustom);
 app.route("/profile", profileApp);
 
 // Docs
