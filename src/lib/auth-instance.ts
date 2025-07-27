@@ -5,6 +5,7 @@ import { emailOTP, magicLink, openAPI, username } from "better-auth/plugins";
 import { createAuthMiddleware } from "better-auth/api";
 import setDefaultLists from "./setDefaultLists.js";
 import { transport } from "./email.js";
+import { setSocialUsername } from "./setSocialUsername.js";
 
 const prisma = getPrisma();
 
@@ -44,7 +45,7 @@ export const auth = betterAuth({
     accountLinking: {
       allowDifferentEmails: false,
       enabled: true,
-      trustedProviders: ["github"],
+      trustedProviders: ["github", "google"],
     },
   },
   trustedOrigins: process.env.ORIGINS!.split(",") || [],
@@ -66,16 +67,25 @@ export const auth = betterAuth({
       clientId: process.env.GITHUB_CLIENT_ID || "",
       clientSecret: process.env.GITHUB_CLIENT_SECRET || "",
     },
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID || "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+    },
   },
   hooks: {
     after: createAuthMiddleware(async (c) => {
+      const newSession = c.context.newSession;
+
       if (
         c.path.startsWith("/magic-link/verify") ||
         c.path.startsWith("/sign-in/email-otp")
       ) {
-        const newSession = c.context.newSession;
-
         if (newSession && !newSession.user.emailVerified) {
+          await setDefaultLists(newSession.user.id);
+        }
+      } else if (c.path.startsWith("/callback/:id")) {
+        if (newSession && !newSession.user.username) {
+          await setSocialUsername(newSession.user.id, newSession.user.name);
           await setDefaultLists(newSession.user.id);
         }
       }
