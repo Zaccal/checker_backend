@@ -25,7 +25,7 @@ app.use("/auth/*", authCors);
 app.use("*", userMidllware);
 
 // Logging middleware
-// app.use(logger());
+app.use(logger());
 // Compression middleware, enabled only in production
 if (process.env.NODE_ENV === "production") {
   app.use(compress({ encoding: "gzip" }));
