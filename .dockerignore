@@ -1,0 +1,15 @@
+# Node.js
+node_modules
+npm-debug.log
+
+# Git
+.git
+.gitignore
+
+# Docker
+Dockerfile
+.dockerignore
+
+# Env files
+.env
+

@@ -121,11 +121,15 @@ tagsApp.post(
       const createdTag = await prisma.tag.create({
         data: {
           ...body,
-          todos: {
-            connect: {
-              id: todoId,
-            },
-          },
+          ...(todoId
+            ? {
+                todos: {
+                  connect: {
+                    id: todoId,
+                  },
+                },
+              }
+            : {}),
           user: {
             connect: {
               id: userId,
