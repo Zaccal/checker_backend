@@ -49,18 +49,23 @@ tagsApp.get(
       ) {
         return c.text(
           `An error occurred while searching for tags. (${error.message})`,
-          500
+          500,
         );
       }
 
       c.text("An error occurred while searching for tags", 500);
     }
-  }
+  },
 );
 
 tagsApp.get("/", async (c) => {
+  const { id: userId } = c.get("user");
+
   try {
     const tags = await prisma.tag.findMany({
+      where: {
+        userId,
+      },
       select: TAGS_SELECT,
     });
 
@@ -78,11 +83,13 @@ tagsApp.get("/", async (c) => {
 
 tagsApp.get("/:id", async (c) => {
   const { id } = c.req.param();
+  const { id: userId } = c.get("user");
 
   try {
     const foundTag = await prisma.tag.findFirst({
       where: {
         id,
+        userId,
       },
       select: TAGS_SELECT,
     });
@@ -152,7 +159,7 @@ tagsApp.post(
 
       c.text("An unknown error occurred while creating the tag", 500);
     }
-  }
+  },
 );
 
 // PATCH
@@ -188,13 +195,13 @@ tagsApp.patch(
 
         return c.text(
           `An error occurred while updating the tag: ${error.message}`,
-          500
+          500,
         );
       }
 
       return c.text("An error occurred while updating the tag.", 500);
     }
-  }
+  },
 );
 
 // DELETE
@@ -220,7 +227,7 @@ tagsApp.delete("/:id", async (c) => {
 
       return c.text(
         `An error occured while deleting the tag: ${error.message}`,
-        500
+        500,
       );
     }
 
