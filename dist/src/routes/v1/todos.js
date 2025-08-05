@@ -72,15 +72,18 @@ todosApp.get("/:id", async (c) => {
 // POST
 todosApp.post("/", zValidator("json", todoCreateSchema, (result, c) => {
     if (!result.success) {
-        return c.text("Invalide format!", 400);
+        const errorMessage = result.error?.errors?.map((e) => e.message).join(", ") ||
+            "Invalid format!";
+        return c.text(errorMessage, 400);
     }
 }), async (c) => {
-    const { title, taskListId } = c.req.valid("json");
+    const { title, taskListId, tags, expiresAt, subTasks } = c.req.valid("json");
     const user = c.get("user");
     try {
         const todo = await getPrisma().todo.create({
             data: {
                 title,
+                expiresAt: expiresAt ? new Date(expiresAt) : undefined,
                 user: {
                     connect: {
                         id: user.id,
@@ -90,6 +93,12 @@ todosApp.post("/", zValidator("json", todoCreateSchema, (result, c) => {
                     connect: {
                         id: taskListId,
                     },
+                },
+                tags: {
+                    connect: tags?.map((tag) => ({ id: tag })),
+                },
+                subTasks: {
+                    connect: subTasks?.map((subTask) => ({ id: subTask })),
                 },
             },
             select: TODOS_SELECT,

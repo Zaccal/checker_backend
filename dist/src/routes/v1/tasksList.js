@@ -6,7 +6,8 @@ import protectRoutes from "../../middlewares/protectRoutes.middleware.js";
 import protectLists from "../../middlewares/protectLists.middleware.js";
 import { SearchQuerySchema } from "../../schemas/searchQuery.schemas.js";
 import { LISTS_SELECT, TODOS_SELECT } from "../../lib/constants.js";
-import { createListSchema, updateListSchema, } from "../../schemas/taskList.schemas.js";
+import { createListSchema, filterTodosSchema, updateListSchema, } from "../../schemas/taskList.schemas.js";
+import { filterTodosWhere } from "../../lib/filterTodosWhere.js";
 const tasksList = new Hono();
 // Scure the subtask routes
 tasksList.use("*", protectRoutes);
@@ -83,6 +84,31 @@ tasksList.get("/protected", async (c) => {
         if (error instanceof Error ||
             error instanceof Prisma.PrismaClientKnownRequestError) {
             return c.text(`An error occurred while getting the protected todo lists. (${error.message})`, 500);
+        }
+    }
+});
+tasksList.get("/:listId/todos", zValidator("query", filterTodosSchema, (result, c) => {
+    if (!result.success) {
+        return c.text(result.error.message, 400);
+    }
+}), async (c) => {
+    const { listId } = c.req.param();
+    const { id: userId } = c.get("user");
+    const { sortBy, sortOrder, ...filter } = c.req.valid("query");
+    const where = filterTodosWhere(filter, listId, userId);
+    try {
+        const todos = await getPrisma().todo.findMany({
+            where,
+            orderBy: {
+                [sortBy]: sortOrder,
+            },
+            select: TODOS_SELECT,
+        });
+        return c.json(todos);
+    }
+    catch (error) {
+        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+            return c.text(`An error occurred while getting the todos. (${error.message})`, 500);
         }
     }
 });

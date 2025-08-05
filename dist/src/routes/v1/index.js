@@ -3,4 +3,6 @@ import authApp from "../auth.js";
 import subTaskApp from "./subtasks.js";
 import tasksList from "./tasksList.js";
 import tagsApp from "./tags.js";
-export { todosApp, authApp, subTaskApp, tasksList, tagsApp };
+import profileApp from "./profile.js";
+import docApp from "./docs.js";
+export { todosApp, authApp, subTaskApp, tasksList, tagsApp, profileApp, docApp, };

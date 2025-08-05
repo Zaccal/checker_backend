@@ -29,3 +29,28 @@ export const expectedKeysTags = [
     "todos",
     "color",
 ];
+export const expectedKeysSubtask = [
+    "id",
+    "createdAt",
+    "updatedAt",
+    "title",
+    "completed",
+    "todoId",
+];
+export const expectedProfileKeys = [
+    "id",
+    "name",
+    "email",
+    "image",
+    "createdAt",
+    "updatedAt",
+    "displayUsername",
+    "sessions",
+];
+export const expectedSessionKeys = [
+    "id",
+    "createdAt",
+    "updatedAt",
+    "userAgent",
+    "ipAddress",
+];

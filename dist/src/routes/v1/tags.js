@@ -8,6 +8,7 @@ import { tagCreateSchema, tagUpdateSchema, } from "../../schemas/tags.schemas.js
 const tagsApp = new Hono();
 const prisma = getPrisma();
 // GET
+// TODO: Create a endpoint to connect tags to a todo
 tagsApp.get("/search", zValidator("query", SearchQuerySchema, (result, c) => {
     if (!result.success) {
         return c.text("Invalid form query", 400);
@@ -39,8 +40,12 @@ tagsApp.get("/search", zValidator("query", SearchQuerySchema, (result, c) => {
     }
 });
 tagsApp.get("/", async (c) => {
+    const { id: userId } = c.get("user");
     try {
         const tags = await prisma.tag.findMany({
+            where: {
+                userId,
+            },
             select: TAGS_SELECT,
         });
         return c.json(tags);
@@ -55,10 +60,12 @@ tagsApp.get("/", async (c) => {
 });
 tagsApp.get("/:id", async (c) => {
     const { id } = c.req.param();
+    const { id: userId } = c.get("user");
     try {
         const foundTag = await prisma.tag.findFirst({
             where: {
                 id,
+                userId,
             },
             select: TAGS_SELECT,
         });
@@ -87,11 +94,15 @@ tagsApp.post("/", zValidator("json", tagCreateSchema, (result, c) => {
         const createdTag = await prisma.tag.create({
             data: {
                 ...body,
-                todos: {
-                    connect: {
-                        id: todoId,
-                    },
-                },
+                ...(todoId
+                    ? {
+                        todos: {
+                            connect: {
+                                id: todoId,
+                            },
+                        },
+                    }
+                    : {}),
                 user: {
                     connect: {
                         id: userId,

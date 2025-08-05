@@ -4,14 +4,15 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "dev:4000": "PORT=4000 pnpm run dev",
-    "build": "pnpm prisma:generate && tsc && cp -R src/generated dist/src/generated",
-    "vercel-build": "pnpm prisma:generate && tsc && cp -R src/generated dist/src/generated",
+    "build": "pnpm prisma:generate && pnpm prisma:migrate && tsc && cp -R src/generated dist/src/generated",
+    "vercel-build": "pnpm prisma:generate && pnpm prisma:migrate && tsc && cp -R src/generated dist/src/generated",
     "start": "node dist/src/index.js",
     "lint": "eslint ./src/ --ext .ts --ignore-pattern './src/generated'",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:todos": "vitest run tests/endpoints/todos",
-    "prisma:generate": "npx prisma generate"
+    "prisma:generate": "npx prisma generate",
+    "prisma:migrate": "npx prisma migrate deploy"
   },
   "dependencies": {
     "@hono/node-server": "^1.14.1",

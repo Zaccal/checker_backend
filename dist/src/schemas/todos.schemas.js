@@ -9,4 +9,12 @@ export const todoUpdateSchema = z.object({
 export const todoCreateSchema = z.object({
     title: z.string().min(1).max(100),
     taskListId: z.string(),
+    tags: z.array(z.string()).optional(),
+    expiresAt: z
+        .string()
+        .optional()
+        .refine((value) => value && !isNaN(Date.parse(value)), {
+        message: "Invalid date string",
+    }),
+    subTasks: z.array(z.string()).optional(),
 });

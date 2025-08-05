@@ -58,7 +58,6 @@ model SubTask {
 model Tag {
   id        String   @id @default(cuid())
   name      String
-  color     String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

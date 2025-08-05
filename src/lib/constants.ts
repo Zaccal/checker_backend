@@ -6,7 +6,6 @@ export const BASE_PATH = `${API_PREFIX}/${API_VERSION}`;
 export const PORT = Number(process.env.PORT || 3500);
 
 export const TAGS_SELECT: Prisma.TagSelect = {
-  color: true,
   createdAt: true,
   updatedAt: true,
   id: true,

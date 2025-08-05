@@ -5054,7 +5054,6 @@ export namespace Prisma {
   export type TagMinAggregateOutputType = {
     id: string | null
     name: string | null
-    color: string | null
     createdAt: Date | null
     updatedAt: Date | null
     userId: string | null
@@ -5063,7 +5062,6 @@ export namespace Prisma {
   export type TagMaxAggregateOutputType = {
     id: string | null
     name: string | null
-    color: string | null
     createdAt: Date | null
     updatedAt: Date | null
     userId: string | null
@@ -5072,7 +5070,6 @@ export namespace Prisma {
   export type TagCountAggregateOutputType = {
     id: number
     name: number
-    color: number
     createdAt: number
     updatedAt: number
     userId: number
@@ -5083,7 +5080,6 @@ export namespace Prisma {
   export type TagMinAggregateInputType = {
     id?: true
     name?: true
-    color?: true
     createdAt?: true
     updatedAt?: true
     userId?: true
@@ -5092,7 +5088,6 @@ export namespace Prisma {
   export type TagMaxAggregateInputType = {
     id?: true
     name?: true
-    color?: true
     createdAt?: true
     updatedAt?: true
     userId?: true
@@ -5101,7 +5096,6 @@ export namespace Prisma {
   export type TagCountAggregateInputType = {
     id?: true
     name?: true
-    color?: true
     createdAt?: true
     updatedAt?: true
     userId?: true
@@ -5183,7 +5177,6 @@ export namespace Prisma {
   export type TagGroupByOutputType = {
     id: string
     name: string
-    color: string
     createdAt: Date
     updatedAt: Date
     userId: string
@@ -5209,7 +5202,6 @@ export namespace Prisma {
   export type TagSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
-    color?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     userId?: boolean
@@ -5221,7 +5213,6 @@ export namespace Prisma {
   export type TagSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
-    color?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     userId?: boolean
@@ -5231,7 +5222,6 @@ export namespace Prisma {
   export type TagSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
-    color?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     userId?: boolean
@@ -5241,13 +5231,12 @@ export namespace Prisma {
   export type TagSelectScalar = {
     id?: boolean
     name?: boolean
-    color?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     userId?: boolean
   }
 
-  export type TagOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "color" | "createdAt" | "updatedAt" | "userId", ExtArgs["result"]["tag"]>
+  export type TagOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "createdAt" | "updatedAt" | "userId", ExtArgs["result"]["tag"]>
   export type TagInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     todos?: boolean | Tag$todosArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -5269,7 +5258,6 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       name: string
-      color: string
       createdAt: Date
       updatedAt: Date
       userId: string
@@ -5700,7 +5688,6 @@ export namespace Prisma {
   interface TagFieldRefs {
     readonly id: FieldRef<"Tag", 'String'>
     readonly name: FieldRef<"Tag", 'String'>
-    readonly color: FieldRef<"Tag", 'String'>
     readonly createdAt: FieldRef<"Tag", 'DateTime'>
     readonly updatedAt: FieldRef<"Tag", 'DateTime'>
     readonly userId: FieldRef<"Tag", 'String'>
@@ -10699,7 +10686,6 @@ export namespace Prisma {
   export const TagScalarFieldEnum: {
     id: 'id',
     name: 'name',
-    color: 'color',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     userId: 'userId'
@@ -11062,7 +11048,6 @@ export namespace Prisma {
     NOT?: TagWhereInput | TagWhereInput[]
     id?: StringFilter<"Tag"> | string
     name?: StringFilter<"Tag"> | string
-    color?: StringFilter<"Tag"> | string
     createdAt?: DateTimeFilter<"Tag"> | Date | string
     updatedAt?: DateTimeFilter<"Tag"> | Date | string
     userId?: StringFilter<"Tag"> | string
@@ -11073,7 +11058,6 @@ export namespace Prisma {
   export type TagOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
-    color?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
@@ -11087,7 +11071,6 @@ export namespace Prisma {
     OR?: TagWhereInput[]
     NOT?: TagWhereInput | TagWhereInput[]
     name?: StringFilter<"Tag"> | string
-    color?: StringFilter<"Tag"> | string
     createdAt?: DateTimeFilter<"Tag"> | Date | string
     updatedAt?: DateTimeFilter<"Tag"> | Date | string
     userId?: StringFilter<"Tag"> | string
@@ -11098,7 +11081,6 @@ export namespace Prisma {
   export type TagOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
-    color?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
@@ -11113,7 +11095,6 @@ export namespace Prisma {
     NOT?: TagScalarWhereWithAggregatesInput | TagScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Tag"> | string
     name?: StringWithAggregatesFilter<"Tag"> | string
-    color?: StringWithAggregatesFilter<"Tag"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Tag"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Tag"> | Date | string
     userId?: StringWithAggregatesFilter<"Tag"> | string
@@ -11649,7 +11630,6 @@ export namespace Prisma {
   export type TagCreateInput = {
     id?: string
     name: string
-    color: string
     createdAt?: Date | string
     updatedAt?: Date | string
     todos?: TodoCreateNestedManyWithoutTagsInput
@@ -11659,7 +11639,6 @@ export namespace Prisma {
   export type TagUncheckedCreateInput = {
     id?: string
     name: string
-    color: string
     createdAt?: Date | string
     updatedAt?: Date | string
     userId: string
@@ -11669,7 +11648,6 @@ export namespace Prisma {
   export type TagUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    color?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     todos?: TodoUpdateManyWithoutTagsNestedInput
@@ -11679,7 +11657,6 @@ export namespace Prisma {
   export type TagUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    color?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: StringFieldUpdateOperationsInput | string
@@ -11689,7 +11666,6 @@ export namespace Prisma {
   export type TagCreateManyInput = {
     id?: string
     name: string
-    color: string
     createdAt?: Date | string
     updatedAt?: Date | string
     userId: string
@@ -11698,7 +11674,6 @@ export namespace Prisma {
   export type TagUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    color?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -11706,7 +11681,6 @@ export namespace Prisma {
   export type TagUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    color?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: StringFieldUpdateOperationsInput | string
@@ -12338,7 +12312,6 @@ export namespace Prisma {
   export type TagCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
-    color?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
@@ -12347,7 +12320,6 @@ export namespace Prisma {
   export type TagMaxOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
-    color?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
@@ -12356,7 +12328,6 @@ export namespace Prisma {
   export type TagMinOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
-    color?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
@@ -13264,7 +13235,6 @@ export namespace Prisma {
   export type TagCreateWithoutTodosInput = {
     id?: string
     name: string
-    color: string
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutTagsInput
@@ -13273,7 +13243,6 @@ export namespace Prisma {
   export type TagUncheckedCreateWithoutTodosInput = {
     id?: string
     name: string
-    color: string
     createdAt?: Date | string
     updatedAt?: Date | string
     userId: string
@@ -13408,7 +13377,6 @@ export namespace Prisma {
     NOT?: TagScalarWhereInput | TagScalarWhereInput[]
     id?: StringFilter<"Tag"> | string
     name?: StringFilter<"Tag"> | string
-    color?: StringFilter<"Tag"> | string
     createdAt?: DateTimeFilter<"Tag"> | Date | string
     updatedAt?: DateTimeFilter<"Tag"> | Date | string
     userId?: StringFilter<"Tag"> | string
@@ -13884,7 +13852,6 @@ export namespace Prisma {
   export type TagCreateWithoutUserInput = {
     id?: string
     name: string
-    color: string
     createdAt?: Date | string
     updatedAt?: Date | string
     todos?: TodoCreateNestedManyWithoutTagsInput
@@ -13893,7 +13860,6 @@ export namespace Prisma {
   export type TagUncheckedCreateWithoutUserInput = {
     id?: string
     name: string
-    color: string
     createdAt?: Date | string
     updatedAt?: Date | string
     todos?: TodoUncheckedCreateNestedManyWithoutTagsInput
@@ -14230,7 +14196,6 @@ export namespace Prisma {
   export type TagUpdateWithoutTodosInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    color?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutTagsNestedInput
@@ -14239,7 +14204,6 @@ export namespace Prisma {
   export type TagUncheckedUpdateWithoutTodosInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    color?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: StringFieldUpdateOperationsInput | string
@@ -14248,7 +14212,6 @@ export namespace Prisma {
   export type TagUncheckedUpdateManyWithoutTodosInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    color?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: StringFieldUpdateOperationsInput | string
@@ -14380,7 +14343,6 @@ export namespace Prisma {
   export type TagCreateManyUserInput = {
     id?: string
     name: string
-    color: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -14526,7 +14488,6 @@ export namespace Prisma {
   export type TagUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    color?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     todos?: TodoUpdateManyWithoutTagsNestedInput
@@ -14535,7 +14496,6 @@ export namespace Prisma {
   export type TagUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    color?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     todos?: TodoUncheckedUpdateManyWithoutTagsNestedInput
@@ -14544,7 +14504,6 @@ export namespace Prisma {
   export type TagUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    color?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

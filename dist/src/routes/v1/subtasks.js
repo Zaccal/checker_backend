@@ -1,7 +1,6 @@
 import { Hono } from "hono";
 import { Prisma } from "../../generated/prisma/index.js";
 import { getPrisma } from "../../lib/prisma.js";
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
 import { zValidator } from "@hono/zod-validator";
 import protectRoutes from "../../middlewares/protectRoutes.middleware.js";
 import { SearchQuerySchema } from "../../schemas/searchQuery.schemas.js";
@@ -13,7 +12,7 @@ subTaskApp.use("*", protectRoutes);
 // GET
 subTaskApp.get("/search", zValidator("query", SearchQuerySchema, (result, c) => {
     if (!result.success) {
-        return c.text("Invalid query format!", 400);
+        return c.text(result.error.message || "Invalid query format!", 400);
     }
 }), async (c) => {
     const { query, offset, limit } = c.req.valid("query");
@@ -41,16 +40,23 @@ subTaskApp.get("/search", zValidator("query", SearchQuerySchema, (result, c) => 
         }
     }
 });
-subTaskApp.get("/:todoId", async (c) => {
-    const { todoId } = c.req.param();
-    const { id } = c.get("user");
+subTaskApp.get("/:id", async (c) => {
+    const { id } = c.req.param();
+    const { id: userId } = c.get("user");
     try {
         const subtasks = await getPrisma().subTask.findFirst({
             where: {
-                todoId,
                 todo: {
-                    userId: id,
+                    userId,
                 },
+                OR: [
+                    {
+                        todoId: id,
+                    },
+                    {
+                        id,
+                    },
+                ],
             },
             select: SUBTASKS_SELECT,
         });
@@ -65,34 +71,6 @@ subTaskApp.get("/:todoId", async (c) => {
             return c.text(`An error occurred while geting the todo: ${error.message}`, 500);
         }
         return c.text("An error occurred while geting the todo", 500);
-    }
-});
-subTaskApp.get("/:todoId/:id", async (c) => {
-    const { todoId, id } = c.req.param();
-    const { id: userId } = c.get("user");
-    try {
-        const subtaskFound = await getPrisma().subTask.findFirst({
-            where: {
-                todoId,
-                id,
-                todo: {
-                    userId,
-                },
-            },
-            select: SUBTASKS_SELECT,
-        });
-        if (!subtaskFound) {
-            return c.notFound();
-        }
-        return c.json(subtaskFound);
-    }
-    catch (error) {
-        if (error instanceof Prisma.PrismaClientKnownRequestError) {
-            if (error.code === "P2025") {
-                return c.text("Subtask not found.", 404);
-            }
-            return c.text("An error occurred while geting the todo.", 500);
-        }
     }
 });
 // POST
@@ -117,7 +95,7 @@ subTaskApp.post("/", zValidator("json", subtaskCreateSchema, (result, c) => {
         return c.json(createdSubtask);
     }
     catch (error) {
-        if (error instanceof PrismaClientKnownRequestError ||
+        if (error instanceof Prisma.PrismaClientKnownRequestError ||
             error instanceof Error) {
             return c.text(`An error occurred while creating the subtask: ${error.message}`, 500);
         }

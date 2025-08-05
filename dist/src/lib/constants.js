@@ -3,7 +3,6 @@ export const API_PREFIX = process.env.PREFIX || "/api";
 export const BASE_PATH = `${API_PREFIX}/${API_VERSION}`;
 export const PORT = Number(process.env.PORT || 3500);
 export const TAGS_SELECT = {
-    color: true,
     createdAt: true,
     updatedAt: true,
     id: true,
@@ -53,5 +52,23 @@ export const LISTS_SELECT = {
     protected: true,
     todos: {
         select: TODOS_SELECT,
+    },
+};
+export const PROFILE_SELECT = {
+    id: true,
+    name: true,
+    email: true,
+    image: true,
+    createdAt: true,
+    updatedAt: true,
+    displayUsername: true,
+    sessions: {
+        select: {
+            id: true,
+            createdAt: true,
+            updatedAt: true,
+            userAgent: true,
+            ipAddress: true,
+        },
     },
 };

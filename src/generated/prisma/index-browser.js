@@ -153,7 +153,6 @@ exports.Prisma.SubTaskScalarFieldEnum = {
 exports.Prisma.TagScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  color: 'color',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   userId: 'userId'
