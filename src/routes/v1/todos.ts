@@ -11,6 +11,8 @@ import {
   todoCompletedSchema,
   todoCreateSchema,
   todoUpdateSchema,
+  newTagSchema,
+  newSubtaskSchema,
 } from "../../schemas/todos.schemas.js";
 
 const todosApp = new Hono<{ Variables: AuthVariables }>();
@@ -113,6 +115,21 @@ todosApp.post(
     const user = c.get("user");
 
     try {
+      const tagConnections = [];
+      const newTags = [];
+
+      if (tags) {
+        for (const tag of tags) {
+          if (typeof tag === "string") {
+            tagConnections.push({ id: tag });
+          } else {
+            newTags.push(tag);
+          }
+        }
+      }
+
+      const newSubTasks = subTasks || [];
+
       const todo = await getPrisma().todo.create({
         data: {
           title,
@@ -128,10 +145,20 @@ todosApp.post(
             },
           },
           tags: {
-            connect: tags?.map((tag) => ({ id: tag })),
+            connect: tagConnections,
+            create: newTags.map((tag) => ({
+              name: tag.name,
+              user: {
+                connect: {
+                  id: user.id,
+                },
+              },
+            })),
           },
           subTasks: {
-            connect: subTasks?.map((subTask) => ({ id: subTask })),
+            create: newSubTasks.map((subTask) => ({
+              title: subTask.title,
+            })),
           },
         },
         select: TODOS_SELECT,

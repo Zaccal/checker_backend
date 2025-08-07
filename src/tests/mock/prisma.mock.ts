@@ -5,8 +5,8 @@ export const FAKE_TODO = {
   createdAt: new Date(),
   updatedAt: new Date(),
   expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24), // 1 day later
-  subTasks: [],
-  tags: [],
+  subTasks: [{}, {}],
+  tags: [{}, {}, {}],
 };
 
 const FAKE_LIST = {
