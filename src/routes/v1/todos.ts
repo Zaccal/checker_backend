@@ -11,8 +11,6 @@ import {
   todoCompletedSchema,
   todoCreateSchema,
   todoUpdateSchema,
-  newTagSchema,
-  newSubtaskSchema,
 } from "../../schemas/todos.schemas.js";
 
 const todosApp = new Hono<{ Variables: AuthVariables }>();
