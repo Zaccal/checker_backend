@@ -7,15 +7,17 @@ export const errorHandler: ErrorHandler = (err, c) => {
 
   const statusCode =
     currentStatus !== 200 ? (currentStatus as StatusCode) : 500;
-  const env = c.env?.NODE_ENV || process.env?.NODE_ENV;
+  const env =
+    (c.env as Record<string, unknown> | undefined)?.NODE_ENV ??
+    process.env.NODE_ENV;
 
   return c.json(
     {
       success: false,
-      message: err?.message || "Internal Server Error",
-      stack: env ? null : err?.stack,
+      message: err.message,
+      stack: env ? null : err.stack,
     },
-    statusCode as ContentfulStatusCode,
+    statusCode as ContentfulStatusCode
   );
 };
 
@@ -25,6 +27,6 @@ export const notFound: NotFoundHandler = (c) => {
       success: false,
       message: `Not Found - [${c.req.method}]:[${c.req.url}]`,
     },
-    404, // Explicitly set 404 status
+    404
   );
 };

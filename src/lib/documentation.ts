@@ -1,4 +1,4 @@
-import { type OpenAPIObjectConfigure } from "@hono/zod-openapi";
+import type {OpenAPIObjectConfigure} from "@hono/zod-openapi";
 import type { Env } from "hono";
 
 export const documentation: OpenAPIObjectConfigure<Env, "/doc"> = {

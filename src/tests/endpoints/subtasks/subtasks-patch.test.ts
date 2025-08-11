@@ -3,7 +3,7 @@ import {
   expectedKeysSubtask,
   expectHasProperties,
 } from "../../../lib/testHelper.js";
-import { subtaskUpdateSchema } from "../../../schemas/subtasks.schemas.js";
+import type { subtaskUpdateSchema } from "../../../schemas/subtasks.schemas.js";
 
 type UpdateSubtaskDto = typeof subtaskUpdateSchema._type;
 

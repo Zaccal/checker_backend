@@ -1,3 +1,4 @@
+import type { Session, User } from "better-auth";
 import type { Hono } from "hono";
 import {
   expectedProfileKeys,
@@ -43,7 +44,7 @@ describe("GET /api/v1/profile", () => {
       credentials: "include",
     });
 
-    const data = await response.json();
+    const data = (await response.json()) as User & { sessions: Session[] };
 
     expect(response.status).toBe(200);
     expectHasProperties(data, expectedProfileKeys);
@@ -60,7 +61,7 @@ describe("GET /api/v1/profile", () => {
       credentials: "include",
     });
 
-    const data = await response.json();
+    const data = (await response.json()) as User & { displayUsername: string };
 
     expect(response.status).toBe(200);
     expect(data).toHaveProperty("id");
@@ -79,7 +80,7 @@ describe("GET /api/v1/profile", () => {
       credentials: "include",
     });
 
-    const data = await response.json();
+    const data = (await response.json()) as User & { sessions: Session[] };
 
     expect(response.status).toBe(200);
     expect(data).toHaveProperty("sessions");

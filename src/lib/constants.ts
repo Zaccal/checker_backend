@@ -1,9 +1,9 @@
 import type { Prisma } from "../generated/prisma/index.js";
 
-export const API_VERSION = process.env.VERSION || "v1";
-export const API_PREFIX = process.env.PREFIX || "/api";
+export const API_VERSION = process.env.VERSION ?? "v1";
+export const API_PREFIX = process.env.PREFIX ?? "/api";
 export const BASE_PATH = `${API_PREFIX}/${API_VERSION}`;
-export const PORT = Number(process.env.PORT || 3500);
+export const PORT = Number(process.env.PORT ?? 3500);
 
 export const TAGS_SELECT: Prisma.TagSelect = {
   createdAt: true,

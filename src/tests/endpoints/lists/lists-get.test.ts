@@ -1,4 +1,9 @@
 import { app } from "../../../app.js";
+import type {
+  Prisma,
+  Todo,
+  TodoList,
+} from "../../../generated/prisma/index.js";
 import {
   expectedKeysLists,
   expectHasProperties,
@@ -13,7 +18,7 @@ describe("GET Method", () => {
       credentials: "include",
     });
 
-    const data = await response.json();
+    const data = (await response.json()) as TodoList[];
 
     expect(response.status).toBe(200);
     expect(data).toBeDefined();
@@ -31,7 +36,7 @@ describe("GET Method", () => {
       credentials: "include",
     });
 
-    const data = await response.json();
+    const data = (await response.json()) as TodoList[];
 
     expect(response.status).toBe(200);
     expect(data).toBeDefined();
@@ -50,7 +55,7 @@ describe("GET Method", () => {
       credentials: "include",
     });
 
-    const data = await response.json();
+    const data = (await response.json()) as TodoList[];
 
     expect(response.status).toBe(200);
     expect(data).toBeDefined();
@@ -72,7 +77,7 @@ describe("GET Method", () => {
       }
     );
 
-    const data = await response.json();
+    const data = (await response.json()) as TodoList[];
 
     expect(response.status).toBe(200);
     expect(data).toBeDefined();
@@ -98,7 +103,7 @@ describe("GET /api/v1/lists/:listId/todos (filter endpoint)", () => {
       }
     );
 
-    const data = await response.json();
+    const data = (await response.json()) as Todo[];
 
     expect(response.status).toBe(200);
     expect(Array.isArray(data)).toBe(true);
@@ -119,13 +124,15 @@ describe("GET /api/v1/lists/:listId/todos (filter endpoint)", () => {
         credentials: "include",
       }
     );
-    const data = await response.json();
+    const data = (await response.json()) as Todo[];
     expect(response.status).toBe(200);
     expect(Array.isArray(data)).toBe(true);
 
-    data.forEach((todo: { expiresAt: string }) => {
+    data.forEach((todo) => {
       expect(typeof todo.expiresAt).toBe("string");
-      const expiresAtDate = new Date(todo.expiresAt);
+      const expiresAtDate = todo.expiresAt
+        ? new Date(todo.expiresAt)
+        : new Date();
       expect(expiresAtDate.getTime()).toBeLessThanOrEqual(Date.now());
     });
   });
@@ -139,11 +146,12 @@ describe("GET /api/v1/lists/:listId/todos (filter endpoint)", () => {
         credentials: "include",
       }
     );
-    const data = await response.json();
+
+    const data = (await response.json()) as Todo[];
     expect(response.status).toBe(200);
     expect(Array.isArray(data)).toBe(true);
 
-    data.forEach((todo: { expiresAt: string }) => {
+    data.forEach((todo) => {
       expect(typeof todo.expiresAt).toBe("string");
     });
   });
@@ -158,14 +166,16 @@ describe("GET /api/v1/lists/:listId/todos (filter endpoint)", () => {
       }
     );
 
-    const data = await response.json();
+    const data = (await response.json()) as Todo[];
 
     expect(response.status).toBe(200);
     expect(Array.isArray(data)).toBe(true);
 
-    data.forEach((todo: { expiresAt: string }) => {
+    data.forEach((todo) => {
       expect(typeof todo.expiresAt).toBe("string");
-      const expiresAtDate = new Date(todo.expiresAt);
+      const expiresAtDate = todo.expiresAt
+        ? new Date(todo.expiresAt)
+        : new Date();
       expect(expiresAtDate.getTime()).toBeLessThanOrEqual(Date.now());
     });
   });
@@ -180,17 +190,21 @@ describe("GET /api/v1/lists/:listId/todos (filter endpoint)", () => {
         credentials: "include",
       }
     );
-    const data = await response.json();
+
+    type TodoWithTags = Todo & {
+      tags: {
+        id: string;
+      }[];
+    };
+    const data = (await response.json()) as TodoWithTags[];
 
     expect(response.status).toBe(200);
     expect(Array.isArray(data)).toBe(true);
 
     const tagIds = tagId.split(",");
     if (data.length) {
-      data.forEach((todo: { tags: { id: string }[] }) => {
-        const todoTagIds = (todo.tags || []).map(
-          (tag: { id: string }) => tag.id
-        );
+      data.forEach((todo) => {
+        const todoTagIds = todo.tags.map((tag) => tag.id);
         const hasAtLeastOne = tagIds.some((id) => todoTagIds.includes(id));
         expect(hasAtLeastOne).toBe(true);
       });
@@ -208,13 +222,12 @@ describe("GET /api/v1/lists/:listId/todos (filter endpoint)", () => {
         credentials: "include",
       }
     );
-    const data = await response.json();
-    console.log(data);
+    const data = (await response.json()) as Todo[];
 
     expect(response.status).toBe(200);
     expect(Array.isArray(data)).toBe(true);
     if (data.length) {
-      data.forEach((todo: { createdAt: string }) => {
+      data.forEach((todo) => {
         const createdAtDate = new Date(todo.createdAt).toISOString();
         expect(createdAtDate >= from).toBe(true);
         expect(createdAtDate <= to).toBe(true);
@@ -231,7 +244,7 @@ describe("GET /api/v1/lists/:listId/todos (filter endpoint)", () => {
         credentials: "include",
       }
     );
-    const data = await response.json();
+    const data = (await response.json()) as Todo[];
 
     expect(response.status).toBe(200);
     expect(Array.isArray(data)).toBe(true);
@@ -253,7 +266,7 @@ describe("GET /api/v1/lists/:listId/todos (filter endpoint)", () => {
         credentials: "include",
       }
     );
-    const data = await response.json();
+    const data = (await response.json()) as Todo[];
 
     expect(response.status).toBe(200);
     expect(Array.isArray(data)).toBe(true);
@@ -284,7 +297,7 @@ describe("GET /api/v1/lists/:listId/todos (filter endpoint)", () => {
       }
     );
     // testing by created
-    const dataCreated = await responseCreated.json();
+    const dataCreated = (await responseCreated.json()) as Todo[];
 
     expect(responseCreated.status).toBe(200);
     expect(Array.isArray(dataCreated)).toBe(true);
@@ -297,7 +310,7 @@ describe("GET /api/v1/lists/:listId/todos (filter endpoint)", () => {
     }
 
     // testing by updated
-    const dataUpdated = await responseUpadeted.json();
+    const dataUpdated = (await responseUpadeted.json()) as Todo[];
 
     expect(responseUpadeted.status).toBe(200);
     expect(Array.isArray(dataUpdated)).toBe(true);
@@ -331,7 +344,7 @@ describe("GET /api/v1/lists/:listId/todos (filter endpoint)", () => {
     );
 
     // testing createAt
-    const dataCreated = await responseCreated.json();
+    const dataCreated = (await responseCreated.json()) as Todo[];
 
     expect(responseCreated.status).toBe(200);
     expect(Array.isArray(dataCreated)).toBe(true);
@@ -344,7 +357,7 @@ describe("GET /api/v1/lists/:listId/todos (filter endpoint)", () => {
     }
 
     // testing updatedAt
-    const dataUpdated = await responseUpadeted.json();
+    const dataUpdated = (await responseUpadeted.json()) as Todo[];
 
     expect(responseUpadeted.status).toBe(200);
     expect(Array.isArray(dataUpdated)).toBe(true);

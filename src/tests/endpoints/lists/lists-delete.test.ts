@@ -1,4 +1,5 @@
 import type { Hono } from "hono";
+import type { TodoList } from "../../../generated/prisma/index.js";
 
 vi.mock("../../../lib/prisma.js", async () => {
   const { mockPrisma } = await import("../../mock/prisma.mock.js");
@@ -35,8 +36,7 @@ describe("DELETE Method", () => {
     const response = await appInstance.request("/api/v1/lists/123", {
       method: "DELETE",
     });
-    const data = await response.json();
-    console.log(data);
+    const data = (await response.json()) as TodoList[];
 
     expect(response.status).toBe(200);
     expect(data).toBeDefined();

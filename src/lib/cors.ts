@@ -1,6 +1,6 @@
 import { cors } from "hono/cors";
 
-const allowedOrigins = process.env.ORIGINS?.split(",") || [];
+const allowedOrigins = process.env.ORIGINS?.split(",") ?? [];
 
 export const authCors = cors({
   origin: allowedOrigins,

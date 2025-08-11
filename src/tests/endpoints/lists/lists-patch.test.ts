@@ -1,4 +1,5 @@
 import type { Hono } from "hono";
+import type { TodoList } from "../../../generated/prisma/index.js";
 
 vi.mock("../../../lib/prisma.js", async () => {
   const { mockPrisma } = await import("../../mock/prisma.mock.js");
@@ -42,7 +43,7 @@ describe("PATCH Mathod", () => {
       }),
     });
 
-    const data = await response.json();
+    const data = (await response.json()) as TodoList;
 
     expect(response.status).toBe(200);
     expect(data).toBeDefined();
@@ -56,7 +57,7 @@ describe("PATCH Mathod", () => {
       headers: global.authHeader,
     });
 
-    const data = await response.json();
+    const data = (await response.json()) as TodoList;
 
     expect(response.status).toBe(201);
     expect(data).toEqual({ success: true });

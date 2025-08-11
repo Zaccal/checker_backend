@@ -1,7 +1,5 @@
-import type { TodoSelectedResponse } from "./types.js";
-
-export function expectHasProperties<T = TodoSelectedResponse>(
-  obj: T,
+export function expectHasProperties(
+  obj: Record<string, unknown>,
   keys: string[]
 ) {
   keys.forEach((key) => {

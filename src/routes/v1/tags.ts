@@ -1,9 +1,9 @@
-import { Hono } from "hono";
-import type { AuthVariables } from "../../lib/auth-instance.js";
-import { getPrisma } from "../../lib/prisma.js";
-import { Prisma } from "../../generated/prisma/index.js";
 import { zValidator } from "@hono/zod-validator";
+import { Hono } from "hono";
+import { Prisma } from "../../generated/prisma/index.js";
+import type { AuthVariables } from "../../lib/auth-instance.js";
 import { TAGS_SELECT } from "../../lib/constants.js";
+import { getPrisma } from "../../lib/prisma.js";
 import { SearchQuerySchema } from "../../schemas/searchQuery.schemas.js";
 import {
   tagCreateSchema,

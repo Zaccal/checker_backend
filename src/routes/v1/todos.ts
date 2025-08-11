@@ -1,11 +1,11 @@
-import { Hono } from "hono";
-import { getPrisma } from "../../lib/prisma.js";
-import { Prisma } from "../../generated/prisma/index.js";
 import { zValidator } from "@hono/zod-validator";
-import type { AuthVariables } from "../../lib/auth-instance.js";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
-import protectRoutes from "../../middlewares/protectRoutes.middleware.js";
+import { Hono } from "hono";
+import { Prisma } from "../../generated/prisma/index.js";
+import type { AuthVariables } from "../../lib/auth-instance.js";
 import { TODOS_SELECT } from "../../lib/constants.js";
+import { getPrisma } from "../../lib/prisma.js";
+import protectRoutes from "../../middlewares/protectRoutes.middleware.js";
 import { SearchQuerySchema } from "../../schemas/searchQuery.schemas.js";
 import {
   todoCompletedSchema,
@@ -101,10 +101,7 @@ todosApp.post(
   "/",
   zValidator("json", todoCreateSchema, (result, c) => {
     if (!result.success) {
-      const errorMessage =
-        result.error?.errors?.map((e) => e.message).join(", ") ||
-        "Invalid format!";
-      return c.text(errorMessage, 400);
+      return c.text("Invalid Input", 400);
     }
   }),
   async (c) => {
@@ -126,7 +123,7 @@ todosApp.post(
         }
       }
 
-      const newSubtasks = subtasks || [];
+      const newSubtasks = subtasks ?? [];
 
       const todo = await getPrisma().todo.create({
         data: {
@@ -265,7 +262,7 @@ todosApp.patch(
 
     const tagConnections = [];
     const newTags = [];
-    const newSubtask = subtasks || [];
+    const newSubtask = subtasks ?? [];
 
     if (tags) {
       for (const tag of tags) {

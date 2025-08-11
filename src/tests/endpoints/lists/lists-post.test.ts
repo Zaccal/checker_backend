@@ -4,6 +4,7 @@ import {
   expectHasProperties,
 } from "../../../lib/testHelper.js";
 import type { CreateListDto } from "../../../schemas/taskList.schemas.js";
+import type { TodoList } from "../../../generated/prisma/index.js";
 
 vi.mock("../../../lib/prisma.ts", async () => {
   const { mockPrisma } = await import("../../mock/prisma.mock.js");
@@ -47,7 +48,7 @@ describe("POST method", () => {
       credentials: "include",
     });
 
-    const data = await resposne.json();
+    const data = (await resposne.json()) as TodoList;
 
     expect(resposne.status).toBe(200);
 

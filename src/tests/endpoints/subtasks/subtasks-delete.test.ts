@@ -40,7 +40,9 @@ describe("DELETE method", () => {
       credentials: "include",
     });
 
-    const data = await response.json();
+    const data = (await response.json()) as {
+      message: string;
+    };
 
     expect(response.status).toBe(200);
     expect(data).toHaveProperty("message");
