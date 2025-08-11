@@ -4,17 +4,13 @@ export const todoCompletedSchema = z.object({
   complited: z.boolean(),
 });
 
-export const todoUpdateSchema = z.object({
-  title: z.string().min(1).max(100).optional(),
-  expiresAt: z.string().optional(),
-});
-
 export const newTagSchema = z.object({
   name: z.string().min(2).max(50),
 });
 
 export const newSubtaskSchema = z.object({
   title: z.string().min(1).max(100),
+  completed: z.boolean().optional().default(false),
 });
 
 export const tagInputSchema = z.union([z.string(), newTagSchema]);
@@ -31,5 +27,17 @@ export const todoCreateSchema = z.object({
     .refine((value) => !value || !isNaN(Date.parse(value)), {
       message: "Invalid date string",
     }),
-  subTasks: z.array(subtaskInputSchema).optional(),
+  subtasks: z.array(subtaskInputSchema).optional(),
+});
+
+export const todoUpdateSchema = z.object({
+  title: z.string().min(1).max(100).optional(),
+  tags: z.array(tagInputSchema).optional(),
+  expiresAt: z
+    .string()
+    .optional()
+    .refine((value) => !value || !isNaN(Date.parse(value)), {
+      message: "Invalid date string",
+    }),
+  subtasks: z.array(subtaskInputSchema).optional(),
 });

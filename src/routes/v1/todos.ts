@@ -110,7 +110,7 @@ todosApp.post(
     }
   }),
   async (c) => {
-    const { title, taskListId, tags, expiresAt, subTasks } =
+    const { title, taskListId, tags, expiresAt, subtasks } =
       c.req.valid("json");
     const user = c.get("user");
 
@@ -128,7 +128,7 @@ todosApp.post(
         }
       }
 
-      const newSubTasks = subTasks || [];
+      const newSubtasks = subtasks || [];
 
       const todo = await getPrisma().todo.create({
         data: {
@@ -156,8 +156,9 @@ todosApp.post(
             })),
           },
           subTasks: {
-            create: newSubTasks.map((subTask) => ({
-              title: subTask.title,
+            create: newSubtasks.map((subtask) => ({
+              title: subtask.title,
+              completed: subtask.completed,
             })),
           },
         },
@@ -262,7 +263,21 @@ todosApp.patch(
   async (c) => {
     const { id } = c.req.param();
     const user = c.get("user");
-    const { title, expiresAt } = c.req.valid("json");
+    const { title, expiresAt, subtasks, tags } = c.req.valid("json");
+
+    const tagConnections = [];
+    const newTags = [];
+    const newSubtask = subtasks || [];
+
+    if (tags) {
+      for (const tag of tags) {
+        if (typeof tag === "string") {
+          tagConnections.push({ id: tag });
+        } else {
+          newTags.push(tag);
+        }
+      }
+    }
 
     try {
       const todo = await getPrisma().todo.update({
@@ -272,7 +287,26 @@ todosApp.patch(
         },
         data: {
           title,
-          expiresAt,
+          expiresAt: expiresAt ? new Date(expiresAt) : undefined,
+          tags: {
+            set: [],
+            connect: tagConnections,
+            create: newTags.map((tag) => ({
+              name: tag.name,
+              user: {
+                connect: {
+                  id: user.id,
+                },
+              },
+            })),
+          },
+          subTasks: {
+            deleteMany: {},
+            create: newSubtask.map((subtask) => ({
+              title: subtask.title,
+              completed: subtask.completed || false,
+            })),
+          },
         },
         select: TODOS_SELECT,
       });
