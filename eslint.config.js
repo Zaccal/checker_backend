@@ -1,31 +1,31 @@
 import js from "@eslint/js";
-import unusedImports from "eslint-plugin-unused-imports";
-import globals from "globals";
 import tseslint from "typescript-eslint";
-import { defineConfig } from "eslint/config";
 import baseConfig from "@hono/eslint-config";
 
-export default defineConfig([
+export default tseslint.config(
+  js.configs.recommended,
+  ...tseslint.configs.recommended,
+  ...baseConfig,
   {
-    files: ["**/*.{js,mjs,cjs,ts}"],
-    plugins: { js, unusedImports },
-    extends: ["js/recommended"],
+    ignores: [
+      "dist/**",
+      "node_modules/**",
+      "src/generated/**",
+      "coverage/**",
+      "**/*.js",
+      "./global.d.ts",
+    ],
   },
   {
-    files: ["**/*.{js,mjs,cjs,ts}"],
-    languageOptions: { globals: globals.node },
-  },
-  tseslint.configs.recommended,
-  baseConfig,
-  {
-    rules: {
-      "no-console": "warn",
+    files: ["**/*.ts"],
+    languageOptions: {
+      parserOptions: {
+        project: "./tsconfig.json",
+      },
     },
-  },
-  {
     rules: {
-      "no-console": "off",
+      "@typescript-eslint/no-unused-vars": "error",
+      "@typescript-eslint/no-this-alias": "off",
     },
-    files: ["./src/index.ts"],
-  },
-]);
+  }
+);

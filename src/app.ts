@@ -1,4 +1,10 @@
 import { Hono } from "hono";
+import { compress } from "hono/compress";
+import { logger } from "hono/logger";
+import { BASE_PATH } from "./lib/constants.js";
+import { authCors, globalCors } from "./lib/cors.js";
+import { userMidllware, errorHandler, notFound } from "./middlewares/index.js";
+import authCustom from "./routes/authCustom.js";
 import {
   authApp,
   docApp,
@@ -8,12 +14,6 @@ import {
   tasksList,
   todosApp,
 } from "./routes/v1/index.js";
-import { authCors, globalCors } from "./lib/cors.js";
-import { userMidllware, errorHandler, notFound } from "./middlewares/index.js";
-import { BASE_PATH } from "./lib/constants.js";
-import { logger } from "hono/logger";
-import { compress } from "hono/compress";
-import authCustom from "./routes/authCustom.js";
 
 const app = new Hono().basePath(BASE_PATH);
 
