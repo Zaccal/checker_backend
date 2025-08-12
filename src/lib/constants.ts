@@ -1,4 +1,4 @@
-import type { Prisma } from "../generated/prisma/index.js";
+import type { Prisma } from "@/generated/prisma/index.js";
 
 export const API_VERSION = process.env.VERSION ?? "v1";
 export const API_PREFIX = process.env.PREFIX ?? "/api";

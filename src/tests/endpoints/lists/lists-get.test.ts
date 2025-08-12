@@ -1,10 +1,10 @@
-import { app } from "../../../app.js";
-import type { Todo, TodoList } from "../../../generated/prisma/index.js";
+import { app } from "@/app.js";
+import type { Todo, TodoList } from "@/generated/prisma/index.js";
 import {
   expectedKeysLists,
   expectHasProperties,
   expectedKeysTodo,
-} from "../../../lib/testHelper.js";
+} from "@/lib/testHelper.js";
 
 describe("GET Method", () => {
   test("GET lists", async () => {

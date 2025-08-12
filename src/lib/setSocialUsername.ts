@@ -1,4 +1,4 @@
-import { getPrisma } from "./prisma.js";
+import { getPrisma } from "../config/prisma.js";
 
 export async function setSocialUsername(id: string, name: string) {
   try {

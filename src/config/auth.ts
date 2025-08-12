@@ -2,11 +2,11 @@ import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { createAuthMiddleware } from "better-auth/api";
 import { emailOTP, magicLink, openAPI, username } from "better-auth/plugins";
-import { transport } from "./email.js";
-import { getTrustedOrigins } from "./getTrustedOrigins.js";
-import { getPrisma } from "./prisma.js";
-import setDefaultLists from "./setDefaultLists.js";
-import { setSocialUsername } from "./setSocialUsername.js";
+import { transport } from "@/config/email.js";
+import { getPrisma } from "@/config/prisma.js";
+import { getTrustedOrigins } from "@/lib/getTrustedOrigins.js";
+import setDefaultLists from "@/lib/setDefaultLists.js";
+import { setSocialUsername } from "@/lib/setSocialUsername.js";
 
 const prisma = getPrisma();
 

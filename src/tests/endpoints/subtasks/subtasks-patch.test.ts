@@ -1,11 +1,8 @@
 import type { Hono } from "hono";
 import type { z } from "zod";
-import type { SubTask } from "../../../generated/prisma/index.js";
-import {
-  expectedKeysSubtask,
-  expectHasProperties,
-} from "../../../lib/testHelper.js";
-import type { subtaskUpdateSchema } from "../../../schemas/subtasks.schemas.js";
+import type { SubTask } from "@/generated/prisma/index.js";
+import { expectedKeysSubtask, expectHasProperties } from "@/lib/testHelper.js";
+import type { subtaskUpdateSchema } from "@/schemas/subtasks.schemas.js";
 
 type UpdateSubtaskDto = z.infer<typeof subtaskUpdateSchema>;
 

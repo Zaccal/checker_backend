@@ -1,15 +1,15 @@
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
-import { Prisma } from "../../generated/prisma/index.js";
-import type { AuthVariables } from "../../lib/auth-instance.js";
-import { SUBTASKS_SELECT } from "../../lib/constants.js";
-import { getPrisma } from "../../lib/prisma.js";
-import protectRoutes from "../../middlewares/protectRoutes.middleware.js";
-import { SearchQuerySchema } from "../../schemas/searchQuery.schemas.js";
+import type { AuthVariables } from "@/config/auth.js";
+import { getPrisma } from "@/config/prisma.js";
+import { Prisma } from "@/generated/prisma/index.js";
+import { SUBTASKS_SELECT } from "@/lib/constants.js";
+import protectRoutes from "@/middlewares/protectRoutes.middleware.js";
+import { SearchQuerySchema } from "@/schemas/searchQuery.schemas.js";
 import {
   subtaskCreateSchema,
   subtaskUpdateSchema,
-} from "../../schemas/subtasks.schemas.js";
+} from "@/schemas/subtasks.schemas.js";
 
 const subTaskApp = new Hono<{ Variables: AuthVariables }>();
 

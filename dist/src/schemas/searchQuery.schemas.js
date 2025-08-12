@@ -23,4 +23,4 @@ export const SearchQuerySchema = z
     })
         .optional(),
 })
-    .strict("Invalid query format!");
+    .strict();

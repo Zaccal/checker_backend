@@ -1,10 +1,7 @@
 import { describe, it, expect } from "vitest";
-import { app } from "../../../app.js";
-import type { Tag } from "../../../generated/prisma/index.js";
-import {
-  expectedKeysTags,
-  expectHasProperties,
-} from "../../../lib/testHelper.js";
+import { app } from "@/app.js";
+import type { Tag } from "@/generated/prisma/index.js";
+import { expectedKeysTags, expectHasProperties } from "@/lib/testHelper.js";
 
 describe("GET Method", () => {
   it("should return a list of tags", async () => {

@@ -4,7 +4,7 @@ import {
   expectedProfileKeys,
   expectedSessionKeys,
   expectHasProperties,
-} from "../../../lib/testHelper.js";
+} from "@/lib/testHelper.js";
 
 vi.mock("../../../lib/prisma.ts", async () => {
   const { mockPrisma } = await import("../../mock/prisma.mock.js");

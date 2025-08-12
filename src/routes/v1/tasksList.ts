@@ -1,18 +1,18 @@
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
-import { Prisma } from "../../generated/prisma/index.js";
-import type { AuthVariables } from "../../lib/auth-instance.js";
-import { LISTS_SELECT, TODOS_SELECT } from "../../lib/constants.js";
-import { filterTodosWhere } from "../../lib/filterTodosWhere.js";
-import { getPrisma } from "../../lib/prisma.js";
-import protectLists from "../../middlewares/protectLists.middleware.js";
-import protectRoutes from "../../middlewares/protectRoutes.middleware.js";
-import { SearchQuerySchema } from "../../schemas/searchQuery.schemas.js";
+import type { AuthVariables } from "@/config/auth.js";
+import { getPrisma } from "@/config/prisma.js";
+import { Prisma } from "@/generated/prisma/index.js";
+import { LISTS_SELECT, TODOS_SELECT } from "@/lib/constants.js";
+import { filterTodosWhere } from "@/lib/filterTodosWhere.js";
+import protectLists from "@/middlewares/protectLists.middleware.js";
+import protectRoutes from "@/middlewares/protectRoutes.middleware.js";
+import { SearchQuerySchema } from "@/schemas/searchQuery.schemas.js";
 import {
   createListSchema,
   filterTodosSchema,
   updateListSchema,
-} from "../../schemas/taskList.schemas.js";
+} from "@/schemas/taskList.schemas.js";
 
 const tasksList = new Hono<{ Variables: AuthVariables }>();
 

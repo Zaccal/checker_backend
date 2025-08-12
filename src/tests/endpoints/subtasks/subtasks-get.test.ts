@@ -1,9 +1,6 @@
-import { app } from "../../../app.js";
-import type { SubTask } from "../../../generated/prisma/index.js";
-import {
-  expectHasProperties,
-  expectedKeysSubtask,
-} from "../../../lib/testHelper.js";
+import { app } from "@/app.js";
+import type { SubTask } from "@/generated/prisma/index.js";
+import { expectHasProperties, expectedKeysSubtask } from "@/lib/testHelper.js";
 
 describe("GET Method - Subtasks", () => {
   describe("GET /search - Search subtasks", () => {

@@ -1,5 +1,5 @@
-import type { Prisma } from "../generated/prisma/index.js";
-import type { FilterTodosDto } from "../schemas/taskList.schemas.js";
+import type { Prisma } from "@/generated/prisma/index.js";
+import type { FilterTodosDto } from "@/schemas/taskList.schemas.js";
 
 export const filterTodosWhere = (
   filter: Omit<FilterTodosDto, "sortBy" | "sortOrder">,

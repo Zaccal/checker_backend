@@ -1,17 +1,17 @@
 import { zValidator } from "@hono/zod-validator";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
 import { Hono } from "hono";
-import { Prisma } from "../../generated/prisma/index.js";
-import type { AuthVariables } from "../../lib/auth-instance.js";
-import { TODOS_SELECT } from "../../lib/constants.js";
-import { getPrisma } from "../../lib/prisma.js";
-import protectRoutes from "../../middlewares/protectRoutes.middleware.js";
-import { SearchQuerySchema } from "../../schemas/searchQuery.schemas.js";
+import type { AuthVariables } from "@/config/auth.js";
+import { getPrisma } from "@/config/prisma.js";
+import { Prisma } from "@/generated/prisma/index.js";
+import { TODOS_SELECT } from "@/lib/constants.js";
+import protectRoutes from "@/middlewares/protectRoutes.middleware.js";
+import { SearchQuerySchema } from "@/schemas/searchQuery.schemas.js";
 import {
   todoCompletedSchema,
   todoCreateSchema,
   todoUpdateSchema,
-} from "../../schemas/todos.schemas.js";
+} from "@/schemas/todos.schemas.js";
 
 const todosApp = new Hono<{ Variables: AuthVariables }>();
 

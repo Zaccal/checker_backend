@@ -1,9 +1,6 @@
 import type { Hono } from "hono";
-import type { Todo } from "../../../generated/prisma/index.js";
-import {
-  expectHasProperties,
-  expectedKeysTodo,
-} from "../../../lib/testHelper.js";
+import type { Todo } from "@/generated/prisma/index.js";
+import { expectHasProperties, expectedKeysTodo } from "@/lib/testHelper.js";
 
 vi.mock("../../../lib/prisma.ts", async () => {
   const { mockPrisma } = await import("../../mock/prisma.mock.js");

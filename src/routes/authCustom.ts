@@ -1,8 +1,8 @@
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
 import { Prisma } from "../generated/prisma/index.js";
-import { getPrisma } from "../lib/prisma.js";
-import { changeEmailOtpSchemas } from "../schemas/changeEmailOtp.schemas.js";
+import { getPrisma } from "@/config/prisma.js";
+import { changeEmailOtpSchemas } from "@/schemas/changeEmailOtp.schemas.js";
 
 const authCustom = new Hono({
   strict: true,
@@ -42,7 +42,7 @@ authCustom.post(
 
       return c.text("An error occurred while changing email.", 500);
     }
-  },
+  }
 );
 
 export default authCustom;

@@ -1,8 +1,8 @@
 import { Hono } from "hono";
 import { compress } from "hono/compress";
 import { logger } from "hono/logger";
+import { authCors, globalCors } from "./config/cors.js";
 import { BASE_PATH } from "./lib/constants.js";
-import { authCors, globalCors } from "./lib/cors.js";
 import { userMidllware, errorHandler, notFound } from "./middlewares/index.js";
 import authCustom from "./routes/authCustom.js";
 import {

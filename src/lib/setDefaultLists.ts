@@ -1,4 +1,4 @@
-import { getPrisma } from "./prisma.js";
+import { getPrisma } from "../config/prisma.js";
 
 async function setDefaultLists(id: string) {
   await getPrisma().todoList.createMany({

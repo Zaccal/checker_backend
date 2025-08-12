@@ -1,6 +1,6 @@
 import { Hono } from "hono";
-import { auth  } from "../lib/auth-instance.js";
-import type {AuthType} from "../lib/auth-instance.js";
+import type { AuthType } from "../config/auth.js";
+import { auth } from "../config/auth.js";
 
 const authApp = new Hono<{ Bindings: AuthType }>({
   strict: true,

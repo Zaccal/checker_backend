@@ -1,14 +1,11 @@
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
-import { Prisma } from "../../generated/prisma/index.js";
-import type { AuthVariables } from "../../lib/auth-instance.js";
-import { TAGS_SELECT } from "../../lib/constants.js";
-import { getPrisma } from "../../lib/prisma.js";
-import { SearchQuerySchema } from "../../schemas/searchQuery.schemas.js";
-import {
-  tagCreateSchema,
-  tagUpdateSchema,
-} from "../../schemas/tags.schemas.js";
+import type { AuthVariables } from "@/config/auth.js";
+import { getPrisma } from "@/config/prisma.js";
+import { Prisma } from "@/generated/prisma/index.js";
+import { TAGS_SELECT } from "@/lib/constants.js";
+import { SearchQuerySchema } from "@/schemas/searchQuery.schemas.js";
+import { tagCreateSchema, tagUpdateSchema } from "@/schemas/tags.schemas.js";
 
 const tagsApp = new Hono<{ Variables: AuthVariables }>();
 const prisma = getPrisma();
@@ -49,13 +46,13 @@ tagsApp.get(
       ) {
         return c.text(
           `An error occurred while searching for tags. (${error.message})`,
-          500,
+          500
         );
       }
 
       c.text("An error occurred while searching for tags", 500);
     }
-  },
+  }
 );
 
 tagsApp.get("/", async (c) => {
@@ -159,7 +156,7 @@ tagsApp.post(
 
       c.text("An unknown error occurred while creating the tag", 500);
     }
-  },
+  }
 );
 
 // PATCH
@@ -195,13 +192,13 @@ tagsApp.patch(
 
         return c.text(
           `An error occurred while updating the tag: ${error.message}`,
-          500,
+          500
         );
       }
 
       return c.text("An error occurred while updating the tag.", 500);
     }
-  },
+  }
 );
 
 // DELETE
@@ -227,7 +224,7 @@ tagsApp.delete("/:id", async (c) => {
 
       return c.text(
         `An error occured while deleting the tag: ${error.message}`,
-        500,
+        500
       );
     }
 
