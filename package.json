@@ -13,7 +13,8 @@
     "test:watch": "vitest",
     "test:todos": "vitest run tests/endpoints/todos",
     "prisma:generate": "npx prisma generate",
-    "prisma:migrate": "npx prisma migrate deploy"
+    "prisma:migrate": "npx prisma migrate deploy",
+    "prepare": "husky"
   },
   "dependencies": {
     "@hono/node-server": "^1.14.1",
@@ -25,6 +26,7 @@
     "better-auth": "^1.2.7",
     "eslint-config": "link:@types/hono/eslint-config",
     "hono": "^4.7.9",
+    "husky": "^9.1.7",
     "nodemailer": "^7.0.3",
     "zod": "^4.0.17"
   },
