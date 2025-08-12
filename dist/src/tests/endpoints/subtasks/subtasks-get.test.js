@@ -8,7 +8,7 @@ describe("GET Method - Subtasks", () => {
                 headers: globalThis.authHeader,
                 credentials: "include",
             });
-            const data = await response.json();
+            const data = (await response.json());
             expect(response.status).toBe(200);
             expect(data).toBeDefined();
             expect(Array.isArray(data)).toBe(true);
@@ -22,7 +22,7 @@ describe("GET Method - Subtasks", () => {
                 headers: globalThis.authHeader,
                 credentials: "include",
             });
-            const data = await response.json();
+            const data = (await response.json());
             expect(response.status).toBe(200);
             expect(data).toBeDefined();
             expect(Array.isArray(data)).toBe(true);
@@ -39,8 +39,8 @@ describe("GET Method - Subtasks", () => {
             });
             expect(response.status).toBe(400);
             const data = await response.text();
-            const dataJson = JSON.parse(data)[0].message;
-            expect(dataJson).toBe("Invalid query format!");
+            const dataJson = JSON.parse(data)[0];
+            expect(dataJson.message).toBe("Invalid query format!");
         });
         test("GET search subtasks without authentication", async () => {
             const response = await app.request("/api/v1/subtasks/search?query=test", {
@@ -62,7 +62,7 @@ describe("GET Method - Subtasks", () => {
                 credentials: "include",
             });
             expect(response.status).toBe(200);
-            const data = await response.json();
+            const data = (await response.json());
             expect(data).toBeDefined();
             expectHasProperties(data, expectedKeysSubtask);
         });
@@ -74,7 +74,7 @@ describe("GET Method - Subtasks", () => {
                 credentials: "include",
             });
             expect(response.status).toBe(200);
-            const data = await response.json();
+            const data = (await response.json());
             expect(data).toBeDefined();
             expectHasProperties(data, expectedKeysSubtask);
         });
@@ -132,7 +132,7 @@ describe("GET Method - Subtasks", () => {
                 headers: globalThis.authHeader,
                 credentials: "include",
             });
-            const data = await response.json();
+            const data = (await response.json());
             expect(response.status).toBe(200);
             expect(data).toBeDefined();
             expect(Array.isArray(data)).toBe(true);
@@ -143,7 +143,7 @@ describe("GET Method - Subtasks", () => {
                 headers: globalThis.authHeader,
                 credentials: "include",
             });
-            const data = await response.json();
+            const data = (await response.json());
             expect(response.status).toBe(200);
             expect(data).toBeDefined();
             expect(Array.isArray(data)).toBe(true);
@@ -188,7 +188,7 @@ describe("GET Method - Subtasks", () => {
                 headers: globalThis.authHeader,
                 credentials: "include",
             });
-            const data = await response.json();
+            const data = (await response.json());
             expect(response.status).toBe(200);
             expect(data).toBeDefined();
             expect(Array.isArray(data)).toBe(true);

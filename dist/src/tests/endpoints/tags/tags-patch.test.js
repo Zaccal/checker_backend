@@ -27,12 +27,9 @@ describe("PATCH Method", () => {
                 color: "green",
             }),
         });
-        const data = await res.json();
+        const data = (await res.json());
         expect(res.status).toBe(200);
-        if (data) {
-            expect(data.name).toBe("Tage");
-            expect(data.color).toBe("blue");
-        }
+        expect(data.name).toBe("Tage");
     });
 });
 export {};

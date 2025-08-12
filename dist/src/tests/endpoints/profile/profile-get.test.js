@@ -27,7 +27,7 @@ describe("GET /api/v1/profile", () => {
             method: "GET",
             credentials: "include",
         });
-        const data = await response.json();
+        const data = (await response.json());
         expect(response.status).toBe(200);
         expectHasProperties(data, expectedProfileKeys);
         expect(Array.isArray(data.sessions)).toBe(true);
@@ -40,7 +40,7 @@ describe("GET /api/v1/profile", () => {
             method: "GET",
             credentials: "include",
         });
-        const data = await response.json();
+        const data = (await response.json());
         expect(response.status).toBe(200);
         expect(data).toHaveProperty("id");
         expect(data).toHaveProperty("name");
@@ -56,7 +56,7 @@ describe("GET /api/v1/profile", () => {
             method: "GET",
             credentials: "include",
         });
-        const data = await response.json();
+        const data = (await response.json());
         expect(response.status).toBe(200);
         expect(data).toHaveProperty("sessions");
         expect(Array.isArray(data.sessions)).toBe(true);

@@ -27,7 +27,7 @@ describe("DELETE Method", () => {
             headers: globalThis.authHeader,
             credentials: "include",
         });
-        const data = await response.json();
+        const data = (await response.json());
         expect(response.status).toBe(200);
         expect(data).toBeDefined();
         expect(data).toEqual({

@@ -25,8 +25,7 @@ describe("DELETE Method", () => {
         const response = await appInstance.request("/api/v1/lists/123", {
             method: "DELETE",
         });
-        const data = await response.json();
-        console.log(data);
+        const data = (await response.json());
         expect(response.status).toBe(200);
         expect(data).toBeDefined();
         expect(data).toEqual({

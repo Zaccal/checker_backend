@@ -7,7 +7,7 @@ describe("GET Method", () => {
             headers: globalThis.authHeader,
             credentials: "include",
         });
-        const data = await response.json();
+        const data = (await response.json());
         expect(response.status).toBe(200);
         expect(data).toBeDefined();
         expect(Array.isArray(data)).toBe(true);
@@ -21,7 +21,7 @@ describe("GET Method", () => {
             headers: globalThis.authHeader,
             credentials: "include",
         });
-        const data = await response.json();
+        const data = (await response.json());
         expect(response.status).toBe(200);
         expect(data).toBeDefined();
         expect(Array.isArray(data)).toBe(true);
@@ -36,7 +36,7 @@ describe("GET Method", () => {
             headers: globalThis.authHeader,
             credentials: "include",
         });
-        const data = await response.json();
+        const data = (await response.json());
         expect(response.status).toBe(200);
         expect(data).toBeDefined();
         expect(Array.isArray(data)).toBe(true);
@@ -51,7 +51,7 @@ describe("GET Method", () => {
             headers: globalThis.authHeader,
             credentials: "include",
         });
-        const data = await response.json();
+        const data = (await response.json());
         expect(response.status).toBe(200);
         expect(data).toBeDefined();
         expect(Array.isArray(data)).toBe(false);
@@ -69,7 +69,7 @@ describe("GET /api/v1/lists/:listId/todos (filter endpoint)", () => {
             headers: globalThis.authHeader,
             credentials: "include",
         });
-        const data = await response.json();
+        const data = (await response.json());
         expect(response.status).toBe(200);
         expect(Array.isArray(data)).toBe(true);
         if (data.length) {
@@ -85,12 +85,14 @@ describe("GET /api/v1/lists/:listId/todos (filter endpoint)", () => {
             headers: globalThis.authHeader,
             credentials: "include",
         });
-        const data = await response.json();
+        const data = (await response.json());
         expect(response.status).toBe(200);
         expect(Array.isArray(data)).toBe(true);
         data.forEach((todo) => {
             expect(typeof todo.expiresAt).toBe("string");
-            const expiresAtDate = new Date(todo.expiresAt);
+            const expiresAtDate = todo.expiresAt
+                ? new Date(todo.expiresAt)
+                : new Date();
             expect(expiresAtDate.getTime()).toBeLessThanOrEqual(Date.now());
         });
     });
@@ -100,7 +102,7 @@ describe("GET /api/v1/lists/:listId/todos (filter endpoint)", () => {
             headers: globalThis.authHeader,
             credentials: "include",
         });
-        const data = await response.json();
+        const data = (await response.json());
         expect(response.status).toBe(200);
         expect(Array.isArray(data)).toBe(true);
         data.forEach((todo) => {
@@ -113,12 +115,14 @@ describe("GET /api/v1/lists/:listId/todos (filter endpoint)", () => {
             headers: globalThis.authHeader,
             credentials: "include",
         });
-        const data = await response.json();
+        const data = (await response.json());
         expect(response.status).toBe(200);
         expect(Array.isArray(data)).toBe(true);
         data.forEach((todo) => {
             expect(typeof todo.expiresAt).toBe("string");
-            const expiresAtDate = new Date(todo.expiresAt);
+            const expiresAtDate = todo.expiresAt
+                ? new Date(todo.expiresAt)
+                : new Date();
             expect(expiresAtDate.getTime()).toBeLessThanOrEqual(Date.now());
         });
     });
@@ -129,13 +133,13 @@ describe("GET /api/v1/lists/:listId/todos (filter endpoint)", () => {
             headers: globalThis.authHeader,
             credentials: "include",
         });
-        const data = await response.json();
+        const data = (await response.json());
         expect(response.status).toBe(200);
         expect(Array.isArray(data)).toBe(true);
         const tagIds = tagId.split(",");
         if (data.length) {
             data.forEach((todo) => {
-                const todoTagIds = (todo.tags || []).map((tag) => tag.id);
+                const todoTagIds = todo.tags.map((tag) => tag.id);
                 const hasAtLeastOne = tagIds.some((id) => todoTagIds.includes(id));
                 expect(hasAtLeastOne).toBe(true);
             });
@@ -149,8 +153,7 @@ describe("GET /api/v1/lists/:listId/todos (filter endpoint)", () => {
             headers: globalThis.authHeader,
             credentials: "include",
         });
-        const data = await response.json();
-        console.log(data);
+        const data = (await response.json());
         expect(response.status).toBe(200);
         expect(Array.isArray(data)).toBe(true);
         if (data.length) {
@@ -167,7 +170,7 @@ describe("GET /api/v1/lists/:listId/todos (filter endpoint)", () => {
             headers: globalThis.authHeader,
             credentials: "include",
         });
-        const data = await response.json();
+        const data = (await response.json());
         expect(response.status).toBe(200);
         expect(Array.isArray(data)).toBe(true);
         if (data.length > 1) {
@@ -182,7 +185,7 @@ describe("GET /api/v1/lists/:listId/todos (filter endpoint)", () => {
             headers: globalThis.authHeader,
             credentials: "include",
         });
-        const data = await response.json();
+        const data = (await response.json());
         expect(response.status).toBe(200);
         expect(Array.isArray(data)).toBe(true);
         if (data.length > 1) {
@@ -203,7 +206,7 @@ describe("GET /api/v1/lists/:listId/todos (filter endpoint)", () => {
             credentials: "include",
         });
         // testing by created
-        const dataCreated = await responseCreated.json();
+        const dataCreated = (await responseCreated.json());
         expect(responseCreated.status).toBe(200);
         expect(Array.isArray(dataCreated)).toBe(true);
         if (dataCreated.length > 1) {
@@ -214,7 +217,7 @@ describe("GET /api/v1/lists/:listId/todos (filter endpoint)", () => {
             }
         }
         // testing by updated
-        const dataUpdated = await responseUpadeted.json();
+        const dataUpdated = (await responseUpadeted.json());
         expect(responseUpadeted.status).toBe(200);
         expect(Array.isArray(dataUpdated)).toBe(true);
         if (dataUpdated.length > 1) {
@@ -237,7 +240,7 @@ describe("GET /api/v1/lists/:listId/todos (filter endpoint)", () => {
             credentials: "include",
         });
         // testing createAt
-        const dataCreated = await responseCreated.json();
+        const dataCreated = (await responseCreated.json());
         expect(responseCreated.status).toBe(200);
         expect(Array.isArray(dataCreated)).toBe(true);
         if (dataCreated.length > 1) {
@@ -248,7 +251,7 @@ describe("GET /api/v1/lists/:listId/todos (filter endpoint)", () => {
             }
         }
         // testing updatedAt
-        const dataUpdated = await responseUpadeted.json();
+        const dataUpdated = (await responseUpadeted.json());
         expect(responseUpadeted.status).toBe(200);
         expect(Array.isArray(dataUpdated)).toBe(true);
         if (dataUpdated.length > 1) {

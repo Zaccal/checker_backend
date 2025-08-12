@@ -32,7 +32,7 @@ describe("POST method", () => {
             }),
             credentials: "include",
         });
-        const data = await resposne.json();
+        const data = (await resposne.json());
         expect(resposne.status).toBe(200);
         expectHasProperties(data, expectedKeysLists);
     });

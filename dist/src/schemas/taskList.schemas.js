@@ -8,7 +8,7 @@ export const updateListSchema = z
     icon: z.string().optional(),
     title: z.string().min(2).max(50).optional(),
 })
-    .refine((data) => data.icon || data.title, {
+    .refine((data) => data.icon ?? data.title, {
     message: "At least one field must be provided for update",
     path: ["icon", "title"],
 });
@@ -39,8 +39,8 @@ export const filterTodosSchema = z.object({
         .optional()
         .default("createdAt"),
     sortOrder: z.enum(["asc", "desc"]).optional().default("asc"),
-    createdFrom: z.string().datetime().optional(),
-    createdTo: z.string().datetime().optional(),
+    createdFrom: z.iso.datetime().optional(),
+    createdTo: z.iso.datetime().optional(),
     tagIds: z
         .string()
         .transform((val) => val.split(","))

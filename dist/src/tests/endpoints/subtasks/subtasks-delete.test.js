@@ -28,7 +28,7 @@ describe("DELETE method", () => {
             headers: globalThis.authHeader,
             credentials: "include",
         });
-        const data = await response.json();
+        const data = (await response.json());
         expect(response.status).toBe(200);
         expect(data).toHaveProperty("message");
         expect(data.message).toBe("Subtask has deleted successfully");

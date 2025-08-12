@@ -1,10 +1,11 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import { getPrisma } from "./prisma.js";
-import { emailOTP, magicLink, openAPI, username } from "better-auth/plugins";
 import { createAuthMiddleware } from "better-auth/api";
-import setDefaultLists from "./setDefaultLists.js";
+import { emailOTP, magicLink, openAPI, username } from "better-auth/plugins";
 import { transport } from "./email.js";
+import { getTrustedOrigins } from "./getTrustedOrigins.js";
+import { getPrisma } from "./prisma.js";
+import setDefaultLists from "./setDefaultLists.js";
 import { setSocialUsername } from "./setSocialUsername.js";
 const prisma = getPrisma();
 export const auth = betterAuth({
@@ -46,7 +47,7 @@ export const auth = betterAuth({
             trustedProviders: ["github", "google"],
         },
     },
-    trustedOrigins: process.env.ORIGINS.split(",") || [],
+    trustedOrigins: getTrustedOrigins().split(","),
     emailAndPassword: {
         enabled: true,
         requireEmailVerification: true,
@@ -62,12 +63,12 @@ export const auth = betterAuth({
     },
     socialProviders: {
         github: {
-            clientId: process.env.GITHUB_CLIENT_ID || "",
-            clientSecret: process.env.GITHUB_CLIENT_SECRET || "",
+            clientId: process.env.GITHUB_CLIENT_ID ?? "",
+            clientSecret: process.env.GITHUB_CLIENT_SECRET ?? "",
         },
         google: {
-            clientId: process.env.GOOGLE_CLIENT_ID || "",
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+            clientId: process.env.GOOGLE_CLIENT_ID ?? "",
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
         },
     },
     hooks: {

@@ -1,5 +1,4 @@
 import { expectedKeysSubtask, expectHasProperties, } from "../../../lib/testHelper.js";
-import { subtaskCreateSchema } from "../../../schemas/subtasks.schemas.js";
 vi.mock("../../../lib/prisma.ts", async () => {
     const { mockPrisma } = await import("../../mock/prisma.mock.js");
     return mockPrisma;
@@ -33,7 +32,7 @@ describe("POST method", () => {
             }),
             credentials: "include",
         });
-        const data = await response.json();
+        const data = (await response.json());
         expect(response.status).toBe(200);
         expectHasProperties(data, expectedKeysSubtask);
     });

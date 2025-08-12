@@ -29,10 +29,8 @@ describe("POST Method", () => {
                 todoId: "123",
             }),
         });
-        const data = await res.json();
+        const data = (await res.json());
         expect(res.status).toBe(200);
-        if (data) {
-            expectHasProperties(data, expectedKeysTags);
-        }
+        expectHasProperties(data, expectedKeysTags);
     });
 });

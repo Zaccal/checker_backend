@@ -4,7 +4,7 @@ import { expectedKeysTags, expectHasProperties, } from "../../../lib/testHelper.
 describe("GET Method", () => {
     it("should return a list of tags", async () => {
         const res = await app.request("/api/v1/tags");
-        const data = await res.json();
+        const data = (await res.json());
         expect(res.status).toBe(200);
         expect(Array.isArray(data)).toBe(true);
         if (Array.isArray(data)) {
@@ -20,7 +20,7 @@ describe("GET Method", () => {
     });
     it("search by id, should return single tag", async () => {
         const res = await app.request("/api/v1/tags/cmc0dc0y80005pu0btanmt1fo");
-        const data = await res.json();
+        const data = (await res.json());
         expect(res.status).toBe(200);
         expect(typeof data).toContain("object");
         expectHasProperties(data, expectedKeysTags);
@@ -30,7 +30,7 @@ describe("GET Method", () => {
             headers: globalThis.authHeader,
             credentials: "include",
         });
-        const data = await res.json();
+        const data = (await res.json());
         expect(res.status).toBe(200);
         expect(Array.isArray(data)).toBe(true);
         if (Array.isArray(data)) {

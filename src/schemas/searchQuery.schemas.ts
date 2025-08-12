@@ -24,6 +24,6 @@ export const SearchQuerySchema = z
       })
       .optional(),
   })
-  .strict("Invalid query format!");
+  .strict();
 
 export type SearchQueryDto = z.infer<typeof SearchQuerySchema>;

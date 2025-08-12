@@ -1,7 +1,7 @@
 import { Hono } from "hono";
+import { Prisma } from "../../generated/prisma/index.js";
 import { PROFILE_SELECT } from "../../lib/constants.js";
 import { getPrisma } from "../../lib/prisma.js";
-import { Prisma } from "../../generated/prisma/index.js";
 import protectRoutes from "../../middlewares/protectRoutes.middleware.js";
 const profileApp = new Hono();
 profileApp.use("*", protectRoutes);

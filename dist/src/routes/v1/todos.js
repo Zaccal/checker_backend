@@ -1,10 +1,10 @@
-import { Hono } from "hono";
-import { getPrisma } from "../../lib/prisma.js";
-import { Prisma } from "../../generated/prisma/index.js";
 import { zValidator } from "@hono/zod-validator";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
-import protectRoutes from "../../middlewares/protectRoutes.middleware.js";
+import { Hono } from "hono";
+import { Prisma } from "../../generated/prisma/index.js";
 import { TODOS_SELECT } from "../../lib/constants.js";
+import { getPrisma } from "../../lib/prisma.js";
+import protectRoutes from "../../middlewares/protectRoutes.middleware.js";
 import { SearchQuerySchema } from "../../schemas/searchQuery.schemas.js";
 import { todoCompletedSchema, todoCreateSchema, todoUpdateSchema, } from "../../schemas/todos.schemas.js";
 const todosApp = new Hono();
@@ -72,14 +72,25 @@ todosApp.get("/:id", async (c) => {
 // POST
 todosApp.post("/", zValidator("json", todoCreateSchema, (result, c) => {
     if (!result.success) {
-        const errorMessage = result.error?.errors?.map((e) => e.message).join(", ") ||
-            "Invalid format!";
-        return c.text(errorMessage, 400);
+        return c.text("Invalid Input", 400);
     }
 }), async (c) => {
-    const { title, taskListId, tags, expiresAt, subTasks } = c.req.valid("json");
+    const { title, taskListId, tags, expiresAt, subtasks } = c.req.valid("json");
     const user = c.get("user");
     try {
+        const tagConnections = [];
+        const newTags = [];
+        if (tags) {
+            for (const tag of tags) {
+                if (typeof tag === "string") {
+                    tagConnections.push({ id: tag });
+                }
+                else {
+                    newTags.push(tag);
+                }
+            }
+        }
+        const newSubtasks = subtasks ?? [];
         const todo = await getPrisma().todo.create({
             data: {
                 title,
@@ -95,10 +106,21 @@ todosApp.post("/", zValidator("json", todoCreateSchema, (result, c) => {
                     },
                 },
                 tags: {
-                    connect: tags?.map((tag) => ({ id: tag })),
+                    connect: tagConnections,
+                    create: newTags.map((tag) => ({
+                        name: tag.name,
+                        user: {
+                            connect: {
+                                id: user.id,
+                            },
+                        },
+                    })),
                 },
                 subTasks: {
-                    connect: subTasks?.map((subTask) => ({ id: subTask })),
+                    create: newSubtasks.map((subtask) => ({
+                        title: subtask.title,
+                        completed: subtask.completed,
+                    })),
                 },
             },
             select: TODOS_SELECT,
@@ -176,7 +198,20 @@ todosApp.patch("/:id", zValidator("json", todoUpdateSchema, (result, c) => {
 }), async (c) => {
     const { id } = c.req.param();
     const user = c.get("user");
-    const { title, expiresAt } = c.req.valid("json");
+    const { title, expiresAt, subtasks, tags } = c.req.valid("json");
+    const tagConnections = [];
+    const newTags = [];
+    const newSubtask = subtasks ?? [];
+    if (tags) {
+        for (const tag of tags) {
+            if (typeof tag === "string") {
+                tagConnections.push({ id: tag });
+            }
+            else {
+                newTags.push(tag);
+            }
+        }
+    }
     try {
         const todo = await getPrisma().todo.update({
             where: {
@@ -185,7 +220,26 @@ todosApp.patch("/:id", zValidator("json", todoUpdateSchema, (result, c) => {
             },
             data: {
                 title,
-                expiresAt,
+                expiresAt: expiresAt ? new Date(expiresAt) : undefined,
+                tags: {
+                    set: [],
+                    connect: tagConnections,
+                    create: newTags.map((tag) => ({
+                        name: tag.name,
+                        user: {
+                            connect: {
+                                id: user.id,
+                            },
+                        },
+                    })),
+                },
+                subTasks: {
+                    deleteMany: {},
+                    create: newSubtask.map((subtask) => ({
+                        title: subtask.title,
+                        completed: subtask.completed || false,
+                    })),
+                },
             },
             select: TODOS_SELECT,
         });

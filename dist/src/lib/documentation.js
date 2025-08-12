@@ -1,4 +1,3 @@
-import {} from "@hono/zod-openapi";
 export const documentation = {
     openapi: "3.0.0",
     info: {

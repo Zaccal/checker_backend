@@ -4,13 +4,13 @@ export const filterTodosWhere = (filter, listId, userId) => {
         todoListId: listId,
         userId,
         ...(completed !== undefined && { completed }),
-        ...((withDeadline || onlyExpired) && {
+        ...((withDeadline ?? onlyExpired) && {
             expiresAt: {
                 ...(withDeadline && { not: null }),
                 ...(onlyExpired && { lte: new Date() }),
             },
         }),
-        ...((createdFrom || createdTo) && {
+        ...((createdFrom ?? createdTo) && {
             createdAt: {
                 ...(createdFrom && {
                     gte: (() => {

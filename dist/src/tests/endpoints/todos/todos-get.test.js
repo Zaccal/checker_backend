@@ -8,7 +8,7 @@ describe("GET Method", () => {
             credentials: "include",
         });
         expect(todos.status).toBe(200);
-        const todosData = await todos.json();
+        const todosData = (await todos.json());
         expect(todosData).toBeDefined();
         expect(Array.isArray(todosData)).toBe(true);
         if (todosData.length > 0) {
@@ -32,7 +32,7 @@ describe("GET Method", () => {
             headers: globalThis.authHeader,
             credentials: "include",
         });
-        const data = await response.json();
+        const data = (await response.json());
         expect(response.status).toBe(200);
         expect(data).toBeDefined();
         expect(Array.isArray(data)).toBe(true);

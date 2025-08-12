@@ -30,7 +30,7 @@ describe("PATCH Mathod", () => {
                 icon: "Updated Icon",
             }),
         });
-        const data = await response.json();
+        const data = (await response.json());
         expect(response.status).toBe(200);
         expect(data).toBeDefined();
         expect(data.title).toBe("Inbox");
@@ -41,7 +41,7 @@ describe("PATCH Mathod", () => {
             method: "PATCH",
             headers: global.authHeader,
         });
-        const data = await response.json();
+        const data = (await response.json());
         expect(response.status).toBe(201);
         expect(data).toEqual({ success: true });
     });

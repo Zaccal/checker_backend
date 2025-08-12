@@ -29,7 +29,7 @@ describe("PATCH method", () => {
                 title: "Test Todo",
             }),
         });
-        const data = await response.json();
+        const data = (await response.json());
         expect(response.status).toBe(200);
         expect(data).toBeDefined();
         expectHasProperties(data, expectedKeysTodo);
@@ -42,7 +42,7 @@ describe("PATCH method", () => {
                 complited: true,
             }),
         });
-        const data = await response.json();
+        const data = (await response.json());
         expect(response.status).toBe(200);
         expect(data).toBeDefined();
         expectHasProperties(data, expectedKeysTodo);
