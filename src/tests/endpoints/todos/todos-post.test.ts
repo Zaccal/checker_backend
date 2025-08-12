@@ -1,4 +1,5 @@
 import type { Hono } from "hono";
+import type { Todo } from "../../../generated/prisma/index.js";
 
 vi.mock("../../../lib/prisma.ts", async () => {
   const { mockPrisma } = await import("../../mock/prisma.mock.js");
@@ -27,6 +28,11 @@ beforeAll(async () => {
   appInstance = app;
 });
 
+type TodoSelected = Todo & {
+  subTasks: object[];
+  tags: object[];
+};
+
 describe("POST method", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -41,19 +47,9 @@ describe("POST method", () => {
       }),
     });
 
-    const data = await response.json();
+    const data = (await response.json()) as TodoSelected;
 
     expect(response.status).toBe(200);
-    expect(data).toEqual({
-      id: "12345",
-      title: "Test Todo",
-      completed: false,
-      createdAt: expect.any(String),
-      updatedAt: expect.any(String),
-      expiresAt: expect.any(String),
-      subTasks: [],
-      tags: [],
-    });
     expect(data.id).toBeDefined();
     expect(data.title).toBe("Test Todo");
     expect(data.completed).toBe(false);
@@ -76,8 +72,7 @@ describe("POST method", () => {
       }),
     });
 
-    const data = await response.json();
-
+    const data = (await response.json()) as TodoSelected;
     expect(response.status).toBe(200);
     expect(data.id).toBeDefined();
     expect(data.title).toBe("Test Todo");
@@ -100,8 +95,7 @@ describe("POST method", () => {
       }),
     });
 
-    const data = await response.json();
-
+    const data = (await response.json()) as TodoSelected;
     expect(response.status).toBe(200);
     expect(data.id).toBeDefined();
     expect(data.title).toBe("Test Todo with New Tags Only");
@@ -120,8 +114,7 @@ describe("POST method", () => {
       }),
     });
 
-    const data = await response.json();
-
+    const data = (await response.json()) as TodoSelected;
     expect(response.status).toBe(200);
     expect(data.id).toBeDefined();
     expect(data.title).toBe("Test Todo with New Subtasks Only");

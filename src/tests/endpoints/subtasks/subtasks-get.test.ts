@@ -1,4 +1,5 @@
 import { app } from "../../../app.js";
+import type { SubTask } from "../../../generated/prisma/index.js";
 import {
   expectHasProperties,
   expectedKeysSubtask,
@@ -15,7 +16,7 @@ describe("GET Method - Subtasks", () => {
           credentials: "include",
         }
       );
-      const data = await response.json();
+      const data = (await response.json()) as SubTask[];
 
       expect(response.status).toBe(200);
       expect(data).toBeDefined();
@@ -35,7 +36,7 @@ describe("GET Method - Subtasks", () => {
           credentials: "include",
         }
       );
-      const data = await response.json();
+      const data = (await response.json()) as SubTask[];
 
       expect(response.status).toBe(200);
       expect(data).toBeDefined();
@@ -59,8 +60,8 @@ describe("GET Method - Subtasks", () => {
 
       expect(response.status).toBe(400);
       const data = await response.text();
-      const dataJson = JSON.parse(data)[0].message;
-      expect(dataJson).toBe("Invalid query format!");
+      const dataJson = (JSON.parse(data) as { message: string }[])[0];
+      expect(dataJson.message).toBe("Invalid query format!");
     });
 
     test("GET search subtasks without authentication", async () => {
@@ -89,7 +90,7 @@ describe("GET Method - Subtasks", () => {
       );
 
       expect(response.status).toBe(200);
-      const data = await response.json();
+      const data = (await response.json()) as SubTask;
       expect(data).toBeDefined();
       expectHasProperties(data, expectedKeysSubtask);
     });
@@ -106,7 +107,7 @@ describe("GET Method - Subtasks", () => {
       );
 
       expect(response.status).toBe(200);
-      const data = await response.json();
+      const data = (await response.json()) as SubTask;
       expect(data).toBeDefined();
       expectHasProperties(data, expectedKeysSubtask);
     });
@@ -184,7 +185,7 @@ describe("GET Method - Subtasks", () => {
         headers: globalThis.authHeader,
         credentials: "include",
       });
-      const data = await response.json();
+      const data = (await response.json()) as SubTask[];
 
       expect(response.status).toBe(200);
       expect(data).toBeDefined();
@@ -200,7 +201,7 @@ describe("GET Method - Subtasks", () => {
           credentials: "include",
         }
       );
-      const data = await response.json();
+      const data = (await response.json()) as SubTask[];
 
       expect(response.status).toBe(200);
       expect(data).toBeDefined();
@@ -221,7 +222,7 @@ describe("GET Method - Subtasks", () => {
       expect(response.status).toBe(400);
 
       const data = await response.text();
-      const dataJson = JSON.parse(data)[0];
+      const dataJson = (JSON.parse(data) as { message: string }[])[0];
 
       expect(dataJson.message).toBe("Query must be less than 100 characters");
     });
@@ -238,7 +239,7 @@ describe("GET Method - Subtasks", () => {
 
       expect(response.status).toBe(400);
       const data = await response.text();
-      const dataJson = JSON.parse(data)[0];
+      const dataJson = (JSON.parse(data) as { message: string }[])[0];
       expect(dataJson.message).toBe(
         "Number must be greater than or equal to 0"
       );
@@ -256,7 +257,7 @@ describe("GET Method - Subtasks", () => {
 
       expect(response.status).toBe(400);
       const data = await response.text();
-      const dataJson = JSON.parse(data)[0];
+      const dataJson = (JSON.parse(data) as { message: string }[])[0];
       expect(dataJson.message).toBe("Limit must be greater than 0");
     });
 
@@ -269,7 +270,7 @@ describe("GET Method - Subtasks", () => {
           credentials: "include",
         }
       );
-      const data = await response.json();
+      const data = (await response.json()) as SubTask[];
 
       expect(response.status).toBe(200);
       expect(data).toBeDefined();

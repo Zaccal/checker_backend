@@ -1,11 +1,13 @@
 import type { Hono } from "hono";
+import type { z } from "zod";
+import type { SubTask } from "../../../generated/prisma/index.js";
 import {
   expectedKeysSubtask,
   expectHasProperties,
 } from "../../../lib/testHelper.js";
 import type { subtaskUpdateSchema } from "../../../schemas/subtasks.schemas.js";
 
-type UpdateSubtaskDto = typeof subtaskUpdateSchema._type;
+type UpdateSubtaskDto = z.infer<typeof subtaskUpdateSchema>;
 
 vi.mock("../../../lib/prisma.ts", async () => {
   const { mockPrisma } = await import("../../mock/prisma.mock.js");
@@ -49,7 +51,7 @@ describe("PATCH method", () => {
       credentials: "include",
     });
 
-    const data = await response.json();
+    const data = (await response.json()) as SubTask;
 
     expect(response.status).toBe(200);
     expectHasProperties(data, expectedKeysSubtask);
@@ -65,7 +67,7 @@ describe("PATCH method", () => {
       credentials: "include",
     });
 
-    const data = await response.json();
+    const data = (await response.json()) as SubTask;
 
     expect(response.status).toBe(200);
     expectHasProperties(data, expectedKeysSubtask);
@@ -82,7 +84,7 @@ describe("PATCH method", () => {
       credentials: "include",
     });
 
-    const data = await response.json();
+    const data = (await response.json()) as SubTask;
 
     expect(response.status).toBe(200);
     expectHasProperties(data, expectedKeysSubtask);

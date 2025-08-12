@@ -35,7 +35,7 @@ describe("DELTE Method", () => {
     });
 
     expect(res.status).toBe(200);
-    const data = await res.json();
+    const data = (await res.json()) as { message: string };
     expect(data).toEqual({ message: "Tag deleted successfully" });
   });
 });

@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { app } from "../../../app.js";
+import type { Tag } from "../../../generated/prisma/index.js";
 import {
   expectedKeysTags,
   expectHasProperties,
@@ -8,7 +9,7 @@ import {
 describe("GET Method", () => {
   it("should return a list of tags", async () => {
     const res = await app.request("/api/v1/tags");
-    const data = await res.json();
+    const data = (await res.json()) as Tag[];
 
     expect(res.status).toBe(200);
     expect(Array.isArray(data)).toBe(true);
@@ -29,7 +30,7 @@ describe("GET Method", () => {
   it("search by id, should return single tag", async () => {
     const res = await app.request("/api/v1/tags/cmc0dc0y80005pu0btanmt1fo");
 
-    const data = await res.json();
+    const data = (await res.json()) as Tag;
 
     expect(res.status).toBe(200);
     expect(typeof data).toContain("object");
@@ -42,7 +43,7 @@ describe("GET Method", () => {
       headers: globalThis.authHeader,
       credentials: "include",
     });
-    const data = await res.json();
+    const data = (await res.json()) as Tag[];
 
     expect(res.status).toBe(200);
     expect(Array.isArray(data)).toBe(true);

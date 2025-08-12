@@ -1,11 +1,10 @@
 import type { Hono } from "hono";
+import type { SubTask } from "../../../generated/prisma/index.js";
 import {
   expectedKeysSubtask,
   expectHasProperties,
 } from "../../../lib/testHelper.js";
-import type { subtaskCreateSchema } from "../../../schemas/subtasks.schemas.js";
-
-type CreateSubtaskDto = typeof subtaskCreateSchema._type;
+import type { SubtaskCreateSchema } from "../../../schemas/subtasks.schemas.js";
 
 vi.mock("../../../lib/prisma.ts", async () => {
   const { mockPrisma } = await import("../../mock/prisma.mock.js");
@@ -46,11 +45,11 @@ describe("POST method", () => {
       body: JSON.stringify({
         title: "Test Subtask",
         taskId: "test-task-id",
-      } satisfies CreateSubtaskDto),
+      } satisfies SubtaskCreateSchema),
       credentials: "include",
     });
 
-    const data = await response.json();
+    const data = (await response.json()) as SubTask;
 
     expect(response.status).toBe(200);
     expectHasProperties(data, expectedKeysSubtask);

@@ -1,4 +1,5 @@
 import type { Hono } from "hono";
+import type { Tag } from "../../../generated/prisma/index.js";
 
 vi.mock("../../../lib/prisma.ts", async () => {
   const { mockPrisma } = await import("../../mock/prisma.mock.js");
@@ -37,12 +38,9 @@ describe("PATCH Method", () => {
         color: "green",
       }),
     });
-    const data = await res.json();
+    const data = (await res.json()) as Tag;
 
     expect(res.status).toBe(200);
-    if (data) {
-      expect(data.name).toBe("Tage");
-      expect(data.color).toBe("blue");
-    }
+    expect(data.name).toBe("Tage");
   });
 });

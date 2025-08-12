@@ -5,6 +5,8 @@ export const subtaskCreateSchema = z.object({
   taskId: z.string(),
 });
 
+export type SubtaskCreateSchema = z.infer<typeof subtaskCreateSchema>;
+
 export const subtaskUpdateSchema = z
   .object({
     title: z.string().max(100).optional(),

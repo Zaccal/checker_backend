@@ -1,4 +1,5 @@
 import { app } from "../../../app.js";
+import type { Todo } from "../../../generated/prisma/index.js";
 import {
   expectHasProperties,
   expectedKeysTodo,
@@ -13,7 +14,7 @@ describe("GET Method", () => {
     });
 
     expect(todos.status).toBe(200);
-    const todosData = await todos.json();
+    const todosData = (await todos.json()) as Todo[];
     expect(todosData).toBeDefined();
     expect(Array.isArray(todosData)).toBe(true);
 
@@ -44,9 +45,9 @@ describe("GET Method", () => {
         method: "GET",
         headers: globalThis.authHeader,
         credentials: "include",
-      },
+      }
     );
-    const data = await response.json();
+    const data = (await response.json()) as Todo[];
 
     expect(response.status).toBe(200);
     expect(data).toBeDefined();

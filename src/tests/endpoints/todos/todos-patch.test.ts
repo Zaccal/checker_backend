@@ -1,4 +1,5 @@
 import type { Hono } from "hono";
+import type { Todo } from "../../../generated/prisma/index.js";
 import {
   expectHasProperties,
   expectedKeysTodo,
@@ -43,7 +44,7 @@ describe("PATCH method", () => {
       }),
     });
 
-    const data = await response.json();
+    const data = (await response.json()) as Todo;
 
     expect(response.status).toBe(200);
     expect(data).toBeDefined();
@@ -60,7 +61,7 @@ describe("PATCH method", () => {
       }),
     });
 
-    const data = await response.json();
+    const data = (await response.json()) as Todo;
 
     expect(response.status).toBe(200);
     expect(data).toBeDefined();

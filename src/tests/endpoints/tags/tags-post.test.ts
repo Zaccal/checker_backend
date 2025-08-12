@@ -1,4 +1,5 @@
 import type { Hono } from "hono";
+import type { Tag } from "../../../generated/prisma/index.js";
 import {
   expectedKeysTags,
   expectHasProperties,
@@ -41,11 +42,9 @@ describe("POST Method", () => {
         todoId: "123",
       }),
     });
-    const data = await res.json();
+    const data = (await res.json()) as Tag;
 
     expect(res.status).toBe(200);
-    if (data) {
-      expectHasProperties(data, expectedKeysTags);
-    }
+    expectHasProperties(data, expectedKeysTags);
   });
 });
