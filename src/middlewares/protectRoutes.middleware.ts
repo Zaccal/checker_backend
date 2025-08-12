@@ -1,5 +1,5 @@
 import type { Context, Next } from "hono";
-import { auth } from "../lib/auth-instance.js";
+import { auth } from "@/config/auth.js";
 
 async function protectRoutes(c: Context, next: Next) {
   const session = await auth.api.getSession({ headers: c.req.raw.headers });

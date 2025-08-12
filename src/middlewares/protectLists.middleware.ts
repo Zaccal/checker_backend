@@ -1,5 +1,5 @@
 import type { Context, Next } from "hono";
-import { getPrisma } from "../lib/prisma.js";
+import { getPrisma } from "@/config/prisma.js";
 
 async function protectLists(c: Context, next: Next) {
   const { id } = c.req.param();
