@@ -96,7 +96,6 @@ export async function createTag(c, data, todoId) {
         return c.json(createdTag);
     }
     catch (error) {
-        console.log(error);
         if (error instanceof Error ||
             error instanceof Prisma.PrismaClientKnownRequestError) {
             return c.text(error.message, 500);

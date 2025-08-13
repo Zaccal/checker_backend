@@ -1,3 +1,5 @@
+import dotenv from "dotenv";
+dotenv.config();
 export const API_VERSION = process.env.VERSION ?? "v1";
 export const API_PREFIX = process.env.PREFIX ?? "/api";
 export const BASE_PATH = `${API_PREFIX}/${API_VERSION}`;

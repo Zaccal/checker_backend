@@ -5,5 +5,6 @@ serve({
     fetch: app.fetch,
     port: PORT,
 }, (info) => {
+    /* eslint no-console: "off" */
     console.log(`Server is running on http://localhost:${String(info.port)} 🚀`);
 });

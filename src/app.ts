@@ -1,10 +1,10 @@
-import { Hono } from "hono";
-import { compress } from "hono/compress";
-import { logger } from "hono/logger";
-import { authCors, globalCors } from "./config/cors.js";
-import { BASE_PATH } from "./lib/constants.js";
-import { userMidllware, errorHandler, notFound } from "./middlewares/index.js";
-import authCustom from "./routes/authCustom.js";
+import { Hono } from 'hono'
+import { compress } from 'hono/compress'
+import { logger } from 'hono/logger'
+import { authCors, globalCors } from './config/cors.js'
+import { BASE_PATH } from './lib/constants.js'
+import { userMidllware, errorHandler, notFound } from './middlewares/index.js'
+import authCustom from './routes/authCustom.js'
 import {
   authApp,
   docApp,
@@ -13,40 +13,40 @@ import {
   tagsApp,
   tasksList,
   todosApp,
-} from "./routes/v1/index.js";
+} from './routes/v1/index.js'
 
-const app = new Hono().basePath(BASE_PATH);
+const app = new Hono().basePath(BASE_PATH)
 
 // Set CORS for different routes
-app.use("/*", globalCors);
-app.use("/auth/*", authCors);
+app.use('/*', globalCors)
+app.use('/auth/*', authCors)
 
 // Middleware for get user for every route
-app.use("*", userMidllware);
+app.use('*', userMidllware)
 
 // Logging middleware
-app.use(logger());
+app.use(logger())
 // Compression middleware, enabled only in production
-if (process.env.NODE_ENV === "production") {
-  app.use(compress({ encoding: "gzip" }));
+if (process.env.NODE_ENV === 'production') {
+  app.use(compress({ encoding: 'gzip' }))
 }
 
 // Routes
-app.route("/todos", todosApp);
-app.route("/subtasks", subTaskApp);
-app.route("/lists", tasksList);
-app.route("/tags", tagsApp);
-app.route("/auth", authApp);
-app.route("/auth-custom", authCustom);
-app.route("/profile", profileApp);
+app.route('/todos', todosApp)
+app.route('/subtasks', subTaskApp)
+app.route('/lists', tasksList)
+app.route('/tags', tagsApp)
+app.route('/auth', authApp)
+app.route('/auth-custom', authCustom)
+app.route('/profile', profileApp)
 
 // Docs
-app.route("/", docApp);
+app.route('/', docApp)
 
 // Error Handler (improved to use err)
-app.onError(errorHandler);
+app.onError(errorHandler)
 
 // Not Found Handler (standardized response)
-app.notFound(notFound);
+app.notFound(notFound)
 
-export { app };
+export { app }
