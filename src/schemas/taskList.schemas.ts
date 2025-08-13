@@ -17,6 +17,8 @@ export const updateListSchema = z
     path: ["icon", "title"],
   });
 
+export type UpdateListDto = z.infer<typeof updateListSchema>;
+
 export const filterTodosSchema = z.object({
   completed: z
     .string()

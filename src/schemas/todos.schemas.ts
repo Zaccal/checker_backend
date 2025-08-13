@@ -30,6 +30,8 @@ export const todoCreateSchema = z.object({
   subtasks: z.array(subtaskInputSchema).optional(),
 });
 
+export type TodoCreateSchema = z.infer<typeof todoCreateSchema>;
+
 export const todoUpdateSchema = z.object({
   title: z.string().min(1).max(100).optional(),
   tags: z.array(tagInputSchema).optional(),
@@ -41,3 +43,5 @@ export const todoUpdateSchema = z.object({
     }),
   subtasks: z.array(subtaskInputSchema).optional(),
 });
+
+export type TodoUpdateSchema = z.infer<typeof todoUpdateSchema>;

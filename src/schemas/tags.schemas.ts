@@ -5,6 +5,10 @@ export const tagCreateSchema = z.object({
   todoId: z.string().optional(),
 });
 
+export type TagCreateSchemaDto = z.infer<typeof tagCreateSchema>;
+
 export const tagUpdateSchema = z.object({
   name: z.string().min(2).max(50).optional(),
 });
+
+export type TagUpdateSchemaDto = z.infer<typeof tagUpdateSchema>;

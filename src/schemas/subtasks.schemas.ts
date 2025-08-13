@@ -16,3 +16,5 @@ export const subtaskUpdateSchema = z
     message: "At least one field must be provided for update",
     path: ["title", "completed"],
   });
+
+export type SubtaskUpdateSchema = z.infer<typeof subtaskUpdateSchema>;

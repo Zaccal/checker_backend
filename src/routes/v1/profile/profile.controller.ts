@@ -1,17 +1,9 @@
-import { Hono } from "hono";
-import type { AuthVariables } from "@/config/auth.js";
 import { getPrisma } from "@/config/prisma.js";
 import { Prisma } from "@/generated/prisma/index.js";
 import { PROFILE_SELECT } from "@/lib/constants.js";
-import protectRoutes from "@/middlewares/protectRoutes.middleware.js";
+import type { ContextAuth } from "@/lib/types.js";
 
-const profileApp = new Hono<{
-  Variables: AuthVariables;
-}>();
-
-profileApp.use("*", protectRoutes);
-
-profileApp.get("/", async (c) => {
+export async function getProfile(c: ContextAuth) {
   const user = c.get("user");
 
   try {
@@ -40,6 +32,4 @@ profileApp.get("/", async (c) => {
 
     return c.text("An error occurred while getting the profile", 500);
   }
-});
-
-export default profileApp;
+}

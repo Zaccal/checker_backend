@@ -11,7 +11,7 @@ async function userMidllware(c: Context, next: Next) {
     return next();
   }
 
-  c.text("Couldn't get session");
+  return c.text("Couldn't get session");
 }
 
 export default userMidllware;

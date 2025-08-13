@@ -1,4 +1,6 @@
-import type { Prisma } from "../generated/prisma/index.js";
+import type { Context } from "hono";
+import type { AuthVariables } from "@/config/auth.js";
+import type { Prisma } from "@/generated/prisma/index.js";
 
 export type TodoSelectedResponse = Prisma.TodoGetPayload<{
   select: {
@@ -12,3 +14,5 @@ export type TodoSelectedResponse = Prisma.TodoGetPayload<{
     updatedAt: true;
   };
 }>;
+
+export type ContextAuth = Context<{ Variables: AuthVariables }>;
