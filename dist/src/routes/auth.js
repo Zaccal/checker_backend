@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { auth } from "../lib/auth-instance.js";
+import { auth } from "../config/auth.js";
 const authApp = new Hono({
     strict: true,
 });

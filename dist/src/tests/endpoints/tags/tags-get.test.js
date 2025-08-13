@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { app } from "../../../app.js";
-import { expectedKeysTags, expectHasProperties, } from "../../../lib/testHelper.js";
+import { app } from "@/app.js";
+import { expectedKeysTags, expectHasProperties } from "@/lib/testHelper.js";
 describe("GET Method", () => {
     it("should return a list of tags", async () => {
         const res = await app.request("/api/v1/tags");

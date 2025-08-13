@@ -1,4 +1,4 @@
-import { expectedKeysTags, expectHasProperties, } from "../../../lib/testHelper.js";
+import { expectedKeysTags, expectHasProperties } from "@/lib/testHelper.js";
 vi.mock("../../../lib/prisma.ts", async () => {
     const { mockPrisma } = await import("../../mock/prisma.mock.js");
     return mockPrisma;

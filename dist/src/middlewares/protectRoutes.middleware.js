@@ -1,4 +1,4 @@
-import { auth } from "../lib/auth-instance.js";
+import { auth } from "@/config/auth.js";
 async function protectRoutes(c, next) {
     const session = await auth.api.getSession({ headers: c.req.raw.headers });
     if (!session?.user) {
