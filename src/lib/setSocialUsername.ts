@@ -1,4 +1,5 @@
 import { getPrisma } from "../config/prisma.js";
+import { Prisma } from "@/generated/prisma/index.js";
 
 export async function setSocialUsername(id: string, name: string) {
   try {
@@ -12,6 +13,10 @@ export async function setSocialUsername(id: string, name: string) {
       },
     });
   } catch (error) {
-    console.error("Failed to set social username:", error);
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      return new Error(error.message);
+    }
+
+    return new Error("Couldn't set username");
   }
 }

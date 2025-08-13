@@ -26,6 +26,7 @@ export default tseslint.config(
     rules: {
       "@typescript-eslint/no-unused-vars": "error",
       "@typescript-eslint/no-this-alias": "off",
+      "no-console": "error",
     },
   }
 );

@@ -75,6 +75,7 @@ export const auth = betterAuth({
   },
   hooks: {
     after: createAuthMiddleware(async (c) => {
+      // TODO: Make catcher errors
       const newSession = c.context.newSession;
 
       if (

@@ -130,8 +130,6 @@ export async function createTag(
 
     return c.json(createdTag);
   } catch (error) {
-    console.log(error);
-
     if (
       error instanceof Error ||
       error instanceof Prisma.PrismaClientKnownRequestError
