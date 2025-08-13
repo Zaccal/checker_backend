@@ -1,10 +1,10 @@
-import { getPrisma } from "@/config/prisma.js";
-import { Prisma } from "@/generated/prisma/index.js";
-import { PROFILE_SELECT } from "@/lib/constants.js";
-import type { ContextAuth } from "@/lib/types.js";
+import { getPrisma } from '@/config/prisma.js'
+import { Prisma } from '@/generated/prisma/index.js'
+import { PROFILE_SELECT } from '@/lib/constants.js'
+import type { ContextAuth } from '@/lib/types.js'
 
 export async function getProfile(c: ContextAuth) {
-  const user = c.get("user");
+  const user = c.get('user')
 
   try {
     const profile = await getPrisma().user.findUnique({
@@ -12,13 +12,13 @@ export async function getProfile(c: ContextAuth) {
         id: user.id,
       },
       select: PROFILE_SELECT,
-    });
+    })
 
     if (!profile) {
-      return c.json({ message: "User not found" }, 404);
+      return c.json({ message: 'User not found' }, 404)
     }
 
-    return c.json(profile, 200);
+    return c.json(profile, 200)
   } catch (error) {
     if (
       error instanceof Prisma.PrismaClientKnownRequestError ||
@@ -26,10 +26,10 @@ export async function getProfile(c: ContextAuth) {
     ) {
       return c.text(
         `An error occurred while getting the profile: ${error.message}`,
-        500
-      );
+        500,
+      )
     }
 
-    return c.text("An error occurred while getting the profile", 500);
+    return c.text('An error occurred while getting the profile', 500)
   }
 }

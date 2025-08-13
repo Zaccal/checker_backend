@@ -1,5 +1,5 @@
-import { zValidator } from "@hono/zod-validator";
-import { Hono } from "hono";
+import { zValidator } from '@hono/zod-validator'
+import { Hono } from 'hono'
 import {
   getSearch,
   getTodoById,
@@ -7,93 +7,93 @@ import {
   deleteTodo,
   completeTodo,
   updateTodo,
-} from "./todo.controller.js";
-import type { AuthVariables } from "@/config/auth.js";
-import protectRoutes from "@/middlewares/protectRoutes.middleware.js";
-import { SearchQuerySchema } from "@/schemas/searchQuery.schemas.js";
+} from './todo.controller.js'
+import type { AuthVariables } from '@/config/auth.js'
+import protectRoutes from '@/middlewares/protectRoutes.middleware.js'
+import { SearchQuerySchema } from '@/schemas/searchQuery.schemas.js'
 import {
   todoCompletedSchema,
   todoCreateSchema,
   todoUpdateSchema,
-} from "@/schemas/todos.schemas.js";
+} from '@/schemas/todos.schemas.js'
 
-const todosApp = new Hono<{ Variables: AuthVariables }>();
+const todosApp = new Hono<{ Variables: AuthVariables }>()
 
 // Secure the todos routes
-todosApp.use("*", protectRoutes);
+todosApp.use('*', protectRoutes)
 
 // GET
 
 todosApp.get(
-  "/search",
-  zValidator("query", SearchQuerySchema, (result, c) => {
+  '/search',
+  zValidator('query', SearchQuerySchema, (result, c) => {
     if (!result.success) {
-      return c.text("Invalid query format!", 400);
+      return c.text('Invalid query format!', 400)
     }
   }),
-  async (c) => {
-    const query = c.req.valid("query");
+  async c => {
+    const query = c.req.valid('query')
 
-    return await getSearch(c, query);
-  }
-);
+    return await getSearch(c, query)
+  },
+)
 
-todosApp.get("/:id", async (c) => {
-  const { id } = c.req.param();
+todosApp.get('/:id', async c => {
+  const { id } = c.req.param()
 
-  return await getTodoById(c, id);
-});
+  return await getTodoById(c, id)
+})
 
 // POST
 
 todosApp.post(
-  "/",
-  zValidator("json", todoCreateSchema, (result, c) => {
+  '/',
+  zValidator('json', todoCreateSchema, (result, c) => {
     if (!result.success) {
-      return c.text("Invalid Input", 400);
+      return c.text('Invalid Input', 400)
     }
   }),
-  async (c) => {
-    const body = c.req.valid("json");
-    return await createTodo(c, body);
-  }
-);
+  async c => {
+    const body = c.req.valid('json')
+    return await createTodo(c, body)
+  },
+)
 
 // DELETE
 
-todosApp.delete("/:id", async (c) => {
-  const { id } = c.req.param();
-  return await deleteTodo(c, id);
-});
+todosApp.delete('/:id', async c => {
+  const { id } = c.req.param()
+  return await deleteTodo(c, id)
+})
 
 // PATCH
 
 todosApp.patch(
-  "complite/:id",
-  zValidator("json", todoCompletedSchema, (result, c) => {
+  'complite/:id',
+  zValidator('json', todoCompletedSchema, (result, c) => {
     if (!result.success) {
-      return c.text("Invalide format!", 400);
+      return c.text('Invalide format!', 400)
     }
   }),
-  async (c) => {
-    const { id } = c.req.param();
-    const { complited } = c.req.valid("json");
-    return await completeTodo(c, id, complited);
-  }
-);
+  async c => {
+    const { id } = c.req.param()
+    const { complited } = c.req.valid('json')
+    return await completeTodo(c, id, complited)
+  },
+)
 
 todosApp.patch(
-  "/:id",
-  zValidator("json", todoUpdateSchema, (result, c) => {
+  '/:id',
+  zValidator('json', todoUpdateSchema, (result, c) => {
     if (!result.success) {
-      return c.text("Invalide format!", 400);
+      return c.text('Invalide format!', 400)
     }
   }),
-  async (c) => {
-    const { id } = c.req.param();
-    const body = c.req.valid("json");
-    return await updateTodo(c, body, id);
-  }
-);
+  async c => {
+    const { id } = c.req.param()
+    const body = c.req.valid('json')
+    return await updateTodo(c, body, id)
+  },
+)
 
-export default todosApp;
+export default todosApp

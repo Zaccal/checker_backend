@@ -1,48 +1,48 @@
-import type { Hono } from "hono";
+import type { Hono } from 'hono'
 
-vi.mock("../../../lib/prisma.ts", async () => {
-  const { mockPrisma } = await import("../../mock/prisma.mock.js");
-  return mockPrisma;
-});
+vi.mock('../../../lib/prisma.ts', async () => {
+  const { mockPrisma } = await import('../../mock/prisma.mock.js')
+  return mockPrisma
+})
 
-vi.mock("../../../middlewares/protectRoutes.middleware.ts", async () => {
+vi.mock('../../../middlewares/protectRoutes.middleware.ts', async () => {
   const { mockSkipProtectedRoute } = await import(
-    "../../mock/authMiddlewares.mock.js"
-  );
-  return mockSkipProtectedRoute;
-});
+    '../../mock/authMiddlewares.mock.js'
+  )
+  return mockSkipProtectedRoute
+})
 
-vi.mock("../../../middlewares/getUser.middlleware.ts", async () => {
+vi.mock('../../../middlewares/getUser.middlleware.ts', async () => {
   const { mockGetUserMiddleware } = await import(
-    "../../mock/authMiddlewares.mock.js"
-  );
+    '../../mock/authMiddlewares.mock.js'
+  )
   return {
     default: mockGetUserMiddleware,
-  };
-});
+  }
+})
 
-let appInstance: Hono;
+let appInstance: Hono
 beforeAll(async () => {
-  const { app } = await import("../../../app.js");
-  appInstance = app;
-});
+  const { app } = await import('../../../app.js')
+  appInstance = app
+})
 
-describe("DELETE Method", () => {
+describe('DELETE Method', () => {
   beforeEach(() => {
-    vi.resetAllMocks();
-  });
-  test("should delete a todo", async () => {
-    const response = await appInstance.request("/api/v1/todos/123", {
-      method: "DELETE",
+    vi.resetAllMocks()
+  })
+  test('should delete a todo', async () => {
+    const response = await appInstance.request('/api/v1/todos/123', {
+      method: 'DELETE',
       headers: globalThis.authHeader,
-      credentials: "include",
-    });
-    const data = (await response.json()) as { success: boolean };
+      credentials: 'include',
+    })
+    const data = (await response.json()) as { success: boolean }
 
-    expect(response.status).toBe(200);
-    expect(data).toBeDefined();
+    expect(response.status).toBe(200)
+    expect(data).toBeDefined()
     expect(data).toEqual({
       success: true,
-    });
-  });
-});
+    })
+  })
+})

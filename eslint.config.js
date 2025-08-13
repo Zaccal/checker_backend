@@ -1,6 +1,6 @@
-import js from "@eslint/js";
-import tseslint from "typescript-eslint";
-import baseConfig from "@hono/eslint-config";
+import js from '@eslint/js'
+import tseslint from 'typescript-eslint'
+import baseConfig from '@hono/eslint-config'
 
 export default tseslint.config(
   js.configs.recommended,
@@ -8,25 +8,25 @@ export default tseslint.config(
   ...baseConfig,
   {
     ignores: [
-      "dist/**",
-      "node_modules/**",
-      "src/generated/**",
-      "coverage/**",
-      "**/*.js",
-      "./global.d.ts",
+      'dist/**',
+      'node_modules/**',
+      'src/generated/**',
+      'coverage/**',
+      '**/*.js',
+      './global.d.ts',
     ],
   },
   {
-    files: ["**/*.ts"],
+    files: ['**/*.ts'],
     languageOptions: {
       parserOptions: {
-        project: "./tsconfig.json",
+        project: './tsconfig.json',
       },
     },
     rules: {
-      "@typescript-eslint/no-unused-vars": "error",
-      "@typescript-eslint/no-this-alias": "off",
-      "no-console": "error",
+      '@typescript-eslint/no-unused-vars': 'error',
+      '@typescript-eslint/no-this-alias': 'off',
+      'no-console': 'error',
     },
-  }
-);
+  },
+)

@@ -1,12 +1,12 @@
-import dotenv from "dotenv";
-import type { Prisma } from "@/generated/prisma/index.js";
+import dotenv from 'dotenv'
+import type { Prisma } from '@/generated/prisma/index.js'
 
-dotenv.config();
+dotenv.config()
 
-export const API_VERSION = process.env.VERSION ?? "v1";
-export const API_PREFIX = process.env.PREFIX ?? "/api";
-export const BASE_PATH = `${API_PREFIX}/${API_VERSION}`;
-export const PORT = Number(process.env.PORT ?? 3500);
+export const API_VERSION = process.env.VERSION ?? 'v1'
+export const API_PREFIX = process.env.PREFIX ?? '/api'
+export const BASE_PATH = `${API_PREFIX}/${API_VERSION}`
+export const PORT = Number(process.env.PORT ?? 3500)
 
 export const TAGS_SELECT: Prisma.TagSelect = {
   createdAt: true,
@@ -23,7 +23,7 @@ export const TAGS_SELECT: Prisma.TagSelect = {
       updatedAt: true,
     },
   },
-};
+}
 
 export const SUBTASKS_SELECT: Prisma.SubTaskSelect = {
   id: true,
@@ -32,7 +32,7 @@ export const SUBTASKS_SELECT: Prisma.SubTaskSelect = {
   title: true,
   completed: true,
   todoId: true,
-};
+}
 
 export const TODOS_SELECT: Prisma.TodoSelect = {
   createdAt: true,
@@ -50,7 +50,7 @@ export const TODOS_SELECT: Prisma.TodoSelect = {
   subTasks: {
     select: SUBTASKS_SELECT,
   },
-};
+}
 
 export const LISTS_SELECT: Prisma.TodoListSelect = {
   id: true,
@@ -62,7 +62,7 @@ export const LISTS_SELECT: Prisma.TodoListSelect = {
   todos: {
     select: TODOS_SELECT,
   },
-};
+}
 
 export const PROFILE_SELECT: Prisma.UserSelect = {
   id: true,
@@ -81,4 +81,4 @@ export const PROFILE_SELECT: Prisma.UserSelect = {
       ipAddress: true,
     },
   },
-};
+}

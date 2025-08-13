@@ -1,21 +1,21 @@
-import { getPrisma } from "@/config/prisma.js";
-import { Prisma } from "@/generated/prisma/index.js";
-import { LISTS_SELECT, TODOS_SELECT } from "@/lib/constants.js";
-import { filterTodosWhere } from "@/lib/filterTodosWhere.js";
-import type { ContextAuth } from "@/lib/types.js";
-import type { SearchQueryDto } from "@/schemas/searchQuery.schemas.js";
+import { getPrisma } from '@/config/prisma.js'
+import { Prisma } from '@/generated/prisma/index.js'
+import { LISTS_SELECT, TODOS_SELECT } from '@/lib/constants.js'
+import { filterTodosWhere } from '@/lib/filterTodosWhere.js'
+import type { ContextAuth } from '@/lib/types.js'
+import type { SearchQueryDto } from '@/schemas/searchQuery.schemas.js'
 import type {
   CreateListDto,
   FilterTodosDto,
   UpdateListDto,
-} from "@/schemas/taskList.schemas.js";
+} from '@/schemas/taskList.schemas.js'
 
 export async function searchTasksList(
   c: ContextAuth,
-  queryParams: SearchQueryDto
+  queryParams: SearchQueryDto,
 ) {
-  const userId = c.get("user").id;
-  const { query, limit, offset } = queryParams;
+  const userId = c.get('user').id
+  const { query, limit, offset } = queryParams
 
   try {
     const foundLists = await getPrisma().todoList.findMany({
@@ -23,15 +23,15 @@ export async function searchTasksList(
         userId,
         title: {
           contains: query,
-          mode: "insensitive",
+          mode: 'insensitive',
         },
       },
       skip: offset,
       take: limit,
       select: LISTS_SELECT,
-    });
+    })
 
-    return c.json(foundLists);
+    return c.json(foundLists)
   } catch (error) {
     if (
       error instanceof Error ||
@@ -39,14 +39,14 @@ export async function searchTasksList(
     ) {
       return c.text(
         `An error occurred while searching the todo lists. (${error.message})`,
-        500
-      );
+        500,
+      )
     }
   }
 }
 
 export async function getTaskLists(c: ContextAuth) {
-  const { id } = c.get("user");
+  const { id } = c.get('user')
 
   try {
     const lists = await getPrisma().todoList.findMany({
@@ -56,11 +56,11 @@ export async function getTaskLists(c: ContextAuth) {
       },
       select: LISTS_SELECT,
       orderBy: {
-        createdAt: "asc",
+        createdAt: 'asc',
       },
-    });
+    })
 
-    return c.json(lists);
+    return c.json(lists)
   } catch (error) {
     if (
       error instanceof Error ||
@@ -68,14 +68,14 @@ export async function getTaskLists(c: ContextAuth) {
     ) {
       return c.text(
         `An error occurred while getting the todo list. (${error.message})`,
-        500
-      );
+        500,
+      )
     }
   }
 }
 
 export async function getTaskListsProtected(c: ContextAuth) {
-  const { id: userId } = c.get("user");
+  const { id: userId } = c.get('user')
 
   try {
     const lists = await getPrisma().todoList.findMany({
@@ -87,9 +87,9 @@ export async function getTaskListsProtected(c: ContextAuth) {
         ...LISTS_SELECT,
         protected: true,
       },
-    });
+    })
 
-    return c.json(lists);
+    return c.json(lists)
   } catch (error) {
     if (
       error instanceof Error ||
@@ -97,8 +97,8 @@ export async function getTaskListsProtected(c: ContextAuth) {
     ) {
       return c.text(
         `An error occurred while getting the protected todo lists. (${error.message})`,
-        500
-      );
+        500,
+      )
     }
   }
 }
@@ -106,12 +106,12 @@ export async function getTaskListsProtected(c: ContextAuth) {
 export async function getTodosByListId(
   c: ContextAuth,
   listId: string,
-  queryParams: FilterTodosDto
+  queryParams: FilterTodosDto,
 ) {
-  const { id: userId } = c.get("user");
-  const { sortBy, sortOrder, ...filter } = queryParams;
+  const { id: userId } = c.get('user')
+  const { sortBy, sortOrder, ...filter } = queryParams
 
-  const where: Prisma.TodoWhereInput = filterTodosWhere(filter, listId, userId);
+  const where: Prisma.TodoWhereInput = filterTodosWhere(filter, listId, userId)
 
   try {
     const todos = await getPrisma().todo.findMany({
@@ -120,21 +120,21 @@ export async function getTodosByListId(
         [sortBy as keyof Prisma.TodoOrderByWithRelationInput]: sortOrder,
       },
       select: TODOS_SELECT,
-    });
+    })
 
-    return c.json(todos);
+    return c.json(todos)
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       return c.text(
         `An error occurred while getting the todos. (${error.message})`,
-        500
-      );
+        500,
+      )
     }
   }
 }
 
 export async function getListById(c: ContextAuth, id: string) {
-  const { id: userId } = c.get("user");
+  const { id: userId } = c.get('user')
 
   try {
     const foundList = await getPrisma().todoList.findFirst({
@@ -148,13 +148,13 @@ export async function getListById(c: ContextAuth, id: string) {
           select: TODOS_SELECT,
         },
       },
-    });
+    })
 
     if (!foundList) {
-      return await c.notFound();
+      return await c.notFound()
     }
 
-    return c.json(foundList);
+    return c.json(foundList)
   } catch (error) {
     if (
       error instanceof Prisma.PrismaClientKnownRequestError ||
@@ -162,17 +162,17 @@ export async function getListById(c: ContextAuth, id: string) {
     ) {
       return c.text(
         `An error occurred while getting the todo list. (${error.message})`,
-        500
-      );
+        500,
+      )
     }
 
-    return c.text("An error occurred while getting the todo list.", 500);
+    return c.text('An error occurred while getting the todo list.', 500)
   }
 }
 
 export async function createList(c: ContextAuth, data: CreateListDto) {
-  const { icon, title } = data;
-  const { id: userId } = c.get("user");
+  const { icon, title } = data
+  const { id: userId } = c.get('user')
 
   try {
     const createdList = await getPrisma().todoList.create({
@@ -186,9 +186,9 @@ export async function createList(c: ContextAuth, data: CreateListDto) {
         },
       },
       select: LISTS_SELECT,
-    });
+    })
 
-    return c.json(createdList);
+    return c.json(createdList)
   } catch (error) {
     if (
       error instanceof Error ||
@@ -196,8 +196,8 @@ export async function createList(c: ContextAuth, data: CreateListDto) {
     ) {
       return c.text(
         `An error occurred while creating the todo list. (${error.message})`,
-        500
-      );
+        500,
+      )
     }
   }
 }
@@ -205,10 +205,10 @@ export async function createList(c: ContextAuth, data: CreateListDto) {
 export async function updateList(
   c: ContextAuth,
   id: string,
-  data: UpdateListDto
+  data: UpdateListDto,
 ) {
-  const { icon, title } = data;
-  const { id: userId } = c.get("user");
+  const { icon, title } = data
+  const { id: userId } = c.get('user')
 
   try {
     const updatedList = await getPrisma().todoList.update({
@@ -221,27 +221,27 @@ export async function updateList(
         icon,
       },
       select: LISTS_SELECT,
-    });
+    })
 
-    return c.json(updatedList);
+    return c.json(updatedList)
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      if (error.code === "P2025") {
-        return c.text("Todo list not found.", 404);
+      if (error.code === 'P2025') {
+        return c.text('Todo list not found.', 404)
       }
 
       return c.text(
         `An error occurred while updating the todo list: ${error.message}`,
-        500
-      );
+        500,
+      )
     }
 
-    return c.text("An error occurred while updating the todo list.", 500);
+    return c.text('An error occurred while updating the todo list.', 500)
   }
 }
 
 export async function deleteList(c: ContextAuth, id: string) {
-  const { id: userId } = c.get("user");
+  const { id: userId } = c.get('user')
 
   try {
     await getPrisma().todoList.delete({
@@ -249,21 +249,21 @@ export async function deleteList(c: ContextAuth, id: string) {
         id,
         userId,
       },
-    });
+    })
 
-    return c.json({ message: "List has deleted successfully" });
+    return c.json({ message: 'List has deleted successfully' })
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      if (error.code === "P2025") {
-        return c.text("Todo list not found.", 404);
+      if (error.code === 'P2025') {
+        return c.text('Todo list not found.', 404)
       }
 
       return c.text(
         `An error occurred while deleting the todo list. (${error.message})`,
-        500
-      );
+        500,
+      )
     }
 
-    return c.text("An error occurred while deleting the todo list.", 500);
+    return c.text('An error occurred while deleting the todo list.', 500)
   }
 }

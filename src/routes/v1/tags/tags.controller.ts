@@ -1,37 +1,37 @@
-import { getPrisma } from "@/config/prisma.js";
-import { Prisma } from "@/generated/prisma/index.js";
-import { TAGS_SELECT } from "@/lib/constants.js";
-import type { ContextAuth } from "@/lib/types.js";
-import type { SearchQueryDto } from "@/schemas/searchQuery.schemas.js";
+import { getPrisma } from '@/config/prisma.js'
+import { Prisma } from '@/generated/prisma/index.js'
+import { TAGS_SELECT } from '@/lib/constants.js'
+import type { ContextAuth } from '@/lib/types.js'
+import type { SearchQueryDto } from '@/schemas/searchQuery.schemas.js'
 import type {
   TagCreateSchemaDto,
   TagUpdateSchemaDto,
-} from "@/schemas/tags.schemas.js";
+} from '@/schemas/tags.schemas.js'
 
-const prisma = getPrisma();
+const prisma = getPrisma()
 
 export async function getSearchTag(
   c: ContextAuth,
-  queryParams: SearchQueryDto
+  queryParams: SearchQueryDto,
 ) {
-  const { query, limit, offset } = queryParams;
-  const { id: userId } = c.get("user");
+  const { query, limit, offset } = queryParams
+  const { id: userId } = c.get('user')
 
   try {
     const foundTags = await prisma.tag.findMany({
       where: {
         name: {
           contains: query,
-          mode: "insensitive",
+          mode: 'insensitive',
         },
         userId,
       },
       skip: offset,
       take: limit,
       select: TAGS_SELECT,
-    });
+    })
 
-    return c.json(foundTags);
+    return c.json(foundTags)
   } catch (error) {
     if (
       error instanceof Error ||
@@ -39,16 +39,16 @@ export async function getSearchTag(
     ) {
       return c.text(
         `An error occurred while searching for tags. (${error.message})`,
-        500
-      );
+        500,
+      )
     }
 
-    c.text("An error occurred while searching for tags", 500);
+    c.text('An error occurred while searching for tags', 500)
   }
 }
 
 export async function getTags(c: ContextAuth) {
-  const { id: userId } = c.get("user");
+  const { id: userId } = c.get('user')
 
   try {
     const tags = await prisma.tag.findMany({
@@ -56,22 +56,22 @@ export async function getTags(c: ContextAuth) {
         userId,
       },
       select: TAGS_SELECT,
-    });
+    })
 
-    return c.json(tags);
+    return c.json(tags)
   } catch (error) {
     if (
       error instanceof Error ||
       error instanceof Prisma.PrismaClientKnownRequestError
     ) {
-      c.text(error.message, 500);
+      c.text(error.message, 500)
     }
-    return c.text("An unknown error occurred", 500);
+    return c.text('An unknown error occurred', 500)
   }
 }
 
 export async function getTagById(c: ContextAuth, id: string) {
-  const { id: userId } = c.get("user");
+  const { id: userId } = c.get('user')
 
   try {
     const foundTag = await prisma.tag.findFirst({
@@ -80,31 +80,31 @@ export async function getTagById(c: ContextAuth, id: string) {
         userId,
       },
       select: TAGS_SELECT,
-    });
+    })
 
     if (!foundTag) {
-      return c.text("Tag not found", 404);
+      return c.text('Tag not found', 404)
     }
 
-    return c.json(foundTag);
+    return c.json(foundTag)
   } catch (error) {
     if (
       error instanceof Prisma.PrismaClientKnownRequestError ||
       error instanceof Error
     ) {
-      return c.text(error.message, 500);
+      return c.text(error.message, 500)
     }
 
-    return c.text("An error occurred while geting the todo.", 500);
+    return c.text('An error occurred while geting the todo.', 500)
   }
 }
 
 export async function createTag(
   c: ContextAuth,
   data: TagCreateSchemaDto,
-  todoId: string | undefined
+  todoId: string | undefined,
 ) {
-  const { id: userId } = c.get("user");
+  const { id: userId } = c.get('user')
 
   try {
     const createdTag = await prisma.tag.create({
@@ -126,27 +126,27 @@ export async function createTag(
         },
       },
       select: TAGS_SELECT,
-    });
+    })
 
-    return c.json(createdTag);
+    return c.json(createdTag)
   } catch (error) {
     if (
       error instanceof Error ||
       error instanceof Prisma.PrismaClientKnownRequestError
     ) {
-      return c.text(error.message, 500);
+      return c.text(error.message, 500)
     }
 
-    c.text("An unknown error occurred while creating the tag", 500);
+    c.text('An unknown error occurred while creating the tag', 500)
   }
 }
 
 export async function updateTag(
   c: ContextAuth,
   data: TagUpdateSchemaDto,
-  id: string
+  id: string,
 ) {
-  const { id: userId } = c.get("user");
+  const { id: userId } = c.get('user')
 
   try {
     const updatedTag = await prisma.tag.update({
@@ -156,27 +156,27 @@ export async function updateTag(
       },
       data,
       select: TAGS_SELECT,
-    });
+    })
 
-    return c.json(updatedTag);
+    return c.json(updatedTag)
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      if (error.code === "P2025") {
-        return c.text("Tag not found.", 404);
+      if (error.code === 'P2025') {
+        return c.text('Tag not found.', 404)
       }
 
       return c.text(
         `An error occurred while updating the tag: ${error.message}`,
-        500
-      );
+        500,
+      )
     }
 
-    return c.text("An error occurred while updating the tag.", 500);
+    return c.text('An error occurred while updating the tag.', 500)
   }
 }
 
 export async function deleteTag(c: ContextAuth, id: string) {
-  const { id: userId } = c.get("user");
+  const { id: userId } = c.get('user')
 
   try {
     await prisma.tag.delete({
@@ -184,21 +184,21 @@ export async function deleteTag(c: ContextAuth, id: string) {
         id,
         userId,
       },
-    });
+    })
 
-    return c.json({ message: "Tag has deleted successfully" });
+    return c.json({ message: 'Tag has deleted successfully' })
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      if (error.code === "P2025") {
-        return c.text("Tag not found.", 404);
+      if (error.code === 'P2025') {
+        return c.text('Tag not found.', 404)
       }
 
       return c.text(
         `An error occured while deleting the tag: ${error.message}`,
-        500
-      );
+        500,
+      )
     }
 
-    return c.text("An error occurred while deleting the tag.", 500);
+    return c.text('An error occurred while deleting the tag.', 500)
   }
 }

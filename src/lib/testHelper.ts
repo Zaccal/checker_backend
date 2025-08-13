@@ -1,65 +1,65 @@
 export function expectHasProperties(
   obj: Record<string, unknown>,
-  keys: string[]
+  keys: string[],
 ) {
-  keys.forEach((key) => {
-    expect(obj).toHaveProperty(key);
-  });
+  keys.forEach(key => {
+    expect(obj).toHaveProperty(key)
+  })
 }
 
 export const expectedKeysTodo = [
-  "id",
-  "title",
-  "completed",
-  "expiresAt",
-  "tags",
-  "subTasks",
-  "createdAt",
-  "updatedAt",
-];
+  'id',
+  'title',
+  'completed',
+  'expiresAt',
+  'tags',
+  'subTasks',
+  'createdAt',
+  'updatedAt',
+]
 
 export const expectedKeysLists = [
-  "id",
-  "title",
-  "updatedAt",
-  "createdAt",
-  "todos",
-  "icon",
-];
+  'id',
+  'title',
+  'updatedAt',
+  'createdAt',
+  'todos',
+  'icon',
+]
 
 export const expectedKeysTags = [
-  "id",
-  "name",
-  "updatedAt",
-  "createdAt",
-  "todos",
-  "color",
-];
+  'id',
+  'name',
+  'updatedAt',
+  'createdAt',
+  'todos',
+  'color',
+]
 
 export const expectedKeysSubtask = [
-  "id",
-  "createdAt",
-  "updatedAt",
-  "title",
-  "completed",
-  "todoId",
-];
+  'id',
+  'createdAt',
+  'updatedAt',
+  'title',
+  'completed',
+  'todoId',
+]
 
 export const expectedProfileKeys = [
-  "id",
-  "name",
-  "email",
-  "image",
-  "createdAt",
-  "updatedAt",
-  "displayUsername",
-  "sessions",
-];
+  'id',
+  'name',
+  'email',
+  'image',
+  'createdAt',
+  'updatedAt',
+  'displayUsername',
+  'sessions',
+]
 
 export const expectedSessionKeys = [
-  "id",
-  "createdAt",
-  "updatedAt",
-  "userAgent",
-  "ipAddress",
-];
+  'id',
+  'createdAt',
+  'updatedAt',
+  'userAgent',
+  'ipAddress',
+]

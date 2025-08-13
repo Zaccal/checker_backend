@@ -1,10 +1,10 @@
-import type { Prisma } from "@/generated/prisma/index.js";
-import type { FilterTodosDto } from "@/schemas/taskList.schemas.js";
+import type { Prisma } from '@/generated/prisma/index.js'
+import type { FilterTodosDto } from '@/schemas/taskList.schemas.js'
 
 export const filterTodosWhere = (
-  filter: Omit<FilterTodosDto, "sortBy" | "sortOrder">,
+  filter: Omit<FilterTodosDto, 'sortBy' | 'sortOrder'>,
   listId: string,
-  userId: string
+  userId: string,
 ) => {
   const {
     completed,
@@ -13,7 +13,7 @@ export const filterTodosWhere = (
     createdFrom,
     createdTo,
     tagIds,
-  } = filter;
+  } = filter
 
   const where: Prisma.TodoWhereInput = {
     todoListId: listId,
@@ -30,16 +30,16 @@ export const filterTodosWhere = (
       createdAt: {
         ...(createdFrom && {
           gte: (() => {
-            const date = new Date(createdFrom);
-            date.setUTCDate(date.getUTCDate() - 1);
-            return date;
+            const date = new Date(createdFrom)
+            date.setUTCDate(date.getUTCDate() - 1)
+            return date
           })(),
         }),
         ...(createdTo && {
           lte: (() => {
-            const date = new Date(createdTo);
-            date.setUTCDate(date.getUTCDate() + 1);
-            return date;
+            const date = new Date(createdTo)
+            date.setUTCDate(date.getUTCDate() + 1)
+            return date
           })(),
         }),
       },
@@ -51,7 +51,7 @@ export const filterTodosWhere = (
         },
       },
     }),
-  };
+  }
 
-  return where;
-};
+  return where
+}

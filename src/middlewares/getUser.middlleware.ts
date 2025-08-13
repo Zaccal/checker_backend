@@ -1,17 +1,17 @@
-import type { Context, Next } from "hono";
-import { auth } from "@/config/auth.js";
+import type { Context, Next } from 'hono'
+import { auth } from '@/config/auth.js'
 
 async function userMidllware(c: Context, next: Next) {
-  const session = await auth.api.getSession({ headers: c.req.raw.headers });
+  const session = await auth.api.getSession({ headers: c.req.raw.headers })
 
   if (session) {
-    c.set("user", session.user);
-    c.set("session", session.session);
+    c.set('user', session.user)
+    c.set('session', session.session)
 
-    return next();
+    return next()
   }
 
-  return c.text("Couldn't get session");
+  return c.text("Couldn't get session")
 }
 
-export default userMidllware;
+export default userMidllware
