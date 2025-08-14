@@ -15,6 +15,8 @@ export const newSubtaskSchema = z.object({
 
 export const tagInputSchema = z.union([z.string(), newTagSchema])
 
+export type TagInputSchema = z.infer<typeof tagInputSchema>
+
 export const subtaskInputSchema = newSubtaskSchema
 
 export const todoCreateSchema = z.object({

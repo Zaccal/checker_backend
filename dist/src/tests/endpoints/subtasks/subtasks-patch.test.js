@@ -1,96 +1,96 @@
-import { expectedKeysSubtask, expectHasProperties } from "@/lib/testHelper.js";
-vi.mock("../../../lib/prisma.ts", async () => {
-    const { mockPrisma } = await import("../../mock/prisma.mock.js");
+import { expectedKeysSubtask, expectHasProperties } from '@/lib/testHelper.js';
+vi.mock('../../../lib/prisma.ts', async () => {
+    const { mockPrisma } = await import('../../mock/prisma.mock.js');
     return mockPrisma;
 });
-vi.mock("../../../middlewares/protectRoutes.middleware.ts", async () => {
-    const { mockSkipProtectedRoute } = await import("../../mock/authMiddlewares.mock.js");
+vi.mock('../../../middlewares/protectRoutes.middleware.ts', async () => {
+    const { mockSkipProtectedRoute } = await import('../../mock/authMiddlewares.mock.js');
     return mockSkipProtectedRoute;
 });
-vi.mock("../../../middlewares/getUser.middlleware.ts", async () => {
-    const { mockGetUserMiddleware } = await import("../../mock/authMiddlewares.mock.js");
+vi.mock('../../../middlewares/getUser.middlleware.ts', async () => {
+    const { mockGetUserMiddleware } = await import('../../mock/authMiddlewares.mock.js');
     return {
         default: mockGetUserMiddleware,
     };
 });
 let appInstance;
 beforeAll(async () => {
-    const { app } = await import("../../../app.js");
+    const { app } = await import('../../../app.js');
     appInstance = app;
 });
-describe("PATCH method", () => {
+describe('PATCH method', () => {
     beforeEach(() => {
         vi.clearAllMocks();
     });
-    test("Update subtask title", async () => {
-        const response = await appInstance.request("/api/v1/subtasks/subtask-123", {
-            method: "PATCH",
+    test('Update subtask title', async () => {
+        const response = await appInstance.request('/api/v1/subtasks/subtask-123', {
+            method: 'PATCH',
             headers: globalThis.authHeader,
             body: JSON.stringify({
-                title: "Updated Subtask Title",
+                title: 'Updated Subtask Title',
             }),
-            credentials: "include",
+            credentials: 'include',
         });
         const data = (await response.json());
         expect(response.status).toBe(200);
         expectHasProperties(data, expectedKeysSubtask);
     });
-    test("Update subtask completed status", async () => {
-        const response = await appInstance.request("/api/v1/subtasks/subtask-123", {
-            method: "PATCH",
+    test('Update subtask completed status', async () => {
+        const response = await appInstance.request('/api/v1/subtasks/subtask-123', {
+            method: 'PATCH',
             headers: globalThis.authHeader,
             body: JSON.stringify({
                 completed: true,
             }),
-            credentials: "include",
+            credentials: 'include',
         });
         const data = (await response.json());
         expect(response.status).toBe(200);
         expectHasProperties(data, expectedKeysSubtask);
     });
-    test("Update subtask title and completed status", async () => {
-        const response = await appInstance.request("/api/v1/subtasks/subtask-123", {
-            method: "PATCH",
+    test('Update subtask title and completed status', async () => {
+        const response = await appInstance.request('/api/v1/subtasks/subtask-123', {
+            method: 'PATCH',
             headers: globalThis.authHeader,
             body: JSON.stringify({
-                title: "Updated Subtask Title",
+                title: 'Updated Subtask Title',
                 completed: true,
             }),
-            credentials: "include",
+            credentials: 'include',
         });
         const data = (await response.json());
         expect(response.status).toBe(200);
         expectHasProperties(data, expectedKeysSubtask);
     });
-    test("Update with empty body should fail", async () => {
-        const response = await appInstance.request("/api/v1/subtasks/subtask-123", {
-            method: "PATCH",
+    test('Update with empty body should fail', async () => {
+        const response = await appInstance.request('/api/v1/subtasks/subtask-123', {
+            method: 'PATCH',
             headers: globalThis.authHeader,
             body: JSON.stringify({}),
-            credentials: "include",
+            credentials: 'include',
         });
         expect(response.status).toBe(400);
     });
-    test("Update with invalid completed type should fail", async () => {
-        const response = await appInstance.request("/api/v1/subtasks/subtask-123", {
-            method: "PATCH",
+    test('Update with invalid completed type should fail', async () => {
+        const response = await appInstance.request('/api/v1/subtasks/subtask-123', {
+            method: 'PATCH',
             headers: globalThis.authHeader,
             body: JSON.stringify({
-                completed: "not-a-boolean",
+                completed: 'not-a-boolean',
             }),
-            credentials: "include",
+            credentials: 'include',
         });
         expect(response.status).toBe(400);
     });
-    test("Update with title too long should fail", async () => {
-        const longTitle = "a".repeat(101); // 101 characters, exceeding max of 100
-        const response = await appInstance.request("/api/v1/subtasks/subtask-123", {
-            method: "PATCH",
+    test('Update with title too long should fail', async () => {
+        const longTitle = 'a'.repeat(101); // 101 characters, exceeding max of 100
+        const response = await appInstance.request('/api/v1/subtasks/subtask-123', {
+            method: 'PATCH',
             headers: globalThis.authHeader,
             body: JSON.stringify({
                 title: longTitle,
             }),
-            credentials: "include",
+            credentials: 'include',
         });
         expect(response.status).toBe(400);
     });

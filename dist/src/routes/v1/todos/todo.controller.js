@@ -1,15 +1,15 @@
-import { getPrisma } from "@/config/prisma.js";
-import { Prisma } from "@/generated/prisma/index.js";
-import { TODOS_SELECT } from "@/lib/constants.js";
+import { getPrisma } from '@/config/prisma.js';
+import { Prisma } from '@/generated/prisma/index.js';
+import { TODOS_SELECT } from '@/lib/constants.js';
 export async function getSearch(c, queryParam) {
     const { query, offset, limit } = queryParam;
-    const userId = c.get("user").id;
+    const userId = c.get('user').id;
     try {
         const foundTodos = await getPrisma().todo.findMany({
             where: {
                 title: {
                     contains: query,
-                    mode: "insensitive",
+                    mode: 'insensitive',
                 },
                 userId,
             },
@@ -27,7 +27,7 @@ export async function getSearch(c, queryParam) {
     }
 }
 export async function getTodoById(c, id) {
-    const user = c.get("user");
+    const user = c.get('user');
     try {
         const todos = await getPrisma().todo.findFirst({
             where: {
@@ -42,7 +42,7 @@ export async function getTodoById(c, id) {
             select: TODOS_SELECT,
         });
         if (!todos) {
-            return c.text("Todo not found.", 404);
+            return c.text('Todo not found.', 404);
         }
         return c.json(todos);
     }
@@ -51,18 +51,18 @@ export async function getTodoById(c, id) {
             error instanceof Error) {
             return c.text(error.message, 500);
         }
-        return c.text("An error occurred while getting the todos.", 500);
+        return c.text('An error occurred while getting the todos.', 500);
     }
 }
 export async function createTodo(c, data) {
-    const user = c.get("user");
+    const user = c.get('user');
     const { title, expiresAt, taskListId, tags, subtasks } = data;
     try {
         const tagConnections = [];
         const newTags = [];
         if (tags) {
             for (const tag of tags) {
-                if (typeof tag === "string") {
+                if (typeof tag === 'string') {
                     tagConnections.push({ id: tag });
                 }
                 else {
@@ -87,7 +87,7 @@ export async function createTodo(c, data) {
                 },
                 tags: {
                     connect: tagConnections,
-                    create: newTags.map((tag) => ({
+                    create: newTags.map(tag => ({
                         name: tag.name,
                         user: {
                             connect: {
@@ -97,7 +97,7 @@ export async function createTodo(c, data) {
                     })),
                 },
                 subTasks: {
-                    create: newSubtasks.map((subtask) => ({
+                    create: newSubtasks.map(subtask => ({
                         title: subtask.title,
                         completed: subtask.completed,
                     })),
@@ -112,11 +112,11 @@ export async function createTodo(c, data) {
             error instanceof Error) {
             c.text(error.message, 500);
         }
-        c.text("An error occurred while creating the todo.", 500);
+        c.text('An error occurred while creating the todo.', 500);
     }
 }
 export async function deleteTodo(c, id) {
-    const user = c.get("user");
+    const user = c.get('user');
     try {
         await getPrisma().todo.delete({
             where: {
@@ -124,21 +124,21 @@ export async function deleteTodo(c, id) {
                 userId: user.id,
             },
         });
-        return c.json({ message: "Task has deleted successfully" });
+        return c.json({ message: 'Task has deleted successfully' });
     }
     catch (error) {
         if (error instanceof Prisma.PrismaClientKnownRequestError) {
-            if (error.code === "P2025") {
-                return c.text("Todo not found.", 404);
+            if (error.code === 'P2025') {
+                return c.text('Todo not found.', 404);
             }
             return c.text(`An error occurred while deleting the todo: ${error.message}`, 500);
         }
-        return c.text("An error occurred while geting the todo.", 500);
+        return c.text('An error occurred while geting the todo.', 500);
     }
 }
 export async function completeTodo(c, id, complited) {
     const prisma = getPrisma();
-    const user = c.get("user");
+    const user = c.get('user');
     try {
         const todo = await prisma.todo.update({
             where: {
@@ -154,23 +154,23 @@ export async function completeTodo(c, id, complited) {
     }
     catch (error) {
         if (error instanceof Prisma.PrismaClientKnownRequestError) {
-            if (error.code === "P2025") {
-                return c.text("Todo not found.", 404);
+            if (error.code === 'P2025') {
+                return c.text('Todo not found.', 404);
             }
             return c.text(`An error occurred while geting the todo: ${error.message}`, 500);
         }
-        return c.text("An error occurred while geting the todo.", 500);
+        return c.text('An error occurred while geting the todo.', 500);
     }
 }
 export async function updateTodo(c, data, id) {
-    const user = c.get("user");
+    const user = c.get('user');
     const { title, expiresAt, subtasks, tags } = data;
     const tagConnections = [];
     const newTags = [];
     const newSubtask = subtasks ?? [];
     if (tags) {
         for (const tag of tags) {
-            if (typeof tag === "string") {
+            if (typeof tag === 'string') {
                 tagConnections.push({ id: tag });
             }
             else {
@@ -190,7 +190,7 @@ export async function updateTodo(c, data, id) {
                 tags: {
                     set: [],
                     connect: tagConnections,
-                    create: newTags.map((tag) => ({
+                    create: newTags.map(tag => ({
                         name: tag.name,
                         user: {
                             connect: {
@@ -201,7 +201,7 @@ export async function updateTodo(c, data, id) {
                 },
                 subTasks: {
                     deleteMany: {},
-                    create: newSubtask.map((subtask) => ({
+                    create: newSubtask.map(subtask => ({
                         title: subtask.title,
                         completed: subtask.completed || false,
                     })),
@@ -213,10 +213,10 @@ export async function updateTodo(c, data, id) {
     }
     catch (error) {
         if (error instanceof Prisma.PrismaClientKnownRequestError) {
-            if (error.code === "P2025") {
-                return c.text("Todo not found.", 404);
+            if (error.code === 'P2025') {
+                return c.text('Todo not found.', 404);
             }
-            return c.text("An error occurred while geting the todo.", 500);
+            return c.text('An error occurred while geting the todo.', 500);
         }
     }
 }

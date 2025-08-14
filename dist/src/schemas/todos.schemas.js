@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 export const todoCompletedSchema = z.object({
     complited: z.boolean(),
 });
@@ -18,8 +18,8 @@ export const todoCreateSchema = z.object({
     expiresAt: z
         .string()
         .optional()
-        .refine((value) => !value || !isNaN(Date.parse(value)), {
-        message: "Invalid date string",
+        .refine(value => !value || !isNaN(Date.parse(value)), {
+        message: 'Invalid date string',
     }),
     subtasks: z.array(subtaskInputSchema).optional(),
 });
@@ -29,8 +29,8 @@ export const todoUpdateSchema = z.object({
     expiresAt: z
         .string()
         .optional()
-        .refine((value) => !value || !isNaN(Date.parse(value)), {
-        message: "Invalid date string",
+        .refine(value => !value || !isNaN(Date.parse(value)), {
+        message: 'Invalid date string',
     }),
     subtasks: z.array(subtaskInputSchema).optional(),
 });

@@ -1,9 +1,9 @@
-import { getPrisma } from "@/config/prisma.js";
-import { Prisma } from "@/generated/prisma/index.js";
-import { LISTS_SELECT, TODOS_SELECT } from "@/lib/constants.js";
-import { filterTodosWhere } from "@/lib/filterTodosWhere.js";
+import { getPrisma } from '@/config/prisma.js';
+import { Prisma } from '@/generated/prisma/index.js';
+import { LISTS_SELECT, TODOS_SELECT } from '@/lib/constants.js';
+import { filterTodosWhere } from '@/lib/filterTodosWhere.js';
 export async function searchTasksList(c, queryParams) {
-    const userId = c.get("user").id;
+    const userId = c.get('user').id;
     const { query, limit, offset } = queryParams;
     try {
         const foundLists = await getPrisma().todoList.findMany({
@@ -11,7 +11,7 @@ export async function searchTasksList(c, queryParams) {
                 userId,
                 title: {
                     contains: query,
-                    mode: "insensitive",
+                    mode: 'insensitive',
                 },
             },
             skip: offset,
@@ -28,7 +28,7 @@ export async function searchTasksList(c, queryParams) {
     }
 }
 export async function getTaskLists(c) {
-    const { id } = c.get("user");
+    const { id } = c.get('user');
     try {
         const lists = await getPrisma().todoList.findMany({
             where: {
@@ -37,7 +37,7 @@ export async function getTaskLists(c) {
             },
             select: LISTS_SELECT,
             orderBy: {
-                createdAt: "asc",
+                createdAt: 'asc',
             },
         });
         return c.json(lists);
@@ -50,7 +50,7 @@ export async function getTaskLists(c) {
     }
 }
 export async function getTaskListsProtected(c) {
-    const { id: userId } = c.get("user");
+    const { id: userId } = c.get('user');
     try {
         const lists = await getPrisma().todoList.findMany({
             where: {
@@ -72,7 +72,7 @@ export async function getTaskListsProtected(c) {
     }
 }
 export async function getTodosByListId(c, listId, queryParams) {
-    const { id: userId } = c.get("user");
+    const { id: userId } = c.get('user');
     const { sortBy, sortOrder, ...filter } = queryParams;
     const where = filterTodosWhere(filter, listId, userId);
     try {
@@ -92,7 +92,7 @@ export async function getTodosByListId(c, listId, queryParams) {
     }
 }
 export async function getListById(c, id) {
-    const { id: userId } = c.get("user");
+    const { id: userId } = c.get('user');
     try {
         const foundList = await getPrisma().todoList.findFirst({
             where: {
@@ -116,12 +116,12 @@ export async function getListById(c, id) {
             error instanceof Error) {
             return c.text(`An error occurred while getting the todo list. (${error.message})`, 500);
         }
-        return c.text("An error occurred while getting the todo list.", 500);
+        return c.text('An error occurred while getting the todo list.', 500);
     }
 }
 export async function createList(c, data) {
     const { icon, title } = data;
-    const { id: userId } = c.get("user");
+    const { id: userId } = c.get('user');
     try {
         const createdList = await getPrisma().todoList.create({
             data: {
@@ -146,7 +146,7 @@ export async function createList(c, data) {
 }
 export async function updateList(c, id, data) {
     const { icon, title } = data;
-    const { id: userId } = c.get("user");
+    const { id: userId } = c.get('user');
     try {
         const updatedList = await getPrisma().todoList.update({
             where: {
@@ -163,16 +163,16 @@ export async function updateList(c, id, data) {
     }
     catch (error) {
         if (error instanceof Prisma.PrismaClientKnownRequestError) {
-            if (error.code === "P2025") {
-                return c.text("Todo list not found.", 404);
+            if (error.code === 'P2025') {
+                return c.text('Todo list not found.', 404);
             }
             return c.text(`An error occurred while updating the todo list: ${error.message}`, 500);
         }
-        return c.text("An error occurred while updating the todo list.", 500);
+        return c.text('An error occurred while updating the todo list.', 500);
     }
 }
 export async function deleteList(c, id) {
-    const { id: userId } = c.get("user");
+    const { id: userId } = c.get('user');
     try {
         await getPrisma().todoList.delete({
             where: {
@@ -180,15 +180,15 @@ export async function deleteList(c, id) {
                 userId,
             },
         });
-        return c.json({ message: "List has deleted successfully" });
+        return c.json({ message: 'List has deleted successfully' });
     }
     catch (error) {
         if (error instanceof Prisma.PrismaClientKnownRequestError) {
-            if (error.code === "P2025") {
-                return c.text("Todo list not found.", 404);
+            if (error.code === 'P2025') {
+                return c.text('Todo list not found.', 404);
             }
             return c.text(`An error occurred while deleting the todo list. (${error.message})`, 500);
         }
-        return c.text("An error occurred while deleting the todo list.", 500);
+        return c.text('An error occurred while deleting the todo list.', 500);
     }
 }

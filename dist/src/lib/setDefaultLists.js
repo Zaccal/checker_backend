@@ -1,28 +1,28 @@
-import { getPrisma } from "../config/prisma.js";
+import { getPrisma } from '../config/prisma.js';
 async function setDefaultLists(id) {
     await getPrisma().todoList.createMany({
         data: [
             {
-                title: "Inbox",
+                title: 'Inbox',
                 userId: id,
                 protected: true,
-                icon: "inbox",
+                icon: 'inbox',
             },
             {
-                title: "Journal",
+                title: 'Journal',
                 userId: id,
                 protected: true,
-                icon: "calendar-1",
+                icon: 'calendar-1',
             },
             {
-                title: "Work",
+                title: 'Work',
                 userId: id,
-                icon: "briefcase",
+                icon: 'briefcase',
             },
             {
-                title: "Personal",
+                title: 'Personal',
                 userId: id,
-                icon: "user",
+                icon: 'user',
             },
         ],
     });

@@ -1,6 +1,7 @@
 import { getPrisma } from '@/config/prisma.js'
 import { Prisma } from '@/generated/prisma/index.js'
 import { TODOS_SELECT } from '@/lib/constants.js'
+import { partitionTags } from '@/lib/partitionTags.js'
 import type { ContextAuth } from '@/lib/types.js'
 import type { SearchQueryDto } from '@/schemas/searchQuery.schemas.js'
 import type {
@@ -79,19 +80,7 @@ export async function createTodo(c: ContextAuth, data: TodoCreateSchema) {
   const { title, expiresAt, taskListId, tags, subtasks } = data
 
   try {
-    const tagConnections = []
-    const newTags = []
-
-    if (tags) {
-      for (const tag of tags) {
-        if (typeof tag === 'string') {
-          tagConnections.push({ id: tag })
-        } else {
-          newTags.push(tag)
-        }
-      }
-    }
-
+    const { tagConnections, newTags } = partitionTags(tags)
     const newSubtasks = subtasks ?? []
 
     const todo = await getPrisma().todo.create({
@@ -212,19 +201,8 @@ export async function updateTodo(
   const user = c.get('user')
   const { title, expiresAt, subtasks, tags } = data
 
-  const tagConnections = []
-  const newTags = []
+  const { tagConnections, newTags } = partitionTags(tags)
   const newSubtask = subtasks ?? []
-
-  if (tags) {
-    for (const tag of tags) {
-      if (typeof tag === 'string') {
-        tagConnections.push({ id: tag })
-      } else {
-        newTags.push(tag)
-      }
-    }
-  }
 
   try {
     const todo = await getPrisma().todo.update({
