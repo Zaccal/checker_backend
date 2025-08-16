@@ -3,6 +3,7 @@
   "name": "todo-api-hono",
   "scripts": {
     "dev": "tsx watch src/index.ts",
+    "vercel:dev": "pnpm run build && vercel dev",
     "build": "pnpm prisma:generate && pnpm prisma:migrate && tsc && tsc-alias && cp -R src/generated dist/src/generated",
     "vercel-build": "pnpm prisma:generate && pnpm prisma:migrate && tsc && tsc-alias && cp -R src/generated dist/src/generated",
     "start": "node dist/src/index.js",
