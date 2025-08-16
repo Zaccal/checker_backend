@@ -1,5 +1,5 @@
 import { getPrisma } from '../../../config/prisma.js';
-import { Prisma } from '@/generated/prisma/index.js';
+import { Prisma } from '../../../generated/prisma/index.js';
 import { TODOS_SELECT } from '../../../lib/constants.js';
 import { partitionTags } from '../../../lib/partitionTags.js';
 export async function getSearch(c, queryParam) {

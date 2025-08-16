@@ -1,5 +1,5 @@
 import { getPrisma } from '../config/prisma.js';
-import { Prisma } from '@/generated/prisma/index.js';
+import { Prisma } from '../generated/prisma/index.js';
 export async function setSocialUsername(id, name) {
     try {
         await getPrisma().user.update({

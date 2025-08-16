@@ -1,5 +1,5 @@
 import { getPrisma } from '../../../config/prisma.js';
-import { Prisma } from '@/generated/prisma/index.js';
+import { Prisma } from '../../../generated/prisma/index.js';
 import { TAGS_SELECT } from '../../../lib/constants.js';
 const prisma = getPrisma();
 export async function getSearchTag(c, queryParams) {
