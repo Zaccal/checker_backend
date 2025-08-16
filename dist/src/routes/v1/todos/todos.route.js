@@ -1,9 +1,9 @@
 import { zValidator } from '@hono/zod-validator';
 import { Hono } from 'hono';
 import { getSearch, getTodoById, createTodo, deleteTodo, completeTodo, updateTodo, } from './todo.controller.js';
-import protectRoutes from '@/middlewares/protectRoutes.middleware.js';
-import { SearchQuerySchema } from '@/schemas/searchQuery.schemas.js';
-import { todoCompletedSchema, todoCreateSchema, todoUpdateSchema, } from '@/schemas/todos.schemas.js';
+import protectRoutes from '../../../middlewares/protectRoutes.middleware.js';
+import { SearchQuerySchema } from '../../../schemas/searchQuery.schemas.js';
+import { todoCompletedSchema, todoCreateSchema, todoUpdateSchema, } from '../../../schemas/todos.schemas.js';
 const todosApp = new Hono();
 // Secure the todos routes
 todosApp.use('*', protectRoutes);

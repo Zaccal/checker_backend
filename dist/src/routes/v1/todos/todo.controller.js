@@ -1,6 +1,7 @@
-import { getPrisma } from '@/config/prisma.js';
-import { Prisma } from '@/generated/prisma/index.js';
-import { TODOS_SELECT } from '@/lib/constants.js';
+import { getPrisma } from '../../../config/prisma.js';
+import { Prisma } from '../../../generated/prisma/index.js';
+import { TODOS_SELECT } from '../../../lib/constants.js';
+import { partitionTags } from '../../../lib/partitionTags.js';
 export async function getSearch(c, queryParam) {
     const { query, offset, limit } = queryParam;
     const userId = c.get('user').id;
@@ -58,18 +59,7 @@ export async function createTodo(c, data) {
     const user = c.get('user');
     const { title, expiresAt, taskListId, tags, subtasks } = data;
     try {
-        const tagConnections = [];
-        const newTags = [];
-        if (tags) {
-            for (const tag of tags) {
-                if (typeof tag === 'string') {
-                    tagConnections.push({ id: tag });
-                }
-                else {
-                    newTags.push(tag);
-                }
-            }
-        }
+        const { tagConnections, newTags } = partitionTags(tags);
         const newSubtasks = subtasks ?? [];
         const todo = await getPrisma().todo.create({
             data: {
@@ -165,19 +155,8 @@ export async function completeTodo(c, id, complited) {
 export async function updateTodo(c, data, id) {
     const user = c.get('user');
     const { title, expiresAt, subtasks, tags } = data;
-    const tagConnections = [];
-    const newTags = [];
+    const { tagConnections, newTags } = partitionTags(tags);
     const newSubtask = subtasks ?? [];
-    if (tags) {
-        for (const tag of tags) {
-            if (typeof tag === 'string') {
-                tagConnections.push({ id: tag });
-            }
-            else {
-                newTags.push(tag);
-            }
-        }
-    }
     try {
         const todo = await getPrisma().todo.update({
             where: {

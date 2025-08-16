@@ -1,5 +1,5 @@
-import { app } from '@/app.js';
-import { expectedKeysLists, expectHasProperties, expectedKeysTodo, } from '@/lib/testHelper.js';
+import { app } from '../../../app.js';
+import { expectedKeysLists, expectHasProperties, expectedKeysTodo, } from '../../../lib/testHelper.js';
 describe('GET Method', () => {
     test('GET lists', async () => {
         const response = await app.request('/api/v1/lists', {

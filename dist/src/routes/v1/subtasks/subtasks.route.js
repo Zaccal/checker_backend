@@ -2,9 +2,9 @@ import { zValidator } from '@hono/zod-validator';
 import { Hono } from 'hono';
 import { getTagById } from '../tags/tags.controller.js';
 import { createSubtask, deleteSubtask, getSearchSubtasks, updateSubtask, } from './subtasks.controller.js';
-import protectRoutes from '@/middlewares/protectRoutes.middleware.js';
-import { SearchQuerySchema } from '@/schemas/searchQuery.schemas.js';
-import { subtaskCreateSchema, subtaskUpdateSchema, } from '@/schemas/subtasks.schemas.js';
+import protectRoutes from '../../../middlewares/protectRoutes.middleware.js';
+import { SearchQuerySchema } from '../../../schemas/searchQuery.schemas.js';
+import { subtaskCreateSchema, subtaskUpdateSchema, } from '../../../schemas/subtasks.schemas.js';
 const subTaskApp = new Hono();
 // Scure the subtask routes
 subTaskApp.use('*', protectRoutes);

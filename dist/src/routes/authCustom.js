@@ -1,8 +1,8 @@
 import { zValidator } from '@hono/zod-validator';
 import { Hono } from 'hono';
 import { Prisma } from '../generated/prisma/index.js';
-import { getPrisma } from '@/config/prisma.js';
-import { changeEmailOtpSchemas } from '@/schemas/changeEmailOtp.schemas.js';
+import { getPrisma } from '../config/prisma.js';
+import { changeEmailOtpSchemas } from '../schemas/changeEmailOtp.schemas.js';
 const authCustom = new Hono({
     strict: true,
 });

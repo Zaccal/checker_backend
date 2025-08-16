@@ -1,4 +1,4 @@
-import { getPrisma } from '@/config/prisma.js';
+import { getPrisma } from '../config/prisma.js';
 async function protectLists(c, next) {
     const { id } = c.req.param();
     if (!id) {

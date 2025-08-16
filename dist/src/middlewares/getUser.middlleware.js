@@ -1,4 +1,4 @@
-import { auth } from '@/config/auth.js';
+import { auth } from '../config/auth.js';
 async function userMidllware(c, next) {
     const session = await auth.api.getSession({ headers: c.req.raw.headers });
     if (session) {

@@ -1,7 +1,7 @@
-import { getPrisma } from '@/config/prisma.js';
-import { Prisma } from '@/generated/prisma/index.js';
-import { LISTS_SELECT, TODOS_SELECT } from '@/lib/constants.js';
-import { filterTodosWhere } from '@/lib/filterTodosWhere.js';
+import { getPrisma } from '../../../config/prisma.js';
+import { Prisma } from '../../../generated/prisma/index.js';
+import { LISTS_SELECT, TODOS_SELECT } from '../../../lib/constants.js';
+import { filterTodosWhere } from '../../../lib/filterTodosWhere.js';
 export async function searchTasksList(c, queryParams) {
     const userId = c.get('user').id;
     const { query, limit, offset } = queryParams;

@@ -1,10 +1,10 @@
 import { zValidator } from '@hono/zod-validator';
 import { Hono } from 'hono';
 import { createList, deleteList, getListById, getTaskLists, getTaskListsProtected, getTodosByListId, searchTasksList, updateList, } from './taskLists.controller.js';
-import protectLists from '@/middlewares/protectLists.middleware.js';
-import protectRoutes from '@/middlewares/protectRoutes.middleware.js';
-import { SearchQuerySchema } from '@/schemas/searchQuery.schemas.js';
-import { createListSchema, filterTodosSchema, updateListSchema, } from '@/schemas/taskList.schemas.js';
+import protectLists from '../../../middlewares/protectLists.middleware.js';
+import protectRoutes from '../../../middlewares/protectRoutes.middleware.js';
+import { SearchQuerySchema } from '../../../schemas/searchQuery.schemas.js';
+import { createListSchema, filterTodosSchema, updateListSchema, } from '../../../schemas/taskList.schemas.js';
 const tasksList = new Hono();
 // Scure the subtask routes
 tasksList.use('*', protectRoutes);

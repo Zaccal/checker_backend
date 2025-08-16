@@ -1,8 +1,8 @@
 import { zValidator } from '@hono/zod-validator';
 import { Hono } from 'hono';
 import { createTag, deleteTag, getSearchTag, getTagById, getTags, updateTag, } from './tags.controller.js';
-import { SearchQuerySchema } from '@/schemas/searchQuery.schemas.js';
-import { tagCreateSchema, tagUpdateSchema } from '@/schemas/tags.schemas.js';
+import { SearchQuerySchema } from '../../../schemas/searchQuery.schemas.js';
+import { tagCreateSchema, tagUpdateSchema } from '../../../schemas/tags.schemas.js';
 const tagsApp = new Hono();
 // GET
 tagsApp.get('/search', zValidator('query', SearchQuerySchema, (result, c) => {

@@ -1,5 +1,5 @@
-import { app } from '@/app.js';
-import { expectHasProperties, expectedKeysTodo } from '@/lib/testHelper.js';
+import { app } from '../../../app.js';
+import { expectHasProperties, expectedKeysTodo } from '../../../lib/testHelper.js';
 describe('GET Method', () => {
     test('GET with id', async () => {
         const todos = await app.request('/api/v1/todos/cmb3mgkmw00043p0u6ajrjjxm', {
