@@ -1,9 +1,4 @@
 {
-  "functions": {
-    "api/index.js": {
-      "runtime": "edge"
-    }
-  },
   "rewrites": [
     {
       "source": "/(.*)",
