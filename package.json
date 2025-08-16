@@ -4,8 +4,8 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "vercel:dev": "pnpm run build && vercel dev",
-    "build": "pnpm prisma:generate && pnpm prisma:migrate && tsc && tsc-alias && cp -R src/generated dist/src/generated",
-    "vercel-build": "pnpm prisma:generate && pnpm prisma:migrate && tsc && tsc-alias && cp -R src/generated dist/src/generated",
+    "build": "pnpm prisma:generate --no-engine && pnpm prisma:migrate && tsc && tsc-alias && cp -R src/generated dist/src/generated",
+    "vercel-build": "pnpm prisma:generate --no-engine && pnpm prisma:migrate && tsc && tsc-alias && cp -R src/generated dist/src/generated",
     "start": "node dist/src/index.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",

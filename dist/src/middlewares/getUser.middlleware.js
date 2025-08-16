@@ -6,6 +6,6 @@ async function userMidllware(c, next) {
         c.set('session', session.session);
         return next();
     }
-    return c.text("Couldn't get session");
+    return next();
 }
 export default userMidllware;
