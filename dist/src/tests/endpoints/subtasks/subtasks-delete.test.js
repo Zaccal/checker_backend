@@ -1,4 +1,4 @@
-import { Prisma } from '../../../generated/prisma/index.js';
+import { Prisma } from '@/generated/prisma/index.js';
 vi.mock('../../../lib/prisma.ts', async () => {
     const { mockPrisma } = await import('../../mock/prisma.mock.js');
     return mockPrisma;

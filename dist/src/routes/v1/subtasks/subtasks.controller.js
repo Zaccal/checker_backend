@@ -1,5 +1,5 @@
 import { getPrisma } from '../../../config/prisma.js';
-import { Prisma } from '../../../generated/prisma/index.js';
+import { Prisma } from '@/generated/prisma/index.js';
 import { SUBTASKS_SELECT } from '../../../lib/constants.js';
 export async function getSearchSubtasks(c, queryParams) {
     const { query, offset, limit } = queryParams;

@@ -1,5 +1,5 @@
 import { getPrisma } from '../../../config/prisma.js';
-import { Prisma } from '../../../generated/prisma/index.js';
+import { Prisma } from '@/generated/prisma/index.js';
 import { PROFILE_SELECT } from '../../../lib/constants.js';
 export async function getProfile(c) {
     const user = c.get('user');
