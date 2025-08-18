@@ -16,6 +16,9 @@
   },
   "exclude": ["node_modules"],
   "tsc-alias": {
-    "resolveFullPaths": true
+    "resolveFullPaths": true,
+    "replacers": {
+      "@/*": ["./src/*"]
+    }
   }
 }

@@ -3,6 +3,8 @@ export const config = {
 }
 
 import { handle } from '@hono/node-server/vercel'
-import { app } from '../src/app.js'
+import type { Hono } from 'hono'
+// @ts-expect-error - Importing compiled JS file
+import { app } from '../dist/src/app.js'
 
-export default handle(app)
+export default handle(app as Hono)
