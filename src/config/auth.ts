@@ -14,6 +14,9 @@ export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: 'postgresql',
   }),
+  telemetry: {
+    enabled: false,
+  },
   plugins: [
     openAPI(),
     username(),
