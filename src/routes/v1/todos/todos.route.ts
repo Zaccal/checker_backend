@@ -69,7 +69,7 @@ todosApp.delete('/:id', async c => {
 // PATCH
 
 todosApp.patch(
-  'complite/:id',
+  'completed/:id',
   zValidator('json', todoCompletedSchema, (result, c) => {
     if (!result.success) {
       return c.text('Invalide format!', 400)
@@ -77,8 +77,8 @@ todosApp.patch(
   }),
   async c => {
     const { id } = c.req.param()
-    const { complited } = c.req.valid('json')
-    return await completeTodo(c, id, complited)
+    const { completed } = c.req.valid('json')
+    return await completeTodo(c, id, completed)
   },
 )
 

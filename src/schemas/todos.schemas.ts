@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 export const todoCompletedSchema = z.object({
-  complited: z.boolean(),
+  completed: z.boolean(),
 })
 
 export const newTagSchema = z.object({
