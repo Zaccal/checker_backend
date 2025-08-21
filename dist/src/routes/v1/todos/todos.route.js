@@ -35,14 +35,14 @@ todosApp.delete('/:id', async (c) => {
     return await deleteTodo(c, id);
 });
 // PATCH
-todosApp.patch('complite/:id', zValidator('json', todoCompletedSchema, (result, c) => {
+todosApp.patch('completed/:id', zValidator('json', todoCompletedSchema, (result, c) => {
     if (!result.success) {
         return c.text('Invalide format!', 400);
     }
 }), async (c) => {
     const { id } = c.req.param();
-    const { complited } = c.req.valid('json');
-    return await completeTodo(c, id, complited);
+    const { completed } = c.req.valid('json');
+    return await completeTodo(c, id, completed);
 });
 todosApp.patch('/:id', zValidator('json', todoUpdateSchema, (result, c) => {
     if (!result.success) {
