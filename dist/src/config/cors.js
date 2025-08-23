@@ -1,6 +1,4 @@
-import dotenv from 'dotenv';
 import { cors } from 'hono/cors';
-dotenv.config();
 const allowedOrigins = process.env.ORIGINS?.split(',') ?? [];
 export const authCors = cors({
     origin: allowedOrigins,

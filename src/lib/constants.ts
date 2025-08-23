@@ -1,7 +1,4 @@
-import dotenv from 'dotenv'
 import type { Prisma } from '@/generated/prisma/index.js'
-
-dotenv.config()
 
 export const API_VERSION = process.env.VERSION ?? 'v1'
 export const API_PREFIX = process.env.PREFIX ?? '/api'

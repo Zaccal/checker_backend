@@ -24,7 +24,6 @@
     "@hono/zod-validator": "^0.7.2",
     "@prisma/client": "6.14.0",
     "better-auth": "^1.3.7",
-    "dotenv": "^17.2.1",
     "eslint-config": "link:@types/hono/eslint-config",
     "hono": "^4.7.9",
     "husky": "^9.1.7",
