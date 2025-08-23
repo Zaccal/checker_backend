@@ -15,7 +15,7 @@ export const auth = betterAuth({
         provider: 'postgresql',
     }),
     telemetry: {
-        enabled: false,
+        enabled: true,
     },
     plugins: [
         openAPI(),
@@ -40,9 +40,8 @@ export const auth = betterAuth({
                     text: `you OTP code: ${otp}`,
                 });
             },
-            expiresIn: 600,
+            expiresIn: 300,
             allowedAttempts: 3,
-            sendVerificationOnSignUp: true,
         }),
     ],
     account: {
