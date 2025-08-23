@@ -24,8 +24,8 @@ vi.mock('../../../middlewares/getUser.middlleware.js', async () => {
 
 let appInstance: Hono
 beforeAll(async () => {
-  const { app } = await import('../../../app.js')
-  appInstance = app
+  const app = await import('../../../app.js')
+  appInstance = app.default
 })
 
 describe('DELETE Method', () => {

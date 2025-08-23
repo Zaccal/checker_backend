@@ -1,4 +1,4 @@
-import { app } from '@/app.js'
+import app from '@/app.js'
 import type { Todo } from '@/generated/prisma/index.js'
 import { expectHasProperties, expectedKeysTodo } from '@/lib/testHelper.js'
 

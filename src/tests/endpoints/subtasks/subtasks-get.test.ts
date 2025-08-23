@@ -1,4 +1,4 @@
-import { app } from '@/app.js'
+import app from '@/app.js'
 import type { SubTask } from '@/generated/prisma/index.js'
 import { expectHasProperties, expectedKeysSubtask } from '@/lib/testHelper.js'
 

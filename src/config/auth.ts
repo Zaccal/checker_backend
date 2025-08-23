@@ -51,7 +51,7 @@ export const auth = betterAuth({
       trustedProviders: ['github', 'google'],
     },
   },
-  trustedOrigins: getTrustedOrigins().split(','),
+  trustedOrigins: getTrustedOrigins(),
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: true,

@@ -14,8 +14,8 @@ vi.mock('../../../middlewares/getUser.middlleware.ts', async () => {
 });
 let appIntance;
 beforeAll(async () => {
-    const { app } = await import('../../../app.js');
-    appIntance = app;
+    const app = await import('../../../app.js');
+    appIntance = app.default;
 });
 describe('DELTE Method', () => {
     it('should delete a tag', async () => {

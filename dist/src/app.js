@@ -32,4 +32,4 @@ app.route('/', docApp);
 app.onError(errorHandler);
 // Not Found Handler (standardized response)
 app.notFound(notFound);
-export { app };
+export default app;

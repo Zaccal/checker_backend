@@ -1,4 +1,4 @@
-import { app } from '@/app.js'
+import app from '@/app.js'
 import type { Todo, TodoList } from '@/generated/prisma/index.js'
 import {
   expectedKeysLists,

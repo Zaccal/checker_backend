@@ -1,4 +1,4 @@
-import { app } from '../../../app.js';
+import app from '../../../app.js';
 import { expectHasProperties, expectedKeysTodo } from '../../../lib/testHelper.js';
 describe('GET Method', () => {
     test('GET with id', async () => {

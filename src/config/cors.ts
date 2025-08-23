@@ -1,6 +1,10 @@
+import dotenv from 'dotenv'
 import { cors } from 'hono/cors'
+import { getTrustedOrigins } from '@/lib/getTrustedOrigins.js'
 
-const allowedOrigins = process.env.ORIGINS?.split(',') ?? []
+dotenv.config()
+
+const allowedOrigins = getTrustedOrigins()
 
 export const authCors = cors({
   origin: allowedOrigins,

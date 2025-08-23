@@ -14,8 +14,8 @@ vi.mock('../../../middlewares/getUser.middlleware.js', async () => {
 });
 let appInstance;
 beforeAll(async () => {
-    const { app } = await import('../../../app.js');
-    appInstance = app;
+    const app = await import('../../../app.js');
+    appInstance = app.default;
 });
 describe('DELETE Method', () => {
     beforeEach(() => {
