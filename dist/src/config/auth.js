@@ -8,6 +8,7 @@ import { getTrustedOrigins } from '../lib/getTrustedOrigins.js';
 import setDefaultLists from '../lib/setDefaultLists.js';
 import { setSocialUsername } from '../lib/setSocialUsername.js';
 const prisma = getPrisma();
+console.log(process.env.EMAIL);
 export const auth = betterAuth({
     database: prismaAdapter(prisma, {
         provider: 'postgresql',
