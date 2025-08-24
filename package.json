@@ -13,7 +13,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:todos": "vitest run tests/endpoints/todos",
-    "prisma:generate": "npx prisma generate -no-engine ",
+    "prisma:generate": "npx prisma generate --no-engine",
     "prisma:migrate": "npx prisma migrate deploy",
     "prepare": "husky"
   },
