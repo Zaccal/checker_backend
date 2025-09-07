@@ -16,10 +16,24 @@ export async function getSearch(c: ContextAuth, queryParam: SearchQueryDto) {
   try {
     const foundTodos = await getPrisma().todo.findMany({
       where: {
-        title: {
-          contains: query,
-          mode: 'insensitive',
-        },
+        OR: [
+          {
+            title: {
+              contains: query,
+              mode: 'insensitive',
+            },
+          },
+          {
+            tags: {
+              some: {
+                name: {
+                  contains: query,
+                  mode: 'insensitive',
+                },
+              },
+            },
+          },
+        ],
         userId,
       },
       skip: offset,

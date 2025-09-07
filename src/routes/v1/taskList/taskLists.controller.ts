@@ -55,9 +55,6 @@ export async function getTaskLists(c: ContextAuth) {
         protected: false,
       },
       select: LISTS_SELECT,
-      orderBy: {
-        createdAt: 'asc',
-      },
     })
 
     return c.json(lists)
