@@ -21,7 +21,7 @@ authCustom.post(
     try {
       const foundUser = await getPrisma().user.findUnique({
         where: {
-          email: oldEmail,
+          email: newEmail,
         },
       })
 
