@@ -8,10 +8,24 @@ export async function getSearch(c, queryParam) {
     try {
         const foundTodos = await getPrisma().todo.findMany({
             where: {
-                title: {
-                    contains: query,
-                    mode: 'insensitive',
-                },
+                OR: [
+                    {
+                        title: {
+                            contains: query,
+                            mode: 'insensitive',
+                        },
+                    },
+                    {
+                        tags: {
+                            some: {
+                                name: {
+                                    contains: query,
+                                    mode: 'insensitive',
+                                },
+                            },
+                        },
+                    },
+                ],
                 userId,
             },
             skip: offset,

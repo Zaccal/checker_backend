@@ -19,6 +19,16 @@ authCustom.post(
     const { newEmail, oldEmail } = c.req.valid('json')
 
     try {
+      const foundUser = await getPrisma().user.findUnique({
+        where: {
+          email: oldEmail,
+        },
+      })
+
+      if (foundUser) {
+        return c.text('User with this email already exists.', 409)
+      }
+
       await getPrisma().user.update({
         where: {
           email: oldEmail,

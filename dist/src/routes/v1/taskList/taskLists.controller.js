@@ -36,9 +36,6 @@ export async function getTaskLists(c) {
                 protected: false,
             },
             select: LISTS_SELECT,
-            orderBy: {
-                createdAt: 'asc',
-            },
         });
         return c.json(lists);
     }
