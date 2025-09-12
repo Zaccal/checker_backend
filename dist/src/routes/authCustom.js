@@ -13,6 +13,14 @@ authCustom.post('/email-otp/change-email', zValidator('json', changeEmailOtpSche
 }), async (c) => {
     const { newEmail, oldEmail } = c.req.valid('json');
     try {
+        const foundUser = await getPrisma().user.findUnique({
+            where: {
+                email: newEmail,
+            },
+        });
+        if (foundUser) {
+            return c.text('User with this email already exists.', 409);
+        }
         await getPrisma().user.update({
             where: {
                 email: oldEmail,

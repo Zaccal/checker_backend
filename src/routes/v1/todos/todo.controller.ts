@@ -55,6 +55,55 @@ export async function getSearch(c: ContextAuth, queryParam: SearchQueryDto) {
   }
 }
 
+export async function getTodoByListId(c: ContextAuth, id: string) {
+  const user = c.get('user')
+
+  try {
+    const todos = await getPrisma().todo.findMany({
+      where: {
+        userId: user.id,
+        todoListId: id,
+      },
+      select: TODOS_SELECT,
+    })
+
+    return c.json(todos)
+  } catch (error) {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError ||
+      error instanceof Error
+    ) {
+      return c.text(error.message, 500)
+    }
+
+    return c.text('An error occurred while getting the todos.', 500)
+  }
+}
+
+export async function getAllTodos(c: ContextAuth) {
+  const user = c.get('user')
+
+  try {
+    const todos = await getPrisma().todo.findMany({
+      where: {
+        userId: user.id,
+      },
+      select: TODOS_SELECT,
+    })
+
+    return c.json(todos)
+  } catch (error) {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError ||
+      error instanceof Error
+    ) {
+      return c.text(error.message, 500)
+    }
+
+    return c.text('An error occurred while getting the todos.', 500)
+  }
+}
+
 export async function getTodoById(c: ContextAuth, id: string) {
   const user = c.get('user')
 

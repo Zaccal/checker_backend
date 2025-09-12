@@ -7,6 +7,8 @@ import {
   deleteTodo,
   completeTodo,
   updateTodo,
+  getAllTodos,
+  getTodoByListId,
 } from './todo.controller.js'
 import type { AuthVariables } from '@/config/auth.js'
 import protectRoutes from '@/middlewares/protectRoutes.middleware.js'
@@ -24,6 +26,10 @@ todosApp.use('*', protectRoutes)
 
 // GET
 
+todosApp.get('/', async c => {
+  return await getAllTodos(c)
+})
+
 todosApp.get(
   '/search',
   zValidator('query', SearchQuerySchema, (result, c) => {
@@ -38,12 +44,17 @@ todosApp.get(
   },
 )
 
+todosApp.get('/list/:id', async c => {
+  const { id } = c.req.param()
+
+  return await getTodoByListId(c, id)
+})
+
 todosApp.get('/:id', async c => {
   const { id } = c.req.param()
 
   return await getTodoById(c, id)
 })
-
 // POST
 
 todosApp.post(
